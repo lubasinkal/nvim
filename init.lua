@@ -635,7 +635,7 @@ require('lazy').setup({
         ruff = {},
         pyright = {},
         rust_analyzer = {},
-        r_language_server = {},
+        r_language_server = { cmd = { 'R', '--slave', '-e', 'languageserver::run()' }, filetypes = { 'r', 'rmd' } },
         html = {},
         htmlhint = {},
 
