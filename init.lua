@@ -628,12 +628,14 @@ require('lazy').setup({
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-
+      local is_windows = vim.fn.has 'win32' == 1
       local servers = {
         clangd = {},
         gopls = {},
         ruff = {},
-        pyright = {},
+        -- pylsp = {},
+        jedi_language_server = {},
+        -- pyright = {},
         rust_analyzer = {},
         r_language_server = { cmd = { 'R', '--slave', '-e', 'languageserver::run()' }, filetypes = { 'r', 'rmd' } },
         html = {},
