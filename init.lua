@@ -652,7 +652,7 @@ require('lazy').setup({
         --       },
         --     },
         --   },
-        -- },        
+        -- },
         rust_analyzer = {},
         r_language_server = { cmd = { 'R', '--slave', '-e', 'languageserver::run()' }, filetypes = { 'r', 'rmd' } },
         html = {},
@@ -878,6 +878,8 @@ require('lazy').setup({
   -- THEMES
   { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
   { 'nyoom-engineering/oxocarbon.nvim', name = 'oxocarbon', priority = 1000 },
+  { 'folke/tokyonight.nvim', name = 'tokyonight', priority = 1000 },
+  { 'scottmckendry/cyberdream.nvim', name = 'cyberdream', priority = 1000 },
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
@@ -889,7 +891,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'oxocarbon'
+      vim.cmd.colorscheme 'cyberdream'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
