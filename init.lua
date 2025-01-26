@@ -160,7 +160,7 @@ vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
-
+-- vim.opt.showtabline = 2 -- Always show tabs (default: 1)
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -636,6 +636,23 @@ require('lazy').setup({
         -- pylsp = {},
         jedi_language_server = {},
         -- pyright = {},
+        -- pylsp = {
+        --   settings = {
+        --     pylsp = {
+        --       plugins = {
+        --         pyflakes = { enabled = false },
+        --         pycodestyle = { enabled = false },
+        --         autopep8 = { enabled = false },
+        --         yapf = { enabled = false },
+        --         mccabe = { enabled = false },
+        --         pylsp_mypy = {enabled = false},
+        --         pylsp_black = { enabled = false },
+        --         pylsp_isort = { enabled = false },
+        --         configurationSources = { "pyproject.toml" },
+        --       },
+        --     },
+        --   },
+        -- },        
         rust_analyzer = {},
         r_language_server = { cmd = { 'R', '--slave', '-e', 'languageserver::run()' }, filetypes = { 'r', 'rmd' } },
         html = {},
