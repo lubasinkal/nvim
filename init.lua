@@ -276,7 +276,8 @@ require('lazy').setup({
 
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
-    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+    -- event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+event = 'VeryLazy',
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
       -- this setting is independent of vim.opt.timeoutlen
@@ -340,7 +341,7 @@ require('lazy').setup({
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
-    event = 'VimEnter',
+    -- event = 'VimEnter',
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -466,12 +467,14 @@ require('lazy').setup({
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
+    -- event = 'VeryLazy',
+    event = 'LspAttach',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { 'williamboman/mason.nvim', opts = {} },
-      'williamboman/mason-lspconfig.nvim',
+      {'williamboman/mason-lspconfig.nvim', event = 'LspAttach'},
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -628,14 +631,10 @@ require('lazy').setup({
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      local is_windows = vim.fn.has 'win32' == 1
       local servers = {
-        clangd = {},
         gopls = {},
         ruff = {},
-        -- pylsp = {},
         jedi_language_server = {},
-        -- pyright = {},
         -- pylsp = {
         --   settings = {
         --     pylsp = {
@@ -653,7 +652,7 @@ require('lazy').setup({
         --     },
         --   },
         -- },
-        rust_analyzer = {},
+        -- rust_analyzer = {},
         r_language_server = { cmd = { 'R', '--slave', '-e', 'languageserver::run()' }, filetypes = { 'r', 'rmd' } },
         html = {},
         htmlhint = {},
@@ -876,16 +875,16 @@ require('lazy').setup({
     end,
   },
   -- THEMES
-  { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
-  { 'nyoom-engineering/oxocarbon.nvim', name = 'oxocarbon', priority = 1000 },
-  { 'folke/tokyonight.nvim', name = 'tokyonight', priority = 1000 },
-  { 'scottmckendry/cyberdream.nvim', name = 'cyberdream', priority = 1000 },
+  -- { 'catppuccin/nvim', name = 'catppuccin'},
+  -- { 'nyoom-engineering/oxocarbon.nvim', name = 'oxocarbon'},
+  -- { 'folke/tokyonight.nvim', name = 'tokyonight'},
+  -- { 'scottmckendry/cyberdream.nvim', name = 'cyberdream'},
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
 
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'nyoom-engineering/oxocarbon.nvim',
+    'scottmckendry/cyberdream.nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
@@ -897,16 +896,32 @@ require('lazy').setup({
       vim.cmd.hi 'Comment gui=none'
 
       -- Set background blur
-      vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+-- Set background transparency for normal windows
+-- vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+
+-- Set background transparency for floating windows
+-- vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+
+-- Set background transparency for floating borders
+-- vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' })
+
+-- Optionally, set transparency for other related UI elements (like search highlights)
+-- vim.api.nvim_set_hl(0, 'Search', { bg = 'none' })
+-- vim.api.nvim_set_hl(0, 'IncSearch', { bg = 'none' })
+
+-- Optional: You can add a slight blur effect to floating windows by adjusting the float highlights
+-- Ensure that your terminal supports transparency and blur (e.g., through a compositor or terminal emulator that supports it)
+-- vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'none' })
+-- vim.api.nvim_set_hl(0, 'PmenuSel', { bg = 'none', fg = 'white' })
     end,
   },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  { 'folke/todo-comments.nvim', event = 'BufReadPost', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
+    event = 'InsertEnter',
     config = function()
       -- Better Around/Inside textobjects
       --
@@ -948,6 +963,7 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
+    event = 'BufReadPost',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
@@ -980,12 +996,12 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  require 'kickstart.plugins.debug',
+  -- require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
-  require 'kickstart.plugins.lint',
+  -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
-  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.

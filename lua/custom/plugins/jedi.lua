@@ -1,3 +1,0 @@
-return{
-	"davidhalter/jedi-vim",
-}
