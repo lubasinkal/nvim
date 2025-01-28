@@ -241,7 +241,22 @@ require('lazy').setup({
   --
   -- Use `opts = {}` to force a plugin to be loaded.
   --
+  defaults = {
+    lazy = true, -- Enable lazy loading for all plugins by default
+  },
 
+  performance = {
+    rtp = {
+      reset = true, -- Reset rtp to reduce unnecessary paths
+      disabled_plugins = {
+        'gzip',
+        'tarPlugin',
+        'tohtml',
+        'zipPlugin',
+        'netrwPlugin', -- Disable netrw if you use a file explorer like nvim-tree
+      },
+    },
+  },
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -276,8 +291,8 @@ require('lazy').setup({
 
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
-    -- event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-event = 'VeryLazy',
+    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+    -- event = 'VeryLazy',
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
       -- this setting is independent of vim.opt.timeoutlen
@@ -467,8 +482,8 @@ event = 'VeryLazy',
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
-    event = 'VeryLazy',
-    -- event = 'LspAttach',
+    -- event = 'VeryLazy',
+    event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
@@ -718,7 +733,8 @@ event = 'VeryLazy',
 
   { -- Autoformat
     'stevearc/conform.nvim',
-    event = { 'BufWritePre' },
+    -- event = { 'BufWritePre' },
+    event = { 'BufReadPre', 'BufNewFile' },
     cmd = { 'ConformInfo' },
     keys = {
       {
@@ -885,6 +901,7 @@ event = 'VeryLazy',
 
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     'scottmckendry/cyberdream.nvim',
+    lazy = false,
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
@@ -896,23 +913,23 @@ event = 'VeryLazy',
       vim.cmd.hi 'Comment gui=none'
 
       -- Set background blur
--- Set background transparency for normal windows
--- vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+      -- Set background transparency for normal windows
+      -- vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 
--- Set background transparency for floating windows
--- vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+      -- Set background transparency for floating windows
+      -- vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 
--- Set background transparency for floating borders
--- vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' })
+      -- Set background transparency for floating borders
+      -- vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' })
 
--- Optionally, set transparency for other related UI elements (like search highlights)
--- vim.api.nvim_set_hl(0, 'Search', { bg = 'none' })
--- vim.api.nvim_set_hl(0, 'IncSearch', { bg = 'none' })
+      -- Optionally, set transparency for other related UI elements (like search highlights)
+      -- vim.api.nvim_set_hl(0, 'Search', { bg = 'none' })
+      -- vim.api.nvim_set_hl(0, 'IncSearch', { bg = 'none' })
 
--- Optional: You can add a slight blur effect to floating windows by adjusting the float highlights
--- Ensure that your terminal supports transparency and blur (e.g., through a compositor or terminal emulator that supports it)
--- vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'none' })
--- vim.api.nvim_set_hl(0, 'PmenuSel', { bg = 'none', fg = 'white' })
+      -- Optional: You can add a slight blur effect to floating windows by adjusting the float highlights
+      -- Ensure that your terminal supports transparency and blur (e.g., through a compositor or terminal emulator that supports it)
+      -- vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'none' })
+      -- vim.api.nvim_set_hl(0, 'PmenuSel', { bg = 'none', fg = 'white' })
     end,
   },
 
