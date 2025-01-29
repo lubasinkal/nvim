@@ -1,10 +1,11 @@
 return {
   'akinsho/bufferline.nvim',
+  lazy = true,
   dependencies = {
     'moll/vim-bbye',
     'nvim-tree/nvim-web-devicons',
   },
-  event = 'BufAdd',
+  event = 'VeryLazy',
   keys = {
     { '<S-Tab>', '<cmd>BufferLineCyclePrev<cr>', desc = 'Prev Buffer' },
     { '<Tab>', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },

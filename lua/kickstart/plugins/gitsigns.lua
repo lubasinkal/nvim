@@ -5,7 +5,8 @@
 return {
   {
     'lewis6991/gitsigns.nvim',
-    event = 'BufReadPre',
+    event = { 'BufReadPre', 'BufNewFile' }, -- Load when a file is opened
+    lazy = true,
     opts = {
       on_attach = function(bufnr)
         local gitsigns = require 'gitsigns'

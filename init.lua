@@ -129,6 +129,8 @@ vim.opt.breakindent = true
 -- Save undo history
 vim.opt.undofile = true
 
+-- Reduce swapfile overhead
+vim.opt.swapfile = false
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -241,22 +243,6 @@ require('lazy').setup({
   --
   -- Use `opts = {}` to force a plugin to be loaded.
   --
-  defaults = {
-    lazy = true, -- Enable lazy loading for all plugins by default
-  },
-
-  performance = {
-    rtp = {
-      reset = true, -- Reset rtp to reduce unnecessary paths
-      disabled_plugins = {
-        'gzip',
-        'tarPlugin',
-        'tohtml',
-        'zipPlugin',
-        'netrwPlugin', -- Disable netrw if you use a file explorer like nvim-tree
-      },
-    },
-  },
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -291,8 +277,8 @@ require('lazy').setup({
 
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
-    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    -- event = 'VeryLazy',
+    -- event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+    event = 'VeryLazy',
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
       -- this setting is independent of vim.opt.timeoutlen
@@ -356,13 +342,14 @@ require('lazy').setup({
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
-    -- event = 'VimEnter',
+    -- event = 'VeryLazy',
+    lazy = true,
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
-
+        event = 'VeryLazy',
         -- `build` is used to run some command when the plugin is installed/updated.
         -- This is only run then, not every time Neovim starts up.
         build = 'make',
@@ -901,8 +888,12 @@ require('lazy').setup({
 
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     'scottmckendry/cyberdream.nvim',
-    lazy = false,
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+    lazy = true,
+    event = 'BufReadPost', -- FIX: Load after a buffer is read
+
+    -- priority = 1000, -- Make sure to load this before all the other start plugins.
+    --
+    priority = 100, -- FIX: lower priority to allow for later loading
     init = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
@@ -980,11 +971,29 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    event = 'BufReadPost',
+    event = { 'BufReadPre', 'BufNewFile' },
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python', 'r', 'go' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'python',
+        'r',
+        'go',
+        'markdown',
+        'rnoweb',
+        'yaml',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1048,6 +1057,22 @@ require('lazy').setup({
       start = '🚀',
       task = '📌',
       lazy = '💤 ',
+    },
+  },
+  defaults = {
+    lazy = true, -- Enable lazy loading for all plugins by default
+  },
+  cache = { enable = true },
+  performance = {
+    rtp = {
+      reset = true, -- Reset rtp to reduce unnecessary paths
+      disabled_plugins = {
+        'gzip',
+        'tarPlugin',
+        'tohtml',
+        'zipPlugin',
+        'netrwPlugin', -- Disable netrw if you use a file explorer like nvim-tree
+      },
     },
   },
 })
