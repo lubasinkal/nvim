@@ -23,6 +23,7 @@ return {
         wo = { wrap = true }, -- Wrap notifications
       },
     },
+    terminal = { enabled = true },
   },
   keys = {
     {
@@ -103,22 +104,23 @@ return {
       end,
       desc = 'Dismiss All Notifications',
     },
-    -- {
-    --   '<c-/>',
-    --   function()
-    --     Snacks.terminal('pwsh --NoLogo', {
-    --       win = { position = 'float' },
-    --     })
-    --   end,
-    --   desc = 'Toggle Floating Terminal with pwsh --NoLogo',
-    -- },
-    -- {
-    --   '<c-_>',
-    --   function()
-    --     Snacks.terminal()
-    --   end,
-    --   desc = 'which_key_ignore',
-    -- },
+    {
+      '<c-/>',
+      function()
+        Snacks.terminal()
+    
+        -- Ensure the terminal starts in normal mode
+        vim.api.nvim_command('startinsert!')
+      end,
+      desc = 'Toggle Floating Terminal',
+    },    
+    {
+      '<c-_>',
+      function()
+        Snacks.terminal()
+      end,
+      desc = 'which_key_ignore',
+    },
     {
       ']]',
       function()

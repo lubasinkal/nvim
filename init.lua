@@ -102,6 +102,41 @@ vim.api.nvim_set_keymap('n', ':', ':', { noremap = true, silent = false })
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
+local o = vim.o
+o.cursorlineopt = 'both' -- Enable cursorline
+
+local o = vim.o
+o.cursorlineopt = 'both' -- Enable cursorline
+
+-- Detect operating system
+local os_name = vim.loop.os_uname().sysname
+
+-- Set default shell based on OS
+local shell
+
+if os_name == "Windows_NT" then
+    -- Try PowerShell Core first, fallback to Windows PowerShell
+    shell = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell"
+else
+    -- Use preferred Linux/macOS shells
+    if vim.fn.executable("zsh") == 1 then
+        shell = "zsh"
+    elseif vim.fn.executable("bash") == 1 then
+        shell = "bash"
+    elseif vim.fn.executable("sh") == 1 then
+        shell = "sh"
+    else
+        -- print("No valid shell found! Defaulting to /bin/sh")
+        shell = "/bin/sh"
+    end
+end
+
+-- Apply PowerShell-specific flags only when PowerShell is used
+if shell == "pwsh" or shell == "powershell" then
+    vim.opt.shell = shell .. " -NoLogo -NoProfileLoadTime"
+else
+    vim.opt.shell = shell
+end
 
 -- Make line numbers default
 vim.opt.number = true
