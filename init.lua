@@ -138,8 +138,12 @@ vim.opt.smartcase = true
 -- Keep signcolumn on by default
 vim.opt.signcolumn = 'yes'
 
+vim.opt.termguicolors = true -- True color support
+vim.opt.laststatus = 3 -- global statusline
+vim.opt.pumblend = 10 -- Popup blend
+vim.opt.pumheight = 10 -- Maximum number of entries in a popup
 -- Decrease update time
-vim.opt.updatetime = 250
+vim.opt.updatetime = 200
 
 -- Decrease mapped sequence wait time
 vim.opt.timeoutlen = 300
@@ -655,7 +659,10 @@ require('lazy').setup({
         --   },
         -- },
         -- rust_analyzer = {},
-        r_language_server = { cmd = { 'R', '--slave', '-e', 'languageserver::run()' }, filetypes = { 'r', 'rmd' } },
+        r_language_server = {
+          cmd = { 'R', '--vanilla', '--no-restore', '--no-save', '--quiet', '-e', 'languageserver::run()' },
+          filetypes = { 'r', 'rmd' },
+        },
         html = {},
         htmlhint = {},
 
@@ -1023,7 +1030,7 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  require 'kickstart.plugins.indent_line',
+  -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
@@ -1061,7 +1068,12 @@ require('lazy').setup({
   },
   defaults = {
     lazy = true, -- Enable lazy loading for all plugins by default
+    version = false
   },
+    checker = {
+    enabled = true, -- check for plugin updates periodically
+    notify = false, -- notify on update
+    },
   cache = { enable = true },
   performance = {
     rtp = {
@@ -1071,7 +1083,8 @@ require('lazy').setup({
         'tarPlugin',
         'tohtml',
         'zipPlugin',
-        'netrwPlugin', -- Disable netrw if you use a file explorer like nvim-tree
+          'tutor',
+        -- 'netrwPlugin', -- Disable netrw if you use a file explorer like nvim-tree
       },
     },
   },
