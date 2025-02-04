@@ -2,7 +2,7 @@ return {
   'folke/snacks.nvim',
   priority = 1000,
   -- priority = 1000, -- Reduce priority for later loading
-  event = {'UIEnter' ,'VeryLazy'},
+  event = 'VeryLazy',
   lazy = true,
   ---@type snacks.Config
   opts = {

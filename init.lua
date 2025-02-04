@@ -968,7 +968,6 @@ require('lazy').setup({
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'BufReadPost', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
-
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     event = 'InsertEnter',
@@ -1106,11 +1105,12 @@ require('lazy').setup({
     version = false
   },
     checker = {
-    enabled = true, -- check for plugin updates periodically
+    enabled = false, -- check for plugin updates periodically
     notify = false, -- notify on update
     },
-  cache = { enable = true },
-  performance = {
+    performance = {
+    cache = { enable = true },
+    reset_packpath = true,
     rtp = {
       reset = true, -- Reset rtp to reduce unnecessary paths
       disabled_plugins = {
