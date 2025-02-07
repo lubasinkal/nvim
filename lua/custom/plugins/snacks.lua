@@ -1,13 +1,13 @@
 return {
   'folke/snacks.nvim',
-  priority = 1000,
-  -- priority = 1000, -- Reduce priority for later loading
+  priority = 10,
+
   event = 'VeryLazy',
-  lazy = true,
+
   ---@type snacks.Config
   opts = {
     bigfile = { enabled = true },
-    dashboard = { enabled = false },
+    dashboard = { event = "UIEnter", enabled = true },
     indent = { enabled = true },
     input = { enabled = true },
     notifier = {

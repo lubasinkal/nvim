@@ -1,8 +1,7 @@
 return {
   'nvim-neo-tree/neo-tree.nvim',
   branch = 'v3.x',
-  lazy = true,
-  event = 'VeryLazy',
+  event = 'UIEnter',
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-tree/nvim-web-devicons', -- Not strictly required, but recommended
