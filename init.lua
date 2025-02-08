@@ -1096,8 +1096,8 @@ require('lazy').setup({
     },
   },
   defaults = {
-    lazy = true, -- Enable lazy loading for all plugins by default
-    version = false
+    -- lazy = true, -- Enable lazy loading for all plugins by default
+    -- version = false
   },
     checker = {
     enabled = false, -- check for plugin updates periodically

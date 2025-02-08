@@ -1,6 +1,7 @@
 return {
   'stevearc/oil.nvim',
   lazy = true,
+  event = 'UIEnter',
   opts = {}, -- Plugin options (customize as needed)
   dependencies = {
     { 'echasnovski/mini.icons', opts = {} }, -- Optional: mini.icons
