@@ -627,7 +627,38 @@ require('lazy').setup({
         gopls = {},
         ruff = {},
         jedi_language_server = {},
-        r_language_server = {},
+
+        r_language_server = {
+          -- Detect the platform
+          cmd = (function()
+            if vim.fn.has 'win32' == 1 or vim.fn.has 'win64' == 1 then
+              return {
+                'R',
+                '--vanilla',
+                '--slave',
+                '-e',
+                'R_version <- paste(R.version$major, strsplit(R.version$minor, "\\\\.")[[1]][1], sep="."); '
+                  .. 'R_lib_path <- file.path(Sys.getenv("USERPROFILE"), "AppData", "Local", "R", "win-library", R_version); '
+                  .. 'R_lib_path <- gsub("/", "\\\\", R_lib_path); '
+                  .. 'Sys.setenv(R_LIBS_USER = R_lib_path); '
+                  .. 'languageserver::run()',
+              }
+            else
+              return {
+                'R',
+                '--vanilla',
+                '--slave',
+                '-e',
+                'R_version <- paste(R.version$major, strsplit(R.version$minor, "\\\\.")[[1]][1], sep="."); '
+                  .. 'R_lib_path <- file.path(Sys.getenv("HOME"), ".local", "lib", "R", R_version); '
+                  .. 'Sys.setenv(R_LIBS_USER = R_lib_path); '
+                  .. 'languageserver::run()',
+              }
+            end
+          end)(),
+          -- filetypes = { 'r', 'rmd' },
+        },
+
         html = {},
         htmlhint = {},
 

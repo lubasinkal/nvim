@@ -1,4 +1,3 @@
-
 -- Rtools may be an issue for people without it
 --
 -- FIX: DEPENDENCIES
@@ -14,25 +13,21 @@
 
 -- TODO: Uncomment only if you have the dependencies setup. :wq then open nvim R.nvim should then build automatically
 
-
-
-
 return {
-    "R-nvim/R.nvim",
-    lazy = true,  -- Ensures the plugin loads immediately if lazy loading is enabled globally
-    version = "~0.1.0",  -- Pin to a minor version
+  'R-nvim/R.nvim',
+  lazy = false, -- Ensures the plugin loads immediately if lazy loading is enabled globally
+  version = '~0.1.0', -- Pin to a minor version
 
-    dependencies = {
-        {
-            "nvim-treesitter/nvim-treesitter",
-            build = ":TSUpdate",  -- Correct way to run post-install commands in lazy.nvim
-            config = function()
-                require("nvim-treesitter.configs").setup({
-                    ensure_installed = { "markdown", "markdown_inline", "r", "rnoweb", "yaml", "latex", "csv" },
-                    highlight = { enable = true },
-                })
-            end,
-        },
+  dependencies = {
+    {
+      'nvim-treesitter/nvim-treesitter',
+      build = ':TSUpdate', -- Correct way to run post-install commands in lazy.nvim
+      config = function()
+        require('nvim-treesitter.configs').setup {
+          ensure_installed = { 'markdown', 'markdown_inline', 'r', 'rnoweb', 'yaml', 'latex', 'csv' },
+          highlight = { enable = true },
+        }
+      end,
     },
+  },
 }
-
