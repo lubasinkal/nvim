@@ -16,42 +16,23 @@
 
 
 
+
 return {
-  -- R.nvim plugin
-  {
     "R-nvim/R.nvim",
-    -- Only required if you also set defaults.lazy = true
-    lazy = false,
-    -- R.nvim is still young and we may make some breaking changes from time
-    -- to time. For now we recommend pinning to the latest minor version
-    -- like so:
-    version = "~0.1.0"
-  },
+    lazy = true,  -- Ensures the plugin loads immediately if lazy loading is enabled globally
+    version = "~0.1.0",  -- Pin to a minor version
 
-  -- cmp-r and nvim-cmp setup
-  {
-    "R-nvim/cmp-r",
-    dependencies = { "hrsh7th/nvim-cmp" },
-    config = function()
-      require("cmp").setup({
-        sources = {
-          { name = "cmp_r" }
-        }
-      })
-      require("cmp_r").setup({})
-    end,
-  },
-
-  -- nvim-treesitter configuration
-  {
-    "nvim-treesitter/nvim-treesitter",
-    run = ":TSUpdate",
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "markdown", "markdown_inline", "r", "rnoweb", "yaml", "latex", "csv" },
-        highlight = { enable = true },
-      })
-    end,
-  },
+    dependencies = {
+        {
+            "nvim-treesitter/nvim-treesitter",
+            build = ":TSUpdate",  -- Correct way to run post-install commands in lazy.nvim
+            config = function()
+                require("nvim-treesitter.configs").setup({
+                    ensure_installed = { "markdown", "markdown_inline", "r", "rnoweb", "yaml", "latex", "csv" },
+                    highlight = { enable = true },
+                })
+            end,
+        },
+    },
 }
 

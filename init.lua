@@ -1,6 +1,6 @@
 --[[
 
-===================================================================
+=====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
 ========                                    .-----.          ========
@@ -13,7 +13,7 @@
 ========         ||:Tutor              ||   |:::::|          ========
 ========         |'-..................-'|   |____o|          ========
 ========         `"")----------------(""`   ___________      ========
-========        /::::::::::|  |::::::::::\  \ no mouse \     =======(=)
+========        /::::::::::|  |::::::::::\  \ no mouse \     ========
 ========       /:::========|  |==hjkl==:::\  \ required \    ========
 ========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
 ========                                                     ========
@@ -93,50 +93,12 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
--- Map ';' to ':' to trigger the command-line
 vim.api.nvim_set_keymap('n', ';', ':', { noremap = true, silent = false })
-
--- Optional: If you want ':' to also behave as expected, ensure it remains mapped
 vim.api.nvim_set_keymap('n', ':', ':', { noremap = true, silent = false })
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
-local o = vim.o
-o.cursorlineopt = 'both' -- Enable cursorline
-
-local o = vim.o
-o.cursorlineopt = 'both' -- Enable cursorline
-
--- Detect operating system
-local os_name = vim.loop.os_uname().sysname
-
--- Set default shell based on OS
-local shell
-
-if os_name == "Windows_NT" then
-    -- Try PowerShell Core first, fallback to Windows PowerShell
-    shell = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell"
-else
-    -- Use preferred Linux/macOS shells
-    if vim.fn.executable("zsh") == 1 then
-        shell = "zsh"
-    elseif vim.fn.executable("bash") == 1 then
-        shell = "bash"
-    elseif vim.fn.executable("sh") == 1 then
-        shell = "sh"
-    else
-        -- print("No valid shell found! Defaulting to /bin/sh")
-        shell = "/bin/sh"
-    end
-end
-
--- Apply PowerShell-specific flags only when PowerShell is used
-if shell == "pwsh" or shell == "powershell" then
-    vim.opt.shell = shell .. " -NoLogo -NoProfileLoadTime"
-else
-    vim.opt.shell = shell
-end
 
 -- Make line numbers default
 vim.opt.number = true
@@ -164,8 +126,6 @@ vim.opt.breakindent = true
 -- Save undo history
 vim.opt.undofile = true
 
--- Reduce swapfile overhead
-vim.opt.swapfile = false
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -173,12 +133,8 @@ vim.opt.smartcase = true
 -- Keep signcolumn on by default
 vim.opt.signcolumn = 'yes'
 
-vim.opt.termguicolors = true -- True color support
-vim.opt.laststatus = 3 -- global statusline
-vim.opt.pumblend = 10 -- Popup blend
-vim.opt.pumheight = 10 -- Maximum number of entries in a popup
 -- Decrease update time
-vim.opt.updatetime = 200
+vim.opt.updatetime = 250
 
 -- Decrease mapped sequence wait time
 vim.opt.timeoutlen = 300
@@ -201,7 +157,7 @@ vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
--- vim.opt.showtabline = 2 -- Always show tabs (default: 1)
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -282,6 +238,7 @@ require('lazy').setup({
   --
   -- Use `opts = {}` to force a plugin to be loaded.
   --
+
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -316,8 +273,7 @@ require('lazy').setup({
 
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
-    -- event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    event = 'VeryLazy',
+    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
       -- this setting is independent of vim.opt.timeoutlen
@@ -381,14 +337,13 @@ require('lazy').setup({
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
-    -- event = 'VeryLazy',
-    lazy = true,
+    event = 'VimEnter',
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
-        event = 'VeryLazy',
+
         -- `build` is used to run some command when the plugin is installed/updated.
         -- This is only run then, not every time Neovim starts up.
         build = 'make',
@@ -459,12 +414,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-      vim.keymap.set(
-        'n',
-        '<leader>cs',
-        ":lua require('telescope.builtin').colorscheme({enable_preview = true})<CR>",
-        { desc = '[C]hoose [S]cheme with preview', noremap = true, silent = true }
-      )
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -500,16 +449,15 @@ require('lazy').setup({
     opts = {
       library = {
         -- Load luvit types when the `vim.uv` word is found
-        { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
       },
     },
   },
-  { 'Bilal2453/luvit-meta', lazy = true },
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
-    -- event = 'VeryLazy',
-    event = { 'BufReadPre', 'BufNewFile' },
+    -- event = { 'BufReadPre', 'BufNewFile'},
+    lazy = false,
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
@@ -519,7 +467,6 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
@@ -672,35 +619,22 @@ require('lazy').setup({
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+
+      -- NOTE: This is where you add functionality for code analysis, static type checking and formating. Press :Mason search for the LSP, linter or formater for the programming languange, get the name and add it under servers.
+
       local servers = {
+        -- clangd = {},
         gopls = {},
         ruff = {},
         jedi_language_server = {},
-        -- pylsp = {
-        --   settings = {
-        --     pylsp = {
-        --       plugins = {
-        --         pyflakes = { enabled = false },
-        --         pycodestyle = { enabled = false },
-        --         autopep8 = { enabled = false },
-        --         yapf = { enabled = false },
-        --         mccabe = { enabled = false },
-        --         pylsp_mypy = {enabled = false},
-        --         pylsp_black = { enabled = false },
-        --         pylsp_isort = { enabled = false },
-        --         configurationSources = { "pyproject.toml" },
-        --       },
-        --     },
-        --   },
-        -- },
-        -- rust_analyzer = {},
-        r_language_server = {
-          cmd = { 'R', '--vanilla', '--no-restore', '--no-save', '--quiet', '-e', 'languageserver::run()' },
-          filetypes = { 'r', 'rmd' },
-        },
+        r_language_server = {},
         html = {},
         htmlhint = {},
 
+        -- NOTE: ADD LSP/FORMATER/LINTER HERE; TRY TO KEEP TO THE FLOW  name = {},
+
+        -- pyright = {},
+        -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -762,8 +696,7 @@ require('lazy').setup({
 
   { -- Autoformat
     'stevearc/conform.nvim',
-    -- event = { 'BufWritePre' },
-    event = { 'BufReadPre', 'BufNewFile' },
+    event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
     keys = {
       {
@@ -824,12 +757,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          {
-            'rafamadriz/friendly-snippets',
-            config = function()
-              require('luasnip.loaders.from_vscode').lazy_load()
-            end,
-          },
+          -- {
+          --   'rafamadriz/friendly-snippets',
+          --   config = function()
+          --     require('luasnip.loaders.from_vscode').lazy_load()
+          --   end,
+          -- },
         },
       },
       'saadparwaiz1/cmp_luasnip',
@@ -860,9 +793,9 @@ require('lazy').setup({
         -- No, but seriously. Please read `:help ins-completion`, it is really good!
         mapping = cmp.mapping.preset.insert {
           -- Select the [n]ext item
-          -- ['<C-n>'] = cmp.mapping.select_next_item(),
+          ['<C-n>'] = cmp.mapping.select_next_item(),
           -- Select the [p]revious item
-          -- ['<C-p>'] = cmp.mapping.select_prev_item(),
+          ['<C-p>'] = cmp.mapping.select_prev_item(),
 
           -- Scroll the documentation window [b]ack / [f]orward
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -871,13 +804,13 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          -- ['<C-y>'] = cmp.mapping.confirm { select = true },
+          ['<C-y>'] = cmp.mapping.confirm { select = true },
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
-          ['<CR>'] = cmp.mapping.confirm { select = true },
-          ['<Tab>'] = cmp.mapping.select_next_item(),
-          ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          --['<CR>'] = cmp.mapping.confirm { select = true },
+          --['<Tab>'] = cmp.mapping.select_next_item(),
+          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
@@ -919,23 +852,15 @@ require('lazy').setup({
       }
     end,
   },
-  -- THEMES
-  -- { 'catppuccin/nvim', name = 'catppuccin'},
-  -- { 'nyoom-engineering/oxocarbon.nvim', name = 'oxocarbon'},
-  -- { 'folke/tokyonight.nvim', name = 'tokyonight'},
-  -- { 'scottmckendry/cyberdream.nvim', name = 'cyberdream'},
+
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
-
+    --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     'scottmckendry/cyberdream.nvim',
-    lazy = true,
-    event = 'BufReadPost', -- FIX: Load after a buffer is read
-
-    -- priority = 1000, -- Make sure to load this before all the other start plugins.
-    --
-    priority = 100, -- FIX: lower priority to allow for later loading
+    event = 'BufReadPost',
+    priority = 100, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
@@ -944,33 +869,14 @@ require('lazy').setup({
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
-
-      -- Set background blur
-      -- Set background transparency for normal windows
-      -- vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-
-      -- Set background transparency for floating windows
-      -- vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
-
-      -- Set background transparency for floating borders
-      -- vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' })
-
-      -- Optionally, set transparency for other related UI elements (like search highlights)
-      -- vim.api.nvim_set_hl(0, 'Search', { bg = 'none' })
-      -- vim.api.nvim_set_hl(0, 'IncSearch', { bg = 'none' })
-
-      -- Optional: You can add a slight blur effect to floating windows by adjusting the float highlights
-      -- Ensure that your terminal supports transparency and blur (e.g., through a compositor or terminal emulator that supports it)
-      -- vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'none' })
-      -- vim.api.nvim_set_hl(0, 'PmenuSel', { bg = 'none', fg = 'white' })
     end,
   },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'BufReadPost', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
-    event = 'InsertEnter',
     config = function()
       -- Better Around/Inside textobjects
       --
@@ -990,21 +896,18 @@ require('lazy').setup({
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-      -- statusline.setup { use_icons = true }
-
+      -- local statusline = require 'mini.statusline'
+      -- -- set use_icons to true if you have a Nerd Font
+      -- statusline.setup { use_icons = vim.g.have_nerd_font }
       --
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-
+      -- -- You can configure sections in the statusline by overriding their
+      -- -- default behavior. For example, here we set the section for
+      -- -- cursor location to LINE:COLUMN
+      -- ---@diagnostic disable-next-line: duplicate-set-field
+      -- statusline.section_location = function()
+      --   return '%2l:%-2v'
+      -- end
+      --
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
@@ -1016,20 +919,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = {
-        'bash',
-        'c',
-        'diff',
-        'html',
-        'lua',
-        'luadoc',
-        'markdown',
-        'query',
-        'vim',
-        'vimdoc',
-        'python',
-        'go',
-      },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'regex' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1096,25 +986,25 @@ require('lazy').setup({
     },
   },
   defaults = {
-    -- lazy = true, -- Enable lazy loading for all plugins by default
-    -- version = false
+    lazy = true,
+    version = false,
   },
-    checker = {
-    enabled = false, -- check for plugin updates periodically
-    notify = false, -- notify on update
-    },
-    performance = {
-    cache = { enable = true },
+  checker = {
+    enabled = false,
+    notify = false,
+  },
+  performance = {
+    cache = { enabled = true },
     reset_packpath = true,
     rtp = {
-      reset = true, -- Reset rtp to reduce unnecessary paths
+      reset = true,
       disabled_plugins = {
         'gzip',
         'tarPlugin',
-        'tohtml',
+        'tohml',
         'zipPlugin',
-          'tutor',
-        -- 'netrwPlugin', -- Disable netrw if you use a file explorer like nvim-tree
+        'tutor',
+        'netrwPlugin',
       },
     },
   },

@@ -1,7 +1,7 @@
 return {
   'folke/snacks.nvim',
   priority = 1000,
- lazy = false,
+  lazy = false,
   -- event = 'VeryLazy',
 
   ---@type snacks.Config
@@ -11,7 +11,7 @@ return {
     indent = { enabled = true },
     input = { enabled = true },
     notifier = {
-      enabled = false, -- Disable Notifications in snacks.nvim: Since snacks.nvim seems to be causing the conflict with noice configuration disable its vim.notify behavior.
+      enabled = true, -- Disable Notifications in snacks.nvim: Since snacks.nvim seems to be causing the conflict with noice configuration disable its vim.notify behavior.
       timeout = 3000,
     },
     quickfile = { enabled = true },
@@ -108,12 +108,12 @@ return {
       '<c-/>',
       function()
         Snacks.terminal()
-    
+
         -- Ensure the terminal starts in normal mode
-        vim.api.nvim_command('startinsert!')
+        vim.api.nvim_command 'startinsert!'
       end,
       desc = 'Toggle Floating Terminal',
-    },    
+    },
     {
       '<c-_>',
       function()
