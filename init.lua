@@ -338,7 +338,7 @@ require('lazy').setup({
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     -- event = { 'BufReadPre', 'BufNewFile' },
-event = 'VimEnter',
+    event = 'VimEnter',
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -1017,24 +1017,56 @@ event = 'VimEnter',
   },
   defaults = {
     lazy = true,
-    version = false,
+    version = nil,
+    cond = nil,
   },
   checker = {
     enabled = false,
     notify = false,
+  },
+  change_detection = {
+    -- automatically check for config file changes and reload the ui
+    enabled = true,
+    notify = true, -- get a notification when changes are found
+  },
+  concurrency = jit.os:find 'Windows' and (vim.uv.available_parallelism() * 2) or nil,
+  git = {
+    -- defaults for the `Lazy log` command
+    -- log = { "--since=3 days ago" }, -- show commits from the last 3 days
+    log = { '-8' }, -- show the last 8 commits
+    timeout = 120, -- kill processes that take more than 2 minutes
+    url_format = 'https://github.com/%s.git',
+    -- lazy.nvim requires git >=2.19.0. If you really want to use lazy with an older version,
+    -- then set the below to false. This should work, but is NOT supported and will
+    -- increase downloads a lot.
+    filter = true,
+    -- rate of network related git operations (clone, fetch, checkout)
+    throttle = {
+      enabled = false, -- not enabled by default
+      -- max 2 ops every 5 seconds
+      rate = 2,
+      duration = 5 * 1000, -- in ms
+    },
+    -- Time in seconds to wait before running fetch again for a plugin.
+    -- Repeated update/check operations will not run again until this
+    -- cooldown period has passed.
+    cooldown = 0,
   },
   performance = {
     cache = { enabled = true },
     reset_packpath = true,
     rtp = {
       reset = true,
+
       disabled_plugins = {
         'gzip',
-        'tarPlugin',
-        'tohml',
-        'zipPlugin',
-        'tutor',
+        'matchit',
+        'matchparen',
         'netrwPlugin',
+        'tarPlugin',
+        'tohtml',
+        'tutor',
+        'zipPlugin',
       },
     },
   },
