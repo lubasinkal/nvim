@@ -2,7 +2,8 @@
 return {
   'folke/noice.nvim',
   lazy = true,
-  event = { 'UIEnter', 'CmdlineEnter' }, -- Load when entering a command
+  -- event = { 'UIEnter', 'CmdlineEnter' }, -- Load when entering a command
+  event = 'VeryLazy',
   opts = {
     -- add any options here
   },

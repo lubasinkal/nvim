@@ -1,6 +1,7 @@
 return {
   'nvim-lualine/lualine.nvim',
-  event = 'UIEnter', -- This event is fine but consider alternatives based on usage
+  -- lazy = true,
+  event = { 'UIEnter' }, -- This event is fine but consider alternatives based on usage
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   config = function()
     require('lualine').setup {

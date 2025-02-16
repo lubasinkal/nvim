@@ -3,7 +3,7 @@
 
 return {
   'windwp/nvim-autopairs',
-  event = 'InsertCharPre',
+  event = { 'InsertCharPre' },
   lazy = true,
   -- Optional dependency
   dependencies = { 'hrsh7th/nvim-cmp' },

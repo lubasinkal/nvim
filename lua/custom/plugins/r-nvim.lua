@@ -15,9 +15,10 @@
 
 return {
   'R-nvim/R.nvim',
-  lazy = false, -- Ensures the plugin loads immediately if lazy loading is enabled globally
+  lazy = true , -- Ensures the plugin loads immediately if lazy loading is enabled globally
   version = '~0.1.0', -- Pin to a minor version
-
+  -- event = 'VeryLazy',
+ft = "r",
   dependencies = {
     {
       'nvim-treesitter/nvim-treesitter',

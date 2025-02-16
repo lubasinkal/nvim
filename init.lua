@@ -337,7 +337,8 @@ require('lazy').setup({
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
-    event = 'VimEnter',
+    -- event = { 'BufReadPre', 'BufNewFile' },
+event = 'VimEnter',
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -456,8 +457,7 @@ require('lazy').setup({
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
-    -- event = { 'BufReadPre', 'BufNewFile'},
-    lazy = false,
+    event = { 'VeryLazy' },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
@@ -624,9 +624,9 @@ require('lazy').setup({
 
       local servers = {
         -- clangd = {},
-        gopls = {},
-        ruff = {},
-        jedi_language_server = {},
+        gopls = {}, -- GoLang LSPs
+        ruff = {}, -- Python formater
+        jedi_language_server = {}, -- Python LSP
 
         r_language_server = {
           -- Detect the platform
@@ -890,7 +890,6 @@ require('lazy').setup({
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     'scottmckendry/cyberdream.nvim',
-    event = 'BufReadPost',
     priority = 100, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
