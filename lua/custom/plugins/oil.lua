@@ -1,11 +1,11 @@
 return {
   'stevearc/oil.nvim',
   lazy = true,
-  event = { 'VeryLazy', 'UIEnter' },
+  event = { 'BufRead' },
   opts = {}, -- Plugin options (customize as needed)
   dependencies = {
-    { 'echasnovski/mini.icons', opts = {} }, -- Optional: mini.icons
-    -- { "nvim-tree/nvim-web-devicons" }, -- Uncomment to use nvim-web-devicons instead
+    -- { 'echasnovski/mini.icons', opts = {} }, -- Optional: mini.icons
+    { 'nvim-tree/nvim-web-devicons' }, -- Uncomment to use nvim-web-devicons instead
   },
   config = function()
     -- Configure oil.nvim
