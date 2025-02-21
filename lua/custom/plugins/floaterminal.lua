@@ -50,7 +50,8 @@ local function toggle_terminal()
 
     -- Open PowerShell in the terminal buffer
     if vim.bo[state.floating.buf].buftype ~= 'terminal' then
-      vim.cmd 'terminal pwsh -NoLogo -NoProfile' -- Use PowerShell with -NoLogo option on Windows
+      -- vim.cmd 'terminal pwsh.exe -NoLogo -NoProfile' -- Use PowerShell with -NoLogo option on Windows
+      vim.cmd 'terminal '
     end
   else
     vim.api.nvim_win_hide(state.floating.win)
