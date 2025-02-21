@@ -338,7 +338,8 @@ require('lazy').setup({
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     -- event = { 'BufReadPre', 'BufNewFile' },
-    event = 'VimEnter',
+    event = 'UIEnter',
+    -- event = 'VeryLazy',
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -458,7 +459,7 @@ require('lazy').setup({
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     -- event = { 'BufRead' },
-    event = { 'BufReadPost', 'BufNewFile' },
+    event = { 'BufRead', 'BufNewFile' },
     cmd = { 'LspInfo', 'LspInstall', 'LspUninstall' },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
@@ -762,7 +763,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        python = { 'ruff', 'isort', 'black' },
+        python = { 'ruff' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -1025,7 +1026,7 @@ require('lazy').setup({
     cond = nil,
   },
   checker = {
-    enabled = false,
+    enabled = true,
     notify = false,
   },
   change_detection = {
@@ -1057,7 +1058,7 @@ require('lazy').setup({
     cooldown = 0,
   },
   performance = {
-    cache = { enabled = true },
+    cache = { enabled = false },
     reset_packpath = true,
     rtp = {
       reset = true,
@@ -1071,6 +1072,7 @@ require('lazy').setup({
         'tohtml',
         'tutor',
         'zipPlugin',
+        'osc52',
       },
     },
   },
