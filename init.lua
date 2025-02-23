@@ -768,7 +768,7 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         python = { 'ruff' },
-        --
+        go = { 'gofumpt' },
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
       },
@@ -1063,7 +1063,7 @@ require('lazy').setup({
     cooldown = 0,
   },
   performance = {
-    cache = { enabled = false },
+    cache = { enabled = true },
     reset_packpath = true,
     rtp = {
       reset = true,

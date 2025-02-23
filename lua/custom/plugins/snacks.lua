@@ -2,16 +2,17 @@ return {
   'folke/snacks.nvim',
   priority = 1000,
   lazy = false,
-  event = 'VeryLazy',
+  -- event = 'VeryLazy',
 
   ---@type snacks.Config
   opts = {
     bigfile = { enabled = true },
+    animate = { enabled = true },
     dashboard = { enabled = true },
     indent = { enabled = true },
     input = { enabled = true },
     notifier = {
-      enabled = true, -- Disable Notifications in snacks.nvim: Since snacks.nvim seems to be causing the conflict with noice configuration disable its vim.notify behavior.
+      enabled = false, -- Disable Notifications in snacks.nvim: Since snacks.nvim seems to be causing the conflict with noice configuration disable its vim.notify behavior.
       timeout = 3000,
     },
     quickfile = { enabled = true },

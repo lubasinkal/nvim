@@ -1,7 +1,11 @@
 return {
   'stevearc/oil.nvim',
   lazy = true,
-  event = { 'BufRead' },
+  -- event = { 'BufRead' },
+  cmd = 'Oil',
+  keys = {
+	  {'-', '<CMD>Oil<CR>', { desc = 'Open parent directory' }}
+  },
   opts = {}, -- Plugin options (customize as needed)
   dependencies = {
     -- { 'echasnovski/mini.icons', opts = {} }, -- Optional: mini.icons
