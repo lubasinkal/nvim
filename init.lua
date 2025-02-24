@@ -337,7 +337,7 @@ require('lazy').setup({
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
-    event = { 'BufReadPre', 'BufNewFile' },
+    event = { 'BufRead' },
     -- event = 'UIEnter',
     -- event = 'VeryLazy',
     branch = '0.1.x',
@@ -777,7 +777,7 @@ require('lazy').setup({
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
+    event = 'BufRead',
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
       {
