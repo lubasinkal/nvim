@@ -1065,7 +1065,7 @@ require('lazy').setup({
     cooldown = 0,
   },
   performance = {
-    cache = { enabled = true },
+    cache = { enabled = false },
     reset_packpath = true,
     rtp = {
       reset = true,
