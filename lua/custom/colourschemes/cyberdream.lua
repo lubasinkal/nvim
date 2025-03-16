@@ -1,5 +1,5 @@
 return {
-  'scottmckendry/cyberdream.nvim',
+  -- 'scottmckendry/cyberdream.nvim',
 
   -- name = 'cyberdream',
   -- lazy = false, -- Load immediately

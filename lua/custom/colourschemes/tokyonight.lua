@@ -1,6 +1,6 @@
 return {
   {
-    'folke/tokyonight.nvim',
+    -- 'folke/tokyonight.nvim',
     -- name = 'tokyonight',
     -- lazy = false, -- Load immediately``
     -- priority = 1000,

@@ -1,5 +1,5 @@
 return {
-  'datsfilipe/vesper.nvim',
+  -- 'datsfilipe/vesper.nvim',
   -- name = 'vesper',
   -- lazy = false, -- Load immediately
   -- -- priority = 1000,
