@@ -1,7 +1,7 @@
 -- lazy.nvim
 return {
   'folke/noice.nvim',
-  event = 'BufRead',
+  event = {'VeryLazy', 'CmdLineEnter'},
   opts = {
     -- add any options here
   },

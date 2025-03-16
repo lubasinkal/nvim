@@ -158,6 +158,7 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+vim.opt.cmdheight = 0
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -337,7 +338,8 @@ require('lazy').setup({
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
-    event = { 'BufRead' },
+    event = { 'BufReadPre' },
+
     -- event = 'UIEnter',
     -- event = 'VeryLazy',
     branch = '0.1.x',
@@ -463,7 +465,7 @@ require('lazy').setup({
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     -- event = { 'BufRead' },
-    event = { 'BufRead', 'BufNewFile' },
+    event = { 'BufReadPre', 'BufNewFile' },
     cmd = { 'LspInfo', 'LspInstall', 'LspUninstall' },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
@@ -631,7 +633,15 @@ require('lazy').setup({
 
       local servers = {
         -- clangd = {},
-        gopls = {}, -- GoLang LSPs
+        gopls = {
+          cmd = { 'gopls' },
+          filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+          settings = {
+            gopls = {
+              completeUnimported = true,
+            },
+          },
+        }, -- GoLang LSPs
         ruff = {}, -- Python formater
         jedi_language_server = {}, -- Python LSP
 
@@ -777,7 +787,7 @@ require('lazy').setup({
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
-    event = 'BufRead',
+    event = 'InsertEnter',
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
       {
@@ -955,7 +965,7 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    event = { 'BufReadPre', 'BufNewFile' },
+    event = { 'BufReadPre' },
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
@@ -1065,7 +1075,7 @@ require('lazy').setup({
     cooldown = 0,
   },
   performance = {
-    cache = { enabled = false },
+    cache = { enabled = true },
     reset_packpath = true,
     rtp = {
       reset = true,

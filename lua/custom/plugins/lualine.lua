@@ -27,7 +27,10 @@ return {
             padding = { left = 1, right = 1 },
           },
         },
-        lualine_y = { 'searchcount', 'location' },
+        lualine_y = {
+          -- 'searchcount',
+          -- 'location',
+        },
         -- lualine_z = {'os.date("%H:%M:%S")'}, -- Show current time
       },
     }
