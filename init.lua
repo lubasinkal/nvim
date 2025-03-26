@@ -630,6 +630,8 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 
       -- NOTE: This is where you add functionality for code analysis, static type checking and formating. Press :Mason search for the LSP, linter or formater for the programming languange, get the name and add it under servers.
+      local lspconfig = require 'lspconfig'
+      local util = require 'lspconfig.util'
 
       local servers = {
         -- clangd = {},
@@ -643,7 +645,27 @@ require('lazy').setup({
           },
         }, -- GoLang LSPs
         ruff = {}, -- Python formater
-        jedi_language_server = {}, -- Python LSP
+        pylsp = {
+          root_dir = util.root_pattern('.venv', '.git', 'pyproject.toml', 'setup.py', 'requirements.txt'),
+
+          settings = {
+            pylsp = {
+              plugins = {
+                pyflakes = { enabled = false },
+                pycodestyle = { enabled = false },
+                autopep8 = { enabled = false },
+                yapf = { enabled = false },
+                mccabe = { enabled = false },
+                pylsp_mypy = { enabled = false },
+                pylsp_black = { enabled = false },
+                pylsp_isort = { enabled = false },
+              },
+            },
+          },
+        },
+        -- jedi_language_server = {
+        --   root_dir = util.root_pattern('.venv', '.git', 'pyproject.toml', 'setup.py', 'requirements.txt'),
+        -- }, -- Python LSP
 
         r_language_server = {
           -- Detect the platform
