@@ -1,7 +1,7 @@
 -- lazy.nvim
 return {
   'folke/noice.nvim',
-  event = {'VeryLazy', 'CmdLineEnter'},
+  event = { 'UIEnter', 'CmdLineEnter' },
   opts = {
     -- add any options here
   },
