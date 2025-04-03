@@ -9,7 +9,7 @@ return {
       icons_enabled = true,
       section_separators = { '', '' },
       component_separators = { '', '' },
-      globalstatus = true, -- Display the statusline in all windows
+      globalstatus = false, -- Display the statusline in all windows
       sections = {
         lualine_a = { 'mode' },
         lualine_b = { 'branch', 'diff' },

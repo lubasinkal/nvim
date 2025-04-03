@@ -4,7 +4,7 @@ return {
     -- name = 'nightfox',
     name = 'carbonfox',
     lazy = false, -- Load immediately
-    priority = 1000,
+    -- priority = 100,
     config = function()
       vim.cmd 'colorscheme carbonfox' -- Apply colorscheme
     end,
