@@ -650,8 +650,8 @@ require('lazy').setup({
       -- Get the LSP capabilities from blink.cmp
       -- local capabilities = blink_cmp.get_lsp_capabilities()
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      -- capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities({}, false))
-      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities({}, false))
+      -- capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -664,11 +664,30 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 
       -- NOTE: This is where you add functionality for code analysis, static type checking and formating. Press :Mason search for the LSP, linter or formater for the programming languange, get the name and add it under servers.
-      local lspconfig = require 'lspconfig'
+
       local util = require 'lspconfig.util'
 
+      -- NOTE: Function to detect the virtual environment path
+      local function get_venv_path()
+        local cwd = vim.fn.getcwd()
+        local venv_path = util.path.join(cwd, '.venv')
+        if vim.fn.isdirectory(venv_path) == 1 then
+          return venv_path
+        else
+          return nil
+        end
+      end
+
+      --NOTE: before_init function to set the jedi environment (FOR pylsp)
+      local function pylsp_before_init(_, config)
+        local venv_path = get_venv_path()
+        if venv_path then
+          config.settings.pylsp.plugins.jedi.environment = venv_path
+        end
+      end
+
       local servers = {
-        -- clangd = {},
+
         gopls = {
           cmd = { 'gopls' },
           filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
@@ -680,27 +699,27 @@ require('lazy').setup({
         }, -- GoLang LSPs
         ruff = {}, -- Python formater
         pylsp = {
+          before_init = pylsp_before_init,
           root_dir = util.root_pattern('.venv', '.git', 'pyproject.toml', 'setup.py', 'requirements.txt'),
-
           settings = {
             pylsp = {
               plugins = {
+                jedi = {
+                  environment = nil, -- This will be set by before_init
+                },
+                jedi_completion = { enabled = true },
                 pyflakes = { enabled = false },
                 pycodestyle = { enabled = false },
                 autopep8 = { enabled = false },
                 yapf = { enabled = false },
                 mccabe = { enabled = false },
-                pylsp_mypy = { enabled = false },
+                pylsp_mypy = { enabled = true, live_mode = false, daemon = true },
                 pylsp_black = { enabled = false },
                 pylsp_isort = { enabled = false },
               },
             },
           },
         },
-        -- jedi_language_server = {
-        --   root_dir = util.root_pattern('.venv', '.git', 'pyproject.toml', 'setup.py', 'requirements.txt'),
-        -- }, -- Python LSP
-
         r_language_server = {
           -- Detect the platform
           cmd = (function()
@@ -729,7 +748,6 @@ require('lazy').setup({
               }
             end
           end)(),
-          -- filetypes = { 'r', 'rmd' },
         },
 
         html = {},
@@ -738,20 +756,9 @@ require('lazy').setup({
         -- NOTE: ADD LSP/FORMATER/LINTER HERE; TRY TO KEEP TO THE FLOW  name = {},
 
         -- pyright = {},
-        -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
-        --
 
         lua_ls = {
-          -- cmd = { ... },
-          -- filetypes = { ... },
-          -- capabilities = {},
+
           settings = {
             Lua = {
               completion = {
@@ -893,6 +900,10 @@ require('lazy').setup({
         },
         completion = { completeopt = 'menu,menuone,noinsert' },
 
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
+        },
         -- For an understanding of why these mappings were
         -- chosen, you will need to read `:help ins-completion`
         --
