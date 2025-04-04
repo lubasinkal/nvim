@@ -122,6 +122,9 @@ end)
 -- Enable break indent
 vim.opt.breakindent = true
 
+-- Default borders
+-- vim.o.winborder = 'rounded'
+
 -- Save undo history
 vim.opt.undofile = true
 
@@ -878,18 +881,21 @@ require('lazy').setup({
         },
       },
       'saadparwaiz1/cmp_luasnip',
-
+      'onsails/lspkind.nvim',
       -- Adds other completion capabilities.
       --  nvim-cmp does not ship with all sources by default. They are split
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-nvim-lsp-signature-help',
+      'hrsh7th/cmp-cmdline',
     },
     config = function()
       -- See `:help cmp`
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
+
+      local lspkind = require 'lspkind'
       luasnip.config.setup {}
 
       cmp.setup {
@@ -933,7 +939,14 @@ require('lazy').setup({
           --  Generally you don't need this, because nvim-cmp will display
           --  completions whenever it has completion options available.
           ['<C-Space>'] = cmp.mapping.complete {},
+          ['<C-k>'] = cmp.mapping(function(fallback)
+            vim.lsp.buf.hover()
+          end, { 'i', 's' }),
 
+          -- optional: you can also add signature help with <C-h> like this:
+          ['<C-s>'] = cmp.mapping(function()
+            vim.lsp.buf.signature_help()
+          end, { 'i', 's' }),
           -- Think of <c-l> as moving to the right of your snippet expansion.
           --  So if you have a snippet that's like:
           --  function $name($args)
@@ -966,6 +979,21 @@ require('lazy').setup({
           { name = 'luasnip' },
           { name = 'path' },
           { name = 'nvim_lsp_signature_help' },
+          -- { name = 'cmdline' },
+        },
+        formatting = {
+          format = lspkind.cmp_format {
+            mode = 'symbol_text', -- or 'symbol' if you only want icons
+            maxwidth = 50,
+            ellipsis_char = '...',
+            menu = {
+              buffer = '[buf]',
+              nvim_lsp = '[LSP]',
+              path = '[path]',
+              luasnip = '[snip]',
+              -- cmdline = '[cmd]',
+            },
+          },
         },
       }
     end,
@@ -1120,8 +1148,8 @@ require('lazy').setup({
   },
   change_detection = {
     -- automatically check for config file changes and reload the ui
-    enabled = true,
-    notify = true, -- get a notification when changes are found
+    enabled = false,
+    notify = false, -- get a notification when changes are found
   },
   concurrency = jit.os:find 'Windows' and (vim.uv.available_parallelism() * 2) or nil,
   git = {
