@@ -682,13 +682,18 @@ require('lazy').setup({
       end
 
       --NOTE: before_init function to set the jedi environment (FOR pylsp)
-      local function pylsp_before_init(_, config)
-        local venv_path = get_venv_path()
-        if venv_path then
-          config.settings.pylsp.plugins.jedi.environment = venv_path
-        end
-      end
+      -- local function pylsp_before_init(_, config)
+      --   local venv_path = get_venv_path()
+      --   if venv_path then
+      --     config.settings.pylsp.plugins.jedi.environment = venv_path
+      --   end
+      -- end
 
+      local function pylsp_before_init(params, config)
+        -- Dynamically set virtualenv path from root_dir
+        local venv_path = util.path.join(config.root_dir, '.venv')
+        config.settings.pylsp.plugins.jedi.environment = venv_path
+      end
       local servers = {
 
         gopls = {
@@ -701,24 +706,41 @@ require('lazy').setup({
           },
         }, -- GoLang LSPs
         ruff = {}, -- Python formater
+
         pylsp = {
           before_init = pylsp_before_init,
           root_dir = util.root_pattern('.venv', '.git', 'pyproject.toml', 'setup.py', 'requirements.txt'),
+          on_attach = function(client)
+            print 'Pylsp Ready '
+          end,
           settings = {
             pylsp = {
               plugins = {
                 jedi = {
-                  environment = nil, -- This will be set by before_init
+                  -- If you're using virtual environments, uncomment the line below and provide the path
+                  -- environment = vim.fn.expand("~/.venv"),
                 },
                 jedi_completion = { enabled = true },
+                jedi_hover = { enabled = true },
+                jedi_references = { enabled = true },
+                jedi_signature_help = { enabled = true },
+                jedi_symbols = { enabled = true, all_scopes = false },
+
+                -- ⚡ Disabled these for better performance
                 pyflakes = { enabled = false },
                 pycodestyle = { enabled = false },
                 autopep8 = { enabled = false },
                 yapf = { enabled = false },
                 mccabe = { enabled = false },
-                pylsp_mypy = { enabled = true, live_mode = false, daemon = true },
                 pylsp_black = { enabled = false },
                 pylsp_isort = { enabled = false },
+
+                -- ✅ Static type checking (non-live for speed)
+                pylsp_mypy = {
+                  enabled = true,
+                  live_mode = true, -- Static analysis (off for better performance)
+                  daemon = true, -- Type checking runs in the background (faster)
+                },
               },
             },
           },
