@@ -137,7 +137,7 @@ Ensure you have CMake and Microsoft C++ Build Tools installed.
 2. Install dependencies:
 
    ```sh
-   choco install -y neovim git ripgrep wget fd unzip gzip mingw make
+   choco install -y neovim git ripgrep wget fd unzip gzip fzf lazygit zoxide make zig nodejs
    ```
 
 #### Windows Subsystem for Linux (WSL)
