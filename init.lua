@@ -251,6 +251,7 @@ require('lazy').setup({
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
+    event = 'BufRead',
     opts = {
       signs = {
         add = { text = '+' },
@@ -817,7 +818,7 @@ require('lazy').setup({
 
       require('mason-lspconfig').setup {
         -- ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = true,
+        -- automatic_installation = true,
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -847,7 +848,7 @@ require('lazy').setup({
       },
     },
     opts = {
-      notify_on_error = false,
+      notify_on_error = true,
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
@@ -866,7 +867,7 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         python = { 'ruff' },
-        go = { 'gofumpt' },
+        -- go = { 'gofumpt' },
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
       },
@@ -1046,6 +1047,7 @@ require('lazy').setup({
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
+    event = 'BufRead',
     config = function()
       -- Better Around/Inside textobjects
       --
@@ -1132,7 +1134,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   { import = 'custom.plugins' },
-  -- { import = 'custom.colourschemes' },
+
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
@@ -1157,51 +1159,12 @@ require('lazy').setup({
       lazy = '💤 ',
     },
   },
-  defaults = {
-    lazy = true,
-    version = nil,
-    cond = nil,
-  },
-  checker = {
-    enabled = false,
-    notify = false, -- get a notification when new updates are found
-    -- frequency = 3600, -- check for updates every hour
-    -- check_pinned = false, -- check for pinned packages that can't be updated
-  },
-  change_detection = {
-    -- automatically check for config file changes and reload the ui
-    enabled = false,
-    notify = false, -- get a notification when changes are found
-  },
-  concurrency = jit.os:find 'Windows' and (vim.uv.available_parallelism() * 2) or nil,
-  git = {
-    -- defaults for the `Lazy log` command
-    -- log = { "--since=3 days ago" }, -- show commits from the last 3 days
-    log = { '-8' }, -- show the last 8 commits
-    timeout = 120, -- kill processes that take more than 2 minutes
-    url_format = 'https://github.com/%s.git',
-    -- lazy.nvim requires git >=2.19.0. If you really want to use lazy with an older version,
-    -- then set the below to false. This should work, but is NOT supported and will
-    -- increase downloads a lot.
-    filter = true,
-    -- rate of network related git operations (clone, fetch, checkout)
-    throttle = {
-      enabled = false, -- not enabled by default
-      -- max 2 ops every 5 seconds
-      rate = 2,
-      duration = 5 * 1000, -- in ms
-    },
-    -- Time in seconds to wait before running fetch again for a plugin.
-    -- Repeated update/check operations will not run again until this
-    -- cooldown period has passed.
-    cooldown = 0,
-  },
+  install = { colorscheme = { 'tokyonight', 'carbonfox' } },
   performance = {
     cache = { enabled = true },
     reset_packpath = true,
     rtp = {
       reset = true,
-
       disabled_plugins = {
         'gzip',
         'matchit',

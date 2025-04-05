@@ -31,9 +31,7 @@ return {
     explorer = { enabled = true },
     indent = { enabled = true },
     input = { enabled = true },
-    statuscolumn = {},
     notifier = {
-
       enabled = true,
       timeout = 3000,
     },
