@@ -671,26 +671,9 @@ require('lazy').setup({
 
       local util = require 'lspconfig.util'
 
-      -- NOTE: Function to detect the virtual environment path
-      local function get_venv_path()
-        local cwd = vim.fn.getcwd()
-        local venv_path = util.path.join(cwd, '.venv')
-        if vim.fn.isdirectory(venv_path) == 1 then
-          return venv_path
-        else
-          return nil
-        end
-      end
-
-      --NOTE: before_init function to set the jedi environment (FOR pylsp)
-      -- local function pylsp_before_init(_, config)
-      --   local venv_path = get_venv_path()
-      --   if venv_path then
-      --     config.settings.pylsp.plugins.jedi.environment = venv_path
-      --   end
-      -- end
-
+     --NOTE: before_init function to set the jedi environment (FOR pylsp)
       local function pylsp_before_init(params, config)
+        -- Check if the root directory is set and if it contains a .venv directory
         -- Dynamically set virtualenv path from root_dir
         local venv_path = util.path.join(config.root_dir, '.venv')
         config.settings.pylsp.plugins.jedi.environment = venv_path
@@ -706,8 +689,7 @@ require('lazy').setup({
             },
           },
         }, -- GoLang LSPs
-        ruff = {}, -- Python formater
-
+        ruff = {}, -- Python formater  
         pylsp = {
           before_init = pylsp_before_init,
           root_dir = util.root_pattern('.venv', '.git', 'pyproject.toml', 'setup.py', 'requirements.txt'),
@@ -740,7 +722,7 @@ require('lazy').setup({
                 pylsp_mypy = {
                   enabled = true,
                   live_mode = true, -- Static analysis (off for better performance)
-                  daemon = true, -- Type checking runs in the background (faster)
+                  daemon = false, -- Type checking runs in the background (faster)
                 },
               },
             },
