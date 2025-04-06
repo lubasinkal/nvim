@@ -671,7 +671,7 @@ require('lazy').setup({
 
       local util = require 'lspconfig.util'
 
-     --NOTE: before_init function to set the jedi environment (FOR pylsp)
+      --NOTE: before_init function to set the jedi environment (FOR pylsp)
       local function pylsp_before_init(params, config)
         -- Check if the root directory is set and if it contains a .venv directory
         -- Dynamically set virtualenv path from root_dir
@@ -689,7 +689,7 @@ require('lazy').setup({
             },
           },
         }, -- GoLang LSPs
-        ruff = {}, -- Python formater  
+        ruff = {}, -- Python formater
         pylsp = {
           before_init = pylsp_before_init,
           root_dir = util.root_pattern('.venv', '.git', 'pyproject.toml', 'setup.py', 'requirements.txt'),
@@ -720,9 +720,9 @@ require('lazy').setup({
 
                 -- ✅ Static type checking (non-live for speed)
                 pylsp_mypy = {
-                  enabled = true,
-                  live_mode = true, -- Static analysis (off for better performance)
-                  daemon = false, -- Type checking runs in the background (faster)
+                  enabled = false,
+                  -- live_mode = true, -- Static analysis (off for better performance)
+                  -- daemon = false, -- Type checking runs in the background (faster)
                 },
               },
             },
