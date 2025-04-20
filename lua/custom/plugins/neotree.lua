@@ -9,9 +9,13 @@ return {
   },
   cmd = 'Neotree',
 
+  -- keys = {
+  --   { '<leader>e', ':Neotree float toggle<CR>', desc = 'Toggle Neotree (Root Dir in Float)', silent = true },
+  -- },
   keys = {
-    { '<leader>e', ':Neotree float toggle<CR>', desc = 'Toggle Neotree (Root Dir in Float)', silent = true },
+    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
   },
+
   opts = {
     filesystem = {
       window = {
