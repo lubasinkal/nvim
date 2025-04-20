@@ -15,20 +15,7 @@
 
 return {
   'R-nvim/R.nvim',
-  lazy = true, -- Ensures the plugin loads immediately if lazy loading is enabled globally
-  version = '~0.1.0', -- Pin to a minor version
-  -- event = 'VeryLazy',
+  -- Only required if you also set defaults.lazy = true
+  lazy = true,
   ft = 'r',
-  dependencies = {
-    {
-      'nvim-treesitter/nvim-treesitter',
-      build = ':TSUpdate', -- Correct way to run post-install commands in lazy.nvim
-      config = function()
-        require('nvim-treesitter.configs').setup {
-          ensure_installed = { 'markdown', 'markdown_inline', 'r', 'rnoweb', 'yaml', 'latex', 'csv' },
-          highlight = { enable = true },
-        }
-      end,
-    },
-  },
 }

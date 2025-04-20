@@ -343,7 +343,7 @@ require('lazy').setup({
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
-    event = { 'BufReadPre' },
+    event = { 'BufRead' },
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -466,7 +466,7 @@ require('lazy').setup({
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     -- event = { 'BufRead' },
-    event = { 'BufReadPre', 'BufNewFile' },
+    event = { 'BufRead', 'BufNewFile' },
     cmd = { 'LspInfo', 'LspInstall', 'LspUninstall' },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
@@ -675,6 +675,8 @@ require('lazy').setup({
       local function pylsp_before_init(params, config)
         -- Check if the root directory is set and if it contains a .venv directory
         -- Dynamically set virtualenv path from root_dir
+        vim.notify('Pylsp is Loading ⏰', vim.log.levels.INFO, { title = 'LSP' })
+
         local venv_path = util.path.join(config.root_dir, '.venv')
         config.settings.pylsp.plugins.jedi.environment = venv_path
       end
@@ -694,7 +696,7 @@ require('lazy').setup({
           before_init = pylsp_before_init,
           root_dir = util.root_pattern('.venv', '.git', 'pyproject.toml', 'setup.py', 'requirements.txt'),
           on_attach = function(client)
-            print 'Pylsp Ready '
+            vim.notify('Pylsp is ready 🚀', vim.log.levels.INFO, { title = 'LSP' })
           end,
           settings = {
             pylsp = {
@@ -817,7 +819,7 @@ require('lazy').setup({
 
   { -- Autoformat
     'stevearc/conform.nvim',
-    event = { 'BufWritePre', 'BufRead' },
+    event = { 'BufWritePre', 'BufWrite' },
     cmd = { 'ConformInfo' },
     keys = {
       {
@@ -1068,7 +1070,7 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    event = { 'BufReadPre', 'BufRead', 'BufReadPost', 'BufNewFile' },
+    event = { 'BufRead', 'BufReadPost', 'BufNewFile' },
     dependencies = {
       { 'nvim-treesitter/nvim-treesitter-textobjects', opt = { after = 'nvim-treesitter/nvim-treesitter' } },
     },
