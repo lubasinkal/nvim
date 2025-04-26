@@ -94,6 +94,9 @@ vim.g.have_nerd_font = true
 
 vim.api.nvim_set_keymap('n', ';', ':', { noremap = true, silent = false })
 vim.api.nvim_set_keymap('n', ':', ':', { noremap = true, silent = false })
+vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
@@ -103,8 +106,12 @@ vim.api.nvim_set_keymap('n', ':', ':', { noremap = true, silent = false })
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
+vim.opt.nu = true
 vim.opt.relativenumber = true
-
+vim.opt.incsearch = true
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
 
@@ -160,7 +167,7 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
-vim.opt.cmdheight = 0
+-- vim.opt.cmdheight = 0
 
 vim.opt.confirm = true
 -- [[ Basic Keymaps ]]
@@ -986,7 +993,6 @@ require('lazy').setup({
           { name = 'luasnip' },
           { name = 'path' },
           { name = 'nvim_lsp_signature_help' },
-          -- { name = 'cmdline' },
         },
         formatting = {
           format = lspkind.cmp_format {
@@ -998,7 +1004,6 @@ require('lazy').setup({
               nvim_lsp = '[LSP]',
               path = '[path]',
               luasnip = '[snip]',
-              -- cmdline = '[cmd]',
             },
           },
         },
@@ -1006,7 +1011,6 @@ require('lazy').setup({
     end,
   },
 
-  { import = 'custom.colourschemes' },
   -- { -- You can easily change to a different colorscheme.
   --   -- Change the name of the colorscheme plugin below, and then
   --   -- change the command in the config to whatever the name of that colorscheme is.
@@ -1070,6 +1074,7 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
+    -- run = ':TSUpdate',
     event = { 'BufRead', 'BufReadPost', 'BufNewFile' },
     dependencies = {
       { 'nvim-treesitter/nvim-treesitter-textobjects', opt = { after = 'nvim-treesitter/nvim-treesitter' } },
@@ -1077,7 +1082,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'regex' },
+      ensure_installed = { 'python', 'javascript', 'golang', 'r', 'bash', 'diff', 'html', 'lua', 'css' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1109,7 +1114,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  require 'kickstart.plugins.autopairs',
+  -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
@@ -1118,6 +1123,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   { import = 'custom.plugins' },
+  { import = 'custom.colourschemes' },
 
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
