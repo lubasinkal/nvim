@@ -109,8 +109,8 @@ vim.opt.number = true
 vim.opt.nu = true
 vim.opt.relativenumber = true
 vim.opt.incsearch = true
-vim.opt.swapfile = false
-vim.opt.backup = false
+-- vim.opt.swapfile = false
+-- vim.opt.backup = false
 vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -919,10 +919,27 @@ require('lazy').setup({
           end,
         },
         completion = { completeopt = 'menu,menuone,noinsert' },
+        experimental = { ghost_text = true },
 
         window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
+          completion = cmp.config.window.bordered {
+            border = 'rounded',
+            winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+            zindex = 1001,
+            scrolloff = 0,
+            col_offset = 0,
+            side_padding = 1,
+            scrollbar = true,
+          },
+          documentation = cmp.config.window.bordered {
+            border = 'rounded',
+            winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+            zindex = 1001,
+            scrolloff = 0,
+            col_offset = 0,
+            side_padding = 1,
+            scrollbar = true,
+          },
         },
         -- For an understanding of why these mappings were
         -- chosen, you will need to read `:help ins-completion`
@@ -989,10 +1006,11 @@ require('lazy').setup({
             -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
             group_index = 0,
           },
-          { name = 'nvim_lsp' },
+
           { name = 'luasnip' },
-          { name = 'path' },
+          { name = 'nvim_lsp' },
           { name = 'nvim_lsp_signature_help' },
+          { name = 'path' },
         },
         formatting = {
           format = lspkind.cmp_format {
@@ -1082,7 +1100,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'python', 'javascript', 'golang', 'r', 'bash', 'diff', 'html', 'lua', 'css' },
+      ensure_installed = { 'python', 'javascript', 'go', 'r', 'bash', 'diff', 'html', 'lua', 'css' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
