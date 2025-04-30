@@ -549,14 +549,22 @@ require('lazy').setup({
 
       local util = require 'lspconfig.util'
 
-      --NOTE: before_init function to set the jedi environment (FOR pylsp)
       local function pylsp_before_init(params, config)
-        -- Check if the root directory is set and if it contains a .venv directory
-        -- Dynamically set virtualenv path from root_dir
         vim.notify('Pylsp is Loading ⏰', vim.log.levels.INFO, { title = 'LSP' })
 
         local venv_path = util.path.join(config.root_dir, '.venv')
-        config.settings.pylsp.plugins.jedi.environment = venv_path
+
+        -- Check if the .venv directory exists
+        if vim.fn.isdirectory(venv_path) == 1 then
+          -- config.settings = config.settings or {}
+          -- config.settings.pylsp = config.settings.pylsp or {}
+          -- config.settings.pylsp.plugins = config.settings.pylsp.plugins or {}
+          -- config.settings.pylsp.plugins.jedi = config.settings.pylsp.plugins.jedi or {}
+          --
+          config.settings.pylsp.plugins.jedi.environment = venv_path
+        else
+          vim.notify('.venv not found, skipping Jedi environment setup ⚠️', vim.log.levels.WARN, { title = 'LSP' })
+        end
       end
       local servers = {
 
@@ -600,9 +608,9 @@ require('lazy').setup({
 
                 -- ✅ Static type checking (non-live for speed)
                 pylsp_mypy = {
-                  enabled = false,
+                  enabled = true,
                   -- live_mode = true, -- Static analysis (off for better performance)
-                  -- daemon = false, -- Type checking runs in the background (faster)
+                  daemon = true, -- Type checking runs in the background (faster)
                 },
               },
             },
@@ -877,9 +885,8 @@ require('lazy').setup({
             -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
             group_index = 0,
           },
-
-          { name = 'luasnip' },
           { name = 'nvim_lsp' },
+          { name = 'luasnip' },
           { name = 'nvim_lsp_signature_help' },
           { name = 'path' },
         },
