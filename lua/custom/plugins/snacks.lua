@@ -32,20 +32,21 @@ return {
     indent = { enabled = true },
     input = { enabled = true },
     notifier = {
-      enabled = true,
-      timeout = 3000,
+      -- enabled = true,
+      -- timeout = 3000,
     },
-    picker = { enabled = true },
-    quickfile = { enabled = true },
+    picker = {
+      -- enabled = true
+    },
+    quickfile = {
+      -- enabled = true
+    },
     scope = { enabled = true },
-    scroll = { enabled = true },
+    scroll = {},
+    toggle = {},
+    scratch = {},
     statuscolumn = { enabled = true },
     words = { enabled = true },
-    styles = {
-      notification = {
-        -- wo = { wrap = true } -- Wrap notifications
-      },
-    },
   },
   keys = {
     -- Top Pickers & Explorer
