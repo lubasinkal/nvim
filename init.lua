@@ -221,7 +221,7 @@ require('lazy').setup({
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
-    event = { 'BufRead' },
+    event = { 'BufReadPost' },
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -911,7 +911,7 @@ require('lazy').setup({
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
-    event = 'BufRead',
+    event = 'VeryLazy',
     config = function()
       -- Better Around/Inside textobjects
       --
@@ -951,10 +951,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     -- run = ':TSUpdate',
-    event = { 'BufRead', 'BufReadPost', 'BufNewFile' },
-    dependencies = {
-      { 'nvim-treesitter/nvim-treesitter-textobjects', opt = { after = 'nvim-treesitter/nvim-treesitter' } },
-    },
+    event = { 'BufRead', 'BufNewFile' },
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {

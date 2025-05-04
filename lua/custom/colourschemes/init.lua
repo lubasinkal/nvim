@@ -5,10 +5,8 @@ return {
   -- name = 'oxocarbon',
   'scottmckendry/cyberdream.nvim',
 
-  event = { 'BufRead', 'BufReadPre' },
+  event = { 'VeryLazy' },
 
-  -- lazy = false, -- Load immediately
-  -- priority = 100,
   config = function()
     vim.cmd 'colorscheme cyberdream' -- Apply colorscheme
     vim.opt.background = 'dark' -- set this to dark or light
