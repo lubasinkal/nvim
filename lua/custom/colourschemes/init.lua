@@ -5,7 +5,7 @@ return {
   -- name = 'oxocarbon',
   'scottmckendry/cyberdream.nvim',
 
-  event = { 'BufRead' },
+  event = { 'VimEnter' },
 
   config = function()
     vim.cmd 'colorscheme cyberdream' -- Apply colorscheme
