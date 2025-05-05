@@ -6,13 +6,13 @@ return {
   config = function()
     local mode_color = {
       n = { fg = '#000000', bg = '#ADD8E6', gui = 'bold' }, -- Normal - Light Blue
-      i = { fg = '#000000', bg = '#90EE90', gui = 'bold' }, -- Insert - Light Green
-      v = { fg = '#000000', bg = '#DDA0DD', gui = 'bold' }, -- Visual - Plum
+      i = { fg = '#000000', bg = '#91FF72', gui = 'bold' }, -- Insert - Light Green
+      v = { fg = '#000000', bg = '#E06AFF', gui = 'bold' }, -- Visual - Plum
       V = { fg = '#000000', bg = '#DDA0DD', gui = 'bold' }, -- Visual Line
       [''] = { fg = '#000000', bg = '#DDA0DD', gui = 'bold' }, -- Visual Block
       c = { fg = '#000000', bg = '#FFD700', gui = 'bold' }, -- Command - Gold
       s = { fg = '#000000', bg = '#FF7F7F', gui = 'bold' }, -- Select - Light Red
-      R = { fg = '#000000', bg = '#FFFF99', gui = 'bold' }, -- Replace - Pale Yellow
+      R = { fg = '#000000', bg = '#BFBFBF', gui = 'bold' }, -- Replace - Pale Yellow
       t = { fg = '#000000', bg = '#AFEEEE', gui = 'bold' }, -- Terminal - Pale Turquoise
     }
 
