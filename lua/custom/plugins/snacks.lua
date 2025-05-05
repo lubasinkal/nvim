@@ -31,22 +31,22 @@ return {
     explorer = { enabled = true },
     indent = { enabled = true },
     input = { enabled = true },
-    notifier = {
-      -- enabled = true,
-      -- timeout = 3000,
-    },
+    -- notifier = {
+    -- enabled = true,
+    -- timeout = 3000,
+    -- },
     picker = {
       -- enabled = true
     },
     quickfile = {
       -- enabled = true
     },
-    scope = { enabled = true },
-    scroll = {},
-    toggle = {},
+    -- scope = { enabled = true },
+    -- scroll = {},
+    -- toggle = {},
     scratch = {},
-    statuscolumn = { enabled = true },
-    words = { enabled = true },
+    -- statuscolumn = { enabled = true },
+    -- words = { enabled = true },
   },
   keys = {
     -- Top Pickers & Explorer
