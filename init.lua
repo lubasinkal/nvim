@@ -129,7 +129,7 @@ require('lazy').setup({
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
-    event = 'BufReadPost',
+    event = 'BufRead',
     opts = {
       signs = {
         add = { text = '+' },
@@ -548,7 +548,6 @@ require('lazy').setup({
       -- NOTE: This is where you add functionality for code analysis, static type checking and formating. Press :Mason search for the LSP, linter or formater for the programming languange, get the name and add it under servers.
 
       local util = require 'lspconfig.util'
-
       local function pylsp_before_init(params, config)
         vim.notify('Pylsp is Loading ⏰', vim.log.levels.INFO, { title = 'LSP' })
 
@@ -647,12 +646,26 @@ require('lazy').setup({
         },
 
         html = {},
-        htmlhint = {},
 
         -- NOTE: ADD LSP/FORMATER/LINTER HERE; TRY TO KEEP TO THE FLOW  name = {},
+        tailwindcss = {},
+        cssls = {},
 
-        -- pyright = {},
-
+        -- Vue 3
+        volar = {},
+        -- TypeScript
+        ts_ls = {
+          filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+          init_options = {
+            plugins = {
+              {
+                name = '@vue/typescript-plugin',
+                location = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server',
+                languages = { 'vue' },
+              },
+            },
+          },
+        },
         lua_ls = {
 
           settings = {
@@ -908,7 +921,11 @@ require('lazy').setup({
   --
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'BufReadPost', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
-
+  -- plugin: ts_context_commentstring
+  {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    lazy = true,
+  },
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     event = 'BufReadPost',
@@ -920,13 +937,13 @@ require('lazy').setup({
       --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
-
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
+      require('mini.pairs').setup()
       --
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
+
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
@@ -945,19 +962,30 @@ require('lazy').setup({
       --
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
+      require('mini.comment').setup {
+        options = {
+          custom_commentstring = function()
+            return require('ts_context_commentstring.internal').calculate_commentstring() or vim.bo.commentstring
+          end,
+        },
+      }
     end,
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    event = { 'BufReadPost', 'BufNewFile' },
+    event = { 'BufRead', 'BufNewFile' },
     cmd = { 'TSUpdateSync' },
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'python', 'javascript', 'go', 'r', 'bash', 'diff', 'html', 'lua', 'css' },
+      ensure_installed = { 'python', 'javascript', 'go', 'r', 'bash', 'diff', 'lua', 'vue', 'html', 'css', 'javascript', 'typescript' },
       -- Autoinstall languages that are not installed
       auto_install = true,
+      context_commentstring = {
+        enable = true,
+        enable_autocmd = false,
+      },
       highlight = {
         enable = true,
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
@@ -1024,8 +1052,8 @@ require('lazy').setup({
   },
 
   performance = {
-    cache = { enabled = true },
-    reset_packpath = true,
+    -- cache = { enabled = true },
+    -- reset_packpath = true,
     rtp = {
       reset = true,
       disabled_plugins = {

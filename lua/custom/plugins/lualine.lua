@@ -1,85 +1,84 @@
 return {
   'nvim-lualine/lualine.nvim',
-  lazy = true,
-  event = { 'BufRead' },
+  event = 'BufRead',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   config = function()
-    local mode_color = {
-      n = { fg = '#000000', bg = '#ADD8E6', gui = 'bold' }, -- Normal - Light Blue
-      i = { fg = '#000000', bg = '#91FF72', gui = 'bold' }, -- Insert - Light Green
-      v = { fg = '#000000', bg = '#E06AFF', gui = 'bold' }, -- Visual - Plum
-      V = { fg = '#000000', bg = '#DDA0DD', gui = 'bold' }, -- Visual Line
-      [''] = { fg = '#000000', bg = '#DDA0DD', gui = 'bold' }, -- Visual Block
-      c = { fg = '#000000', bg = '#FFD700', gui = 'bold' }, -- Command - Gold
-      s = { fg = '#000000', bg = '#FF7F7F', gui = 'bold' }, -- Select - Light Red
-      R = { fg = '#000000', bg = '#BFBFBF', gui = 'bold' }, -- Replace - Pale Yellow
-      t = { fg = '#000000', bg = '#AFEEEE', gui = 'bold' }, -- Terminal - Pale Turquoise
+    local colors = {
+      blue = '#80a0ff',
+      cyan = '#79dac8',
+      black = '#0d0d0f',
+      white = '#c6c6c6',
+      red = '#ff5189',
+      violet = '#d183e8',
+      grey = '#08080f',
+      mustard = '#f2c811',
+    }
+
+    local bubbles_theme = {
+      normal = {
+        a = { fg = colors.black, bg = colors.violet },
+        b = { fg = colors.white, bg = colors.grey },
+        c = { fg = colors.white },
+      },
+      insert = {
+        a = { fg = colors.black, bg = colors.blue },
+      },
+      visual = {
+        a = { fg = colors.black, bg = colors.cyan },
+      },
+      replace = {
+        a = { fg = colors.black, bg = colors.red },
+      },
+      command = {
+        a = { fg = colors.black, bg = colors.mustard },
+      },
+      inactive = {
+        a = { fg = colors.white, bg = colors.black },
+        b = { fg = colors.white, bg = colors.black },
+        c = { fg = colors.white },
+      },
     }
 
     require('lualine').setup {
       options = {
-        theme = 'auto',
+        theme = bubbles_theme,
         icons_enabled = true,
-        component_separators = { left = '|', right = '' },
-        globalstatus = true,
+        component_separators = { left = '', right = '' },
+        section_separators = { left = '', right = '' },
+        disabled_filetypes = {
+          statusline = {},
+          winbar = {},
+        },
+        ignore_focus = {},
+        always_divide_middle = true,
+        always_show_tabline = true,
+        globalstatus = false,
+        refresh = {
+          statusline = 100,
+          tabline = 100,
+          winbar = 100,
+        },
       },
       sections = {
-        lualine_a = {
-          {
-            'mode',
-            icon = '',
-            color = function()
-              -- Get the current mode
-              local mode = vim.fn.mode()
-              return mode_color[mode] or { fg = '#ffffff', bg = '#4C566A', gui = 'bold' } -- fallback: dark gray
-            end,
-          },
-        },
-        lualine_b = { { 'branch', icon = '' } },
-        lualine_c = {
-          {
-            'filename',
-            symbols = {
-              modified = ' ●',
-              readonly = ' 🔒',
-              unnamed = '[No Name]',
-            },
-          },
-        },
-        lualine_x = {
-          { 'filetype', icon_only = true },
-          'encoding',
-        },
+        lualine_a = { 'mode' },
+        lualine_b = { { 'branch', icon = '' }, 'diff', 'diagnostics' },
+        lualine_c = { 'filename' },
+        lualine_x = { 'encoding', 'filetype' },
         lualine_y = { 'progress' },
-        lualine_z = {
-          {
-            'location',
-            icon = '',
-            color = function()
-              -- Get the current mode
-              local mode = vim.fn.mode()
-              return mode_color[mode] or { fg = '#ffffff', bg = '#4C566A', gui = 'bold' } -- fallback: dark gray
-            end,
-          },
-        },
+        lualine_z = { 'location' },
       },
       inactive_sections = {
         lualine_a = {},
         lualine_b = {},
-        lualine_c = {
-          {
-            'filename',
-            symbols = {
-              modified = ' ●',
-              readonly = ' 🔒',
-              unnamed = '[No Name]',
-            },
-          },
-        },
-        lualine_x = {},
+        lualine_c = { 'filename' },
+        lualine_x = { 'location' },
         lualine_y = {},
         lualine_z = {},
       },
+      tabline = {},
+      winbar = {},
+      inactive_winbar = {},
+      extensions = {},
     }
   end,
 }
