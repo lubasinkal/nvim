@@ -607,9 +607,9 @@ require('lazy').setup({
 
                 -- ✅ Static type checking (non-live for speed)
                 pylsp_mypy = {
-                  enabled = true,
+                  enabled = false,
                   -- live_mode = true, -- Static analysis (off for better performance)
-                  daemon = true, -- Type checking runs in the background (faster)
+                  -- daemon = true, -- Type checking runs in the background (faster)
                 },
               },
             },
@@ -943,7 +943,6 @@ require('lazy').setup({
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
-
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
