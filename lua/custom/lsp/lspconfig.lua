@@ -240,48 +240,24 @@ return {
 
             plugins = {
 
-              jedi = {
-
-                -- If you're using virtual environments, uncomment the line below and provide the path
-
-                -- environment = vim.fn.expand("~/.venv"),
-              },
-
+              jedi = {},
               jedi_completion = { enabled = true },
-
               jedi_hover = { enabled = true },
-
               jedi_references = { enabled = true },
-
               jedi_signature_help = { enabled = true },
-
               jedi_symbols = { enabled = true, all_scopes = false },
 
               -- ⚡ Disabled these for better performance
-
               pyflakes = { enabled = false },
-
               pycodestyle = { enabled = false },
-
               autopep8 = { enabled = false },
-
               yapf = { enabled = false },
-
               mccabe = { enabled = false },
-
               pylsp_black = { enabled = false },
-
               pylsp_isort = { enabled = false },
-
               -- ✅ Static type checking (non-live for speed)
-
               pylsp_mypy = {
-
                 enabled = false,
-
-                -- live_mode = true, -- Static analysis (off for better performance)
-
-                -- daemon = true, -- Type checking runs in the background (faster)
               },
             },
           },
@@ -290,65 +266,11 @@ return {
 
       r_language_server = {
         -- Use a dynamic command based on OS and package availability
-        cmd = (function()
-          -- Function to check if an R package is installed
-          -- Runs a small R script using vim.fn.system
-          local function check_r_package(package_name)
-            -- Use --vanilla and --slave for a clean, non-interactive session
-            local cmd = { 'R', '--vanilla', '--slave', '-e', string.format('cat(find.package("%s", quiet = TRUE))', package_name) }
-            local result = vim.fn.system(cmd)
-            -- vim.fn.system returns empty string if the command fails or the package is not found (quiet=TRUE)
-            -- Check if the result is not empty, indicating a package path was found
-            return result ~= '' and result:match('%S+') ~= nil -- Also check for at least one non-whitespace character
-          end
-      
-          -- Check if the 'languageserver' package is installed
-          local is_languageserver_installed = check_r_package('languageserver')
-      
-          -- If the package is not installed, notify the user and don't return a command
-          if not is_languageserver_installed then
-            vim.notify(
-              "R package 'languageserver' not found. Please install it in R by running: install.packages('languageserver')",
-              vim.log.levels.WARN,
-              { title = 'R Language Server' }
-            )
-            return nil -- Return nil or {} to prevent lspconfig from attempting to start the server
-          end
-      
-          -- If the package is installed, determine the command based on the platform
-          if vim.fn.has 'win32' == 1 or vim.fn.has 'win64' == 1 then
-            -- Command for Windows
-            return {
-              'R',
-              '--vanilla',
-              '--slave',
-              '-e',
-              -- Combine the R script lines into a single string, separated by semicolons
-              -- Using sub() instead of strsplit() to get the minor version part
-              'R_version <- paste(R.version$major, sub("\\\\..*", "", R.version$minor), sep="."); '
-                .. 'R_lib_path <- file.path(Sys.getenv("USERPROFILE"), "AppData", "Local", "R", "win-library", R_version); '
-                .. 'R_lib_path <- gsub("/", "\\\\", R_lib_path); '
-                .. 'Sys.setenv(R_LIBS_USER = R_lib_path); '
-                .. 'languageserver::run()',
-            }
-          else
-            -- Command for non-Windows (Linux/macOS/WSL)
-            return {
-              'R',
-              '--vanilla',
-              '--slave',
-              '-e',
-              -- Combine the R script lines into a single string, separated by semicolons
-              -- Using sub() instead of strsplit() to get the minor version part
-              'R_version <- paste(R.version$major, sub("\\\\..*", "", R.version$minor), sep="."); '
-                .. 'R_lib_path <- file.path(Sys.getenv("HOME"), ".local", "lib", "R", R_version); '
-                .. 'Sys.setenv(R_LIBS_USER = R_lib_path); '
-                .. 'languageserver::run()',
-            }
-          end
-        end)(), -- Immediately invoke the function to determine the cmd value
-        -- Add other r_language_server options here if needed, e.g. root_dir, settings
-        -- root_dir = require('lspconfig.util').root_pattern('.git', 'DESCRIPTION'),
+        root_dir = function(fname)
+          return require('lspconfig.util').root_pattern('DESCRIPTION', 'NAMESPACE', '.Rbuildignore')(fname)
+            or require('lspconfig.util').find_git_ancestor(fname)
+            or vim.loop.os_homedir()
+        end,
       },
       html = {},
       tailwindcss = {},
