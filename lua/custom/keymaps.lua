@@ -4,6 +4,8 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+vim.api.nvim_set_keymap('n', ';', ':', { noremap = true, silent = false })
+vim.api.nvim_set_keymap('n', ':', ':', { noremap = true, silent = false })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -48,4 +50,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
-

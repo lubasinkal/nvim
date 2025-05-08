@@ -1,8 +1,6 @@
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
-vim.api.nvim_set_keymap('n', ';', ':', { noremap = true, silent = false })
-vim.api.nvim_set_keymap('n', ':', ':', { noremap = true, silent = false })
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 vim.opt.incsearch = true
@@ -21,7 +19,7 @@ vim.o.shiftwidth = 4 -- The number of spaces inserted for each indentation (defa
 vim.o.tabstop = 4 -- Insert n spaces for a tab (default: 8)
 vim.o.softtabstop = 4 -- Number of spaces that a tab counts for while performing editing operations (default: 0)
 vim.o.expandtab = true -- Convert tabs to spaces (default: false)
-vim.o.scrolloff = 4 -- Minimal number of screen lines to keep above and below the cursor (default: 0)
+vim.o.scrolloff = 12 -- Minimal number of screen lines to keep above and below the cursor (default: 0)
 vim.o.sidescrolloff = 8 -- Minimal number of screen columns either side of cursor if wrap is `false` (default: 0)
 
 vim.opt.splitright = true
