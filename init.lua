@@ -31,7 +31,11 @@ require('lazy').setup({
       },
     },
   },
-
+  {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    lazy = true,
+    opts = {},
+  },
   -- Collection of various small independent plugins/modules (Mini.nvim)
   {
     'echasnovski/mini.nvim',
@@ -39,9 +43,9 @@ require('lazy').setup({
 
     -- Make nvim-ts-context-commentstring a dependency of mini.nvim
     -- This ensures it's loaded when mini.comment needs it
-    dependencies = {
-      'JoosepAlviste/nvim-ts-context-commentstring',
-    },
+    -- dependencies = {
+    --   'JoosepAlviste/nvim-ts-context-commentstring',
+    -- },
 
     config = function()
       -- [[ Configure Mini.nvim Modules ]]
@@ -63,7 +67,7 @@ require('lazy').setup({
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      -- require('mini.surround').setup()
 
       -- Commenting module
       -- Uses ts_context_commentstring for intelligent commenting

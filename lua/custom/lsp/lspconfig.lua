@@ -289,47 +289,67 @@ return {
       },
 
       r_language_server = {
-
-        -- Detect the platform
-
+        -- Use a dynamic command based on OS and package availability
         cmd = (function()
+          -- Function to check if an R package is installed
+          -- Runs a small R script using vim.fn.system
+          local function check_r_package(package_name)
+            -- Use --vanilla and --slave for a clean, non-interactive session
+            local cmd = { 'R', '--vanilla', '--slave', '-e', string.format('cat(find.package("%s", quiet = TRUE))', package_name) }
+            local result = vim.fn.system(cmd)
+            -- vim.fn.system returns empty string if the command fails or the package is not found (quiet=TRUE)
+            -- Check if the result is not empty, indicating a package path was found
+            return result ~= '' and result:match('%S+') ~= nil -- Also check for at least one non-whitespace character
+          end
+      
+          -- Check if the 'languageserver' package is installed
+          local is_languageserver_installed = check_r_package('languageserver')
+      
+          -- If the package is not installed, notify the user and don't return a command
+          if not is_languageserver_installed then
+            vim.notify(
+              "R package 'languageserver' not found. Please install it in R by running: install.packages('languageserver')",
+              vim.log.levels.WARN,
+              { title = 'R Language Server' }
+            )
+            return nil -- Return nil or {} to prevent lspconfig from attempting to start the server
+          end
+      
+          -- If the package is installed, determine the command based on the platform
           if vim.fn.has 'win32' == 1 or vim.fn.has 'win64' == 1 then
+            -- Command for Windows
             return {
-
               'R',
-
               '--vanilla',
-
               '--slave',
-
               '-e',
-
-              'R_version <- paste(R.version$major, strsplit(R.version$minor, "\\\\.")[[1]][1], sep="."); '
+              -- Combine the R script lines into a single string, separated by semicolons
+              -- Using sub() instead of strsplit() to get the minor version part
+              'R_version <- paste(R.version$major, sub("\\\\..*", "", R.version$minor), sep="."); '
                 .. 'R_lib_path <- file.path(Sys.getenv("USERPROFILE"), "AppData", "Local", "R", "win-library", R_version); '
                 .. 'R_lib_path <- gsub("/", "\\\\", R_lib_path); '
                 .. 'Sys.setenv(R_LIBS_USER = R_lib_path); '
                 .. 'languageserver::run()',
             }
           else
+            -- Command for non-Windows (Linux/macOS/WSL)
             return {
-
               'R',
-
               '--vanilla',
-
               '--slave',
-
               '-e',
-
-              'R_version <- paste(R.version$major, strsplit(R.version$minor, "\\\\.")[[1]][1], sep="."); '
+              -- Combine the R script lines into a single string, separated by semicolons
+              -- Using sub() instead of strsplit() to get the minor version part
+              'R_version <- paste(R.version$major, sub("\\\\..*", "", R.version$minor), sep="."); '
                 .. 'R_lib_path <- file.path(Sys.getenv("HOME"), ".local", "lib", "R", R_version); '
                 .. 'Sys.setenv(R_LIBS_USER = R_lib_path); '
                 .. 'languageserver::run()',
             }
           end
-        end)(),
+        end)(), -- Immediately invoke the function to determine the cmd value
+        -- Add other r_language_server options here if needed, e.g. root_dir, settings
+        -- root_dir = require('lspconfig.util').root_pattern('.git', 'DESCRIPTION'),
       },
-
       html = {},
       tailwindcss = {},
       cssls = {},
