@@ -1,7 +1,7 @@
 return {
   'folke/snacks.nvim',
   priority = 1000,
-  lazy = false,
+  lazy = false, -- Snacks is designed to load early
   ---@type snacks.Config
   opts = {
     bigfile = { enabled = true },
@@ -24,7 +24,7 @@ return {
       sections = {
         { section = 'header' },
         { section = 'keys', padding = 1 },
-        { pane = 2, icon = ' ', title = 'Recent Files', section = 'recent_files', indent = 2, padding = 1, limit = 3 },
+        -- { pane = 2, icon = ' ', title = 'Recent Files', section = 'recent_files', indent = 2, padding = 1, limit = 3 },
         { section = 'startup' },
       },
     },
@@ -50,92 +50,46 @@ return {
   },
   keys = {
     -- Top Pickers & Explorer
-    {
-      '<leader><space>',
-      function()
-        Snacks.picker.smart()
-      end,
-      desc = 'Smart Find Files',
-    },
-    {
-      '<leader>,',
-      function()
-        Snacks.picker.buffers()
-      end,
-      desc = 'Buffers',
-    },
-    {
-      '<leader>/',
-      function()
-        Snacks.picker.grep()
-      end,
-      desc = 'Grep',
-    },
-    {
-      '<leader>:',
-      function()
-        Snacks.picker.command_history()
-      end,
-      desc = 'Command History',
-    },
+    -- Removed: '<leader><space>' (Snacks.picker.smart - overlaps with file finding)
+    -- Removed: '<leader>,' (Snacks.picker.buffers - overlaps with Telescope)
+    -- Removed: '<leader>/' (Snacks.picker.grep - overlaps with Telescope)
+    -- Removed: '<leader>:' (Snacks.picker.command_history - overlaps with Telescope)
     {
       '<leader>n',
       function()
-        Snacks.picker.notifications()
+        Snacks.picker.notifications() -- Keeping this as it's specific to Snacks notifications
       end,
       desc = 'Notification History',
     },
     {
       '<leader>e',
       function()
-        Snacks.explorer()
+        Snacks.explorer() -- Keeping the Snacks file explorer
       end,
       desc = 'File Explorer',
     },
+
     -- find
-    {
-      '<leader>fb',
-      function()
-        Snacks.picker.buffers()
-      end,
-      desc = 'Buffers',
-    },
-    {
-      '<leader>fc',
-      function()
-        Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
-      end,
-      desc = 'Find Config File',
-    },
-    {
-      '<leader>ff',
-      function()
-        Snacks.picker.files()
-      end,
-      desc = 'Find Files',
-    },
+    -- Removed: '<leader>fb' (Snacks.picker.buffers - overlaps with Telescope)
+    -- Removed: '<leader>fc' (Snacks.picker.files cwd config - overlaps with Telescope)
+    -- Removed: '<leader>ff' (Snacks.picker.files - overlaps with Telescope)
     {
       '<leader>fg',
       function()
-        Snacks.picker.git_files()
+        Snacks.picker.git_files() -- Keeping git files picker
       end,
       desc = 'Find Git Files',
     },
     {
       '<leader>fp',
       function()
-        Snacks.picker.projects()
+        Snacks.picker.projects() -- Keeping projects picker
       end,
       desc = 'Projects',
     },
-    {
-      '<leader>fr',
-      function()
-        Snacks.picker.recent()
-      end,
-      desc = 'Recent',
-    },
-    -- git
+    -- Removed: '<leader>fr' (Snacks.picker.recent - overlaps with Telescope)
+
+    -- git (Keeping all git-related pickers as they seem specific to Snacks or complementary)
     {
       '<leader>gb',
       function()
@@ -185,185 +139,91 @@ return {
       end,
       desc = 'Git Log File',
     },
+
     -- Grep
-    {
-      '<leader>sb',
-      function()
-        Snacks.picker.lines()
-      end,
-      desc = 'Buffer Lines',
-    },
-    {
-      '<leader>sB',
-      function()
-        Snacks.picker.grep_buffers()
-      end,
-      desc = 'Grep Open Buffers',
-    },
-    {
-      '<leader>sg',
-      function()
-        Snacks.picker.grep()
-      end,
-      desc = 'Grep',
-    },
-    {
-      '<leader>sw',
-      function()
-        Snacks.picker.grep_word()
-      end,
-      desc = 'Visual selection or word',
-      mode = { 'n', 'x' },
-    },
+    -- Removed: '<leader>sb' (Snacks.picker.lines - duplicate and overlaps conceptually)
+    -- Removed: '<leader>sB' (Snacks.picker.grep_buffers - overlaps with Telescope)
+    -- Removed: '<leader>sg' (Snacks.picker.grep - overlaps with Telescope)
+    -- Removed: '<leader>sw' (Snacks.picker.grep_word - overlaps with Telescope)
+
     -- search
-    {
-      '<leader>s"',
-      function()
-        Snacks.picker.registers()
-      end,
-      desc = 'Registers',
-    },
-    {
-      '<leader>s/',
-      function()
-        Snacks.picker.search_history()
-      end,
-      desc = 'Search History',
-    },
+    -- Removed: '<leader>s"' (Snacks.picker.registers - overlaps with Telescope)
+    -- Removed: '<leader>s/' (Snacks.picker.search_history - overlaps with Telescope)
     {
       '<leader>sa',
       function()
-        Snacks.picker.autocmds()
+        Snacks.picker.autocmds() -- Keeping autocmds picker
       end,
       desc = 'Autocmds',
     },
-    {
-      '<leader>sb',
-      function()
-        Snacks.picker.lines()
-      end,
-      desc = 'Buffer Lines',
-    },
-    {
-      '<leader>sc',
-      function()
-        Snacks.picker.command_history()
-      end,
-      desc = 'Command History',
-    },
+    -- Removed: '<leader>sb' (Snacks.picker.lines - duplicate and overlaps conceptually)
+    -- Removed: '<leader>sc' (Snacks.picker.command_history - overlaps with Telescope)
     {
       '<leader>sC',
       function()
-        Snacks.picker.commands()
+        Snacks.picker.commands() -- Keeping commands picker
       end,
       desc = 'Commands',
     },
-    {
-      '<leader>sd',
-      function()
-        Snacks.picker.diagnostics()
-      end,
-      desc = 'Diagnostics',
-    },
+    -- Removed: '<leader>sd' (Snacks.picker.diagnostics - overlaps with Telescope)
     {
       '<leader>sD',
       function()
-        Snacks.picker.diagnostics_buffer()
+        Snacks.picker.diagnostics_buffer() -- Keeping buffer diagnostics (complementary to workspace diagnostics)
       end,
       desc = 'Buffer Diagnostics',
     },
-    {
-      '<leader>sh',
-      function()
-        Snacks.picker.help()
-      end,
-      desc = 'Help Pages',
-    },
+    -- Removed: '<leader>sh' (Snacks.picker.help - overlaps with Telescope)
     {
       '<leader>sH',
       function()
-        Snacks.picker.highlights()
+        Snacks.picker.highlights() -- Keeping highlights picker
       end,
       desc = 'Highlights',
     },
     {
       '<leader>si',
       function()
-        Snacks.picker.icons()
+        Snacks.picker.icons() -- Keeping icons picker
       end,
       desc = 'Icons',
     },
-    {
-      '<leader>sj',
-      function()
-        Snacks.picker.jumps()
-      end,
-      desc = 'Jumps',
-    },
-    {
-      '<leader>sk',
-      function()
-        Snacks.picker.keymaps()
-      end,
-      desc = 'Keymaps',
-    },
+    -- Removed: '<leader>sj' (Snacks.picker.jumps - overlaps with Telescope)
+    -- Removed: '<leader>sk' (Snacks.picker.keymaps - overlaps with Telescope)
     {
       '<leader>sl',
       function()
-        Snacks.picker.loclist()
+        Snacks.picker.loclist() -- Keeping location list picker
       end,
       desc = 'Location List',
     },
-    {
-      '<leader>sm',
-      function()
-        Snacks.picker.marks()
-      end,
-      desc = 'Marks',
-    },
+    -- Removed: '<leader>sm' (Snacks.picker.marks - overlaps with Telescope)
     {
       '<leader>sM',
       function()
-        Snacks.picker.man()
+        Snacks.picker.man() -- Keeping man pages picker
       end,
       desc = 'Man Pages',
     },
-    {
-      '<leader>sp',
-      function()
-        Snacks.picker.lazy()
-      end,
-      desc = 'Search for Plugin Spec',
-    },
+    -- Removed: '<leader>sp' (Snacks.picker.lazy - overlaps with Telescope 'registers')
     {
       '<leader>sq',
       function()
-        Snacks.picker.qflist()
+        Snacks.picker.qflist() -- Keeping quickfix list picker
       end,
       desc = 'Quickfix List',
     },
-    {
-      '<leader>sR',
-      function()
-        Snacks.picker.resume()
-      end,
-      desc = 'Resume',
-    },
+    -- Removed: '<leader>sR' (Snacks.picker.resume - overlaps with Telescope)
     {
       '<leader>su',
       function()
-        Snacks.picker.undo()
+        Snacks.picker.undo() -- Keeping undo history picker
       end,
       desc = 'Undo History',
     },
-    {
-      '<leader>uC',
-      function()
-        Snacks.picker.colorschemes()
-      end,
-      desc = 'Colorschemes',
-    },
-    -- LSP
+    -- Removed: '<leader>uC' (Snacks.picker.colorschemes - overlaps with Telescope themes)
+
+    -- LSP (Keeping all LSP pickers as they seem specific to Snacks or complementary)
     {
       'gd',
       function()
@@ -414,7 +274,7 @@ return {
       end,
       desc = 'LSP Workspace Symbols',
     },
-    -- Other
+    -- Other (Keeping these as they are not standard Telescope pickers)
     {
       '<leader>z',
       function()
@@ -446,7 +306,7 @@ return {
     {
       '<leader>n',
       function()
-        Snacks.notifier.show_history()
+        Snacks.notifier.show_history() -- Duplicate with the '<leader>n' above, removing the first one is an option.
       end,
       desc = 'Notification History',
     },
@@ -498,8 +358,9 @@ return {
       function()
         Snacks.terminal()
       end,
-      desc = 'which_key_ignore',
+      desc = 'which_key_ignore', -- Assuming this is for which-key integration
     },
+    -- Keeping these unless you have specific Telescope mappings for next/prev reference
     {
       ']]',
       function()

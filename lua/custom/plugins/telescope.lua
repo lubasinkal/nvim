@@ -36,10 +36,6 @@ return { -- Fuzzy Finder (files, lsp, etc)
           i = {
             ['<C-n>'] = actions.move_selection_next, -- Move to the next item in insert mode
             ['<C-p>'] = actions.move_selection_previous, -- Move to the previous item in insert mode
-            ['<CR>'] = actions.select_default, -- Select the default action (usually opening the file)
-            ['<C-x>'] = actions.select_horizontal, -- Open in a horizontal split
-            ['<C-v>'] = actions.select_vertical, -- Open in a vertical split
-            ['<C-t>'] = actions.select_tab, -- Open in a new tab
             ['<C-u>'] = actions.preview_scrolling_up, -- Scroll preview up
             ['<C-d>'] = actions.preview_scrolling_down, -- Scroll preview down
             ['<C-c>'] = actions.close, -- Close Telescope
@@ -50,7 +46,6 @@ return { -- Fuzzy Finder (files, lsp, etc)
           n = {
             ['<C-n>'] = actions.move_selection_next, -- Move to the next item in normal mode
             ['<C-p>'] = actions.move_selection_previous, -- Move to the previous item in normal mode
-            ['?'] = actions.whatis, -- Show keymaps for the current picker
           },
         },
         -- General options for all pickers
@@ -150,39 +145,17 @@ return { -- Fuzzy Finder (files, lsp, etc)
       vim.keymap.set('n', '<leader>sp', builtin.registers, { desc = '[S]earch [P]aste Registers' }) -- using 'p' for paste
     end
 
-    -- Search changelist
-    if builtin.changelist then
-      vim.keymap.set('n', '<leader>sc', builtin.changelist, { desc = '[S]earch [C]hangelist' })
-    end
-
     -- Search jumplist
     if builtin.jumplist then
       vim.keymap.set('n', '<leader>sj', builtin.jumplist, { desc = '[S]earch [J]umplist' })
     end
 
     -- Search themes (requires telescope-ui-select)
-    -- Check if the themes picker exists before setting the keymap
-    if builtin.themes then
-      vim.keymap.set('n', '<leader>st', function()
-        builtin.themes {
-          -- Use ui-select for theme selection
-          initial_mode = 'normal',
-          selection_strategy = 'reset',
-          sorting_strategy = 'ascending',
-          layout_strategy = 'horizontal',
-          layout_config = {
-            horizontal = {
-              prompt_position = 'top',
-              preview_width = 0.55,
-              results_width = 0.8,
-            },
-          },
-          -- You can pass a theme here if you don't want to use ui-select's default
-          -- theme = layout,
-        }
-      end, { desc = '[S]earch [T]hemes' })
-    end
+    vim.keymap.set('n', '<leader>sc', function()
+      builtin.colorscheme { enable_preview = true }
+    end, { desc = '[S]earch [C]olourscheme' })
 
+    --
     -- File browser (requires a file browser extension like telescope-file-browser.nvim)
     -- If you install telescope-file-browser, uncomment the following and add it to dependencies:
     -- { 'nvim-telescope/telescope-file-browser.nvim' },
