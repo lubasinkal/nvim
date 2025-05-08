@@ -180,75 +180,130 @@ return {
     -- NOTE: This is where you add functionality for code analysis, static type checking and formating. Press :Mason search for the LSP, linter or formater for the programming languange, get the name and add it under servers.
 
     local util = require 'lspconfig.util'
+
     local function pylsp_before_init(params, config)
       vim.notify('Pylsp is Loading ⏰', vim.log.levels.INFO, { title = 'LSP' })
 
       local venv_path = util.path.join(config.root_dir, '.venv')
 
       -- Check if the .venv directory exists
-      -- Using vim.loop.fs_stat for async check if possible, or stick to vim.fn.isdirectory
-      local stat = vim.loop.fs_stat(venv_path)
-      if stat and stat.type == 'directory' then
-        -- Ensure the settings path exists before setting the environment
-        config.settings = config.settings or {}
-        config.settings.pylsp = config.settings.pylsp or {}
-        config.settings.pylsp.plugins = config.settings.pylsp.plugins or {}
-        config.settings.pylsp.plugins.jedi = config.settings.pylsp.plugins.jedi or {}
+
+      if vim.fn.isdirectory(venv_path) == 1 then
+        -- config.settings = config.settings or {}
+
+        -- config.settings.pylsp = config.settings.pylsp or {}
+
+        -- config.settings.pylsp.plugins = config.settings.pylsp.plugins or {}
+
+        -- config.settings.pylsp.plugins.jedi = config.settings.pylsp.plugins.jedi or {}
+
+        --
 
         config.settings.pylsp.plugins.jedi.environment = venv_path
-        vim.notify('.venv found, setting Jedi environment ✅', vim.log.levels.INFO, { title = 'LSP' })
       else
         vim.notify('.venv not found, skipping Jedi environment setup ⚠️', vim.log.levels.WARN, { title = 'LSP' })
       end
     end
 
-    -- Define a global root directory pattern for common project types
-    local root_pattern =
-      util.root_pattern('.git', 'Makefile', 'package.json', 'setup.py', 'pyproject.toml', 'composer.json', 'Cargo.toml', '.sln', '.editorconfig')
-
     local servers = {
-      -- GoLang LSP
+
       gopls = {
+
         cmd = { 'gopls' },
+
         filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+
         settings = {
+
           gopls = {
+
             completeUnimported = true,
-            analyses = {
-              unusedparams = true, -- Example analysis
+          },
+        },
+      }, -- GoLang LSPs
+
+      ruff = {}, -- Python formater
+
+      pylsp = {
+
+        before_init = pylsp_before_init,
+
+        root_dir = util.root_pattern('.venv', '.git', 'pyproject.toml', 'setup.py', 'requirements.txt'),
+
+        on_attach = function(client)
+          vim.notify('Pylsp is ready 🚀', vim.log.levels.INFO, { title = 'LSP' })
+        end,
+
+        settings = {
+
+          pylsp = {
+
+            plugins = {
+
+              jedi = {
+
+                -- If you're using virtual environments, uncomment the line below and provide the path
+
+                -- environment = vim.fn.expand("~/.venv"),
+              },
+
+              jedi_completion = { enabled = true },
+
+              jedi_hover = { enabled = true },
+
+              jedi_references = { enabled = true },
+
+              jedi_signature_help = { enabled = true },
+
+              jedi_symbols = { enabled = true, all_scopes = false },
+
+              -- ⚡ Disabled these for better performance
+
+              pyflakes = { enabled = false },
+
+              pycodestyle = { enabled = false },
+
+              autopep8 = { enabled = false },
+
+              yapf = { enabled = false },
+
+              mccabe = { enabled = false },
+
+              pylsp_black = { enabled = false },
+
+              pylsp_isort = { enabled = false },
+
+              -- ✅ Static type checking (non-live for speed)
+
+              pylsp_mypy = {
+
+                enabled = false,
+
+                -- live_mode = true, -- Static analysis (off for better performance)
+
+                -- daemon = true, -- Type checking runs in the background (faster)
+              },
             },
           },
         },
-        root_dir = root_pattern, -- Use global root pattern
-      },
-      -- Python LSPs (choose one or configure multiple carefully)
-      -- pylsp = { ... your existing pylsp config ... }, -- Keeping your pylsp config
-      -- Recommended alternative: pyright (often faster and more feature-rich)
-      -- pyright = {
-      --   root_dir = root_pattern, -- Use global root pattern
-      --   settings = {
-      --     python = {
-      --       analysis = {
-      --         typeCheckingMode = "basic", -- "off", "basic", "strict"
-      --         useLibraryCodeForTypes = true,
-      --       },
-      --     },
-      --   },
-      -- },
-      ruff = { -- Python formater and linter (usually configured via settings or pyproject.toml)
-        root_dir = root_pattern, -- Use global root pattern
       },
 
-      -- R Language Server
       r_language_server = {
-        -- Your existing platform-specific command logic
+
+        -- Detect the platform
+
         cmd = (function()
           if vim.fn.has 'win32' == 1 or vim.fn.has 'win64' == 1 then
             return {
+
               'R',
+
               '--vanilla',
+
               '--slave',
+
               '-e',
+
               'R_version <- paste(R.version$major, strsplit(R.version$minor, "\\\\.")[[1]][1], sep="."); '
                 .. 'R_lib_path <- file.path(Sys.getenv("USERPROFILE"), "AppData", "Local", "R", "win-library", R_version); '
                 .. 'R_lib_path <- gsub("/", "\\\\", R_lib_path); '
@@ -257,10 +312,15 @@ return {
             }
           else
             return {
+
               'R',
+
               '--vanilla',
+
               '--slave',
+
               '-e',
+
               'R_version <- paste(R.version$major, strsplit(R.version$minor, "\\\\.")[[1]][1], sep="."); '
                 .. 'R_lib_path <- file.path(Sys.getenv("HOME"), ".local", "lib", "R", R_version); '
                 .. 'Sys.setenv(R_LIBS_USER = R_lib_path); '
@@ -268,15 +328,14 @@ return {
             }
           end
         end)(),
-        root_dir = root_pattern, -- Use global root pattern
       },
 
-      html = { root_dir = root_pattern },
-      tailwindcss = { root_dir = root_pattern },
-      cssls = { root_dir = root_pattern },
+      html = {},
+      tailwindcss = {},
+      cssls = {},
 
       -- Vue 3 + TypeScript
-      volar = { root_dir = root_pattern },
+      volar = {},
       ts_ls = {
         filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
         init_options = {
@@ -289,7 +348,6 @@ return {
             },
           },
         },
-        root_dir = root_pattern, -- Use global root pattern
       },
 
       lua_ls = {
@@ -311,7 +369,6 @@ return {
             telemetry = { enabled = false }, -- Disable telemetry
           },
         },
-        root_dir = root_pattern, -- Use global root pattern
       },
 
       -- Add other servers here like:
