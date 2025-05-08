@@ -73,7 +73,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
         -- Default configuration for specific pickers
         find_files = {
           -- Set to true to show hidden files
-          -- show_hidden = true,
+          show_hidden = true,
           -- Other options for find_files
         },
         live_grep = {
@@ -86,7 +86,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
         ['ui-select'] = {
           -- Configuration for ui-select extension
           -- You can use a different theme if you prefer
-          -- require('telescope.themes').get_dropdown(),
+          require('telescope.themes').get_dropdown(),
           -- require('telescope.themes').get_cursor(),
           -- require('telescope.themes').get_ivy(),
           layout_strategy = 'horizontal',
