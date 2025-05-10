@@ -181,30 +181,6 @@ return {
 
     local util = require 'lspconfig.util'
 
-    local function pylsp_before_init(params, config)
-      vim.notify('Pylsp is Loading ⏰', vim.log.levels.INFO, { title = 'LSP' })
-
-      local venv_path = util.path.join(config.root_dir, '.venv')
-
-      -- Check if the .venv directory exists
-
-      if vim.fn.isdirectory(venv_path) == 1 then
-        -- config.settings = config.settings or {}
-
-        -- config.settings.pylsp = config.settings.pylsp or {}
-
-        -- config.settings.pylsp.plugins = config.settings.pylsp.plugins or {}
-
-        -- config.settings.pylsp.plugins.jedi = config.settings.pylsp.plugins.jedi or {}
-
-        --
-
-        config.settings.pylsp.plugins.jedi.environment = venv_path
-      else
-        vim.notify('.venv not found, skipping Jedi environment setup ⚠️', vim.log.levels.WARN, { title = 'LSP' })
-      end
-    end
-
     local servers = {
 
       gopls = {
@@ -222,48 +198,17 @@ return {
         },
       }, -- GoLang LSPs
 
-      ruff = {}, -- Python formater
-
-      pylsp = {
-
-        before_init = pylsp_before_init,
-
-        root_dir = util.root_pattern('.venv', '.git', 'pyproject.toml', 'setup.py', 'requirements.txt'),
-
-        on_attach = function(client)
-          vim.notify('Pylsp is ready 🚀', vim.log.levels.INFO, { title = 'LSP' })
-        end,
-
-        settings = {
-
-          pylsp = {
-
-            plugins = {
-
-              jedi = {},
-              jedi_completion = { enabled = true },
-              jedi_hover = { enabled = true },
-              jedi_references = { enabled = true },
-              jedi_signature_help = { enabled = true },
-              jedi_symbols = { enabled = true, all_scopes = false },
-
-              -- ⚡ Disabled these for better performance
-              pyflakes = { enabled = false },
-              pycodestyle = { enabled = false },
-              autopep8 = { enabled = false },
-              yapf = { enabled = false },
-              mccabe = { enabled = false },
-              pylsp_black = { enabled = false },
-              pylsp_isort = { enabled = false },
-              -- ✅ Static type checking (non-live for speed)
-              pylsp_mypy = {
-                enabled = false,
-              },
-            },
+      pyright = {
+        python = {
+          analysis = {
+            autoSearchPaths = true, -- Enable auto searching for Python packages
+            diagnosticMode = 'openFilesOnly', -- Analyze only open files
+            useLibraryCodeForTypes = true, -- Include library code for type analysis
+            extraPaths = { './.venv/Lib/site-packages' },
           },
+          venvPath = '.', -- Look for the virtual environment in the current directory
         },
       },
-
       r_language_server = {
         -- Use a dynamic command based on OS and package availability
         root_dir = function(fname)
@@ -323,62 +268,25 @@ return {
       -- marksman = { root_dir = root_pattern }, -- Markdown LSP
     }
 
-    -- Ensure the servers and tools above are installed by Mason
-    local ensure_installed_servers = vim.tbl_keys(servers or {})
-    local ensure_installed_tools = {
+    local ensure_installed = vim.tbl_keys(servers or {})
+    vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
-      -- Add other formatters/linters here like:
-      -- 'black', -- Python formatter
-      -- 'isort', -- Python import sorter
-      -- 'eslint_d', -- JavaScript/TypeScript linter
-      -- 'prettier', -- General code formatter
-      -- 'jq', -- JSON processor (useful for some LSP tasks)
-    }
-    vim.list_extend(ensure_installed_servers, ensure_installed_tools) -- Combine servers and tools for mason-tool-installer
-    require('mason-tool-installer').setup { ensure_installed = ensure_installed_servers }
+    })
+    require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-    -- Configure Mason-Lspconfig
     require('mason-lspconfig').setup {
-      -- Make sure servers defined in the 'servers' table are set up by lspconfig
-      -- automatically by mason-lspconfig.
-      -- You can set ensure_installed to {} or a specific list if you don't
-      -- want mason-tool-installer to handle all installations.
-      -- ensure_installed = vim.tbl_keys(servers), -- Use the keys from your servers table
-      -- automatic_installation = true, -- This is the default behavior
-
+      ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+      automatic_installation = false,
       handlers = {
-        -- This is the default handler that you already had. It configures
-        -- lspconfig for each server installed by Mason, applying any
-        -- overrides from your 'servers' table.
         function(server_name)
           local server = servers[server_name] or {}
           -- This handles overriding only values explicitly passed
           -- by the server configuration above. Useful when disabling
           -- certain features of an LSP (for example, turning off formatting for ts_ls)
           server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-
-          -- Setup the LSP server using lspconfig
           require('lspconfig')[server_name].setup(server)
         end,
-
-        -- You can add custom handlers for specific servers here if needed
-        -- ["lua_ls"] = function ()
-        --   require('lspconfig').lua_ls.setup {
-        --     -- Custom settings for lua_ls
-        --   }
-        -- end,
       },
     }
-
-    -- [[ Autocommands for LSP-related tasks ]]
-    -- Add any additional LSP-related autocommands here, outside of LspAttach
-
-    -- Example: Autoformat on save (requires a formatter to be configured)
-    -- vim.api.nvim_create_autocmd('BufWritePost', {
-    --   pattern = '*',
-    --   callback = function()
-    --     vim.lsp.buf.format({ async = true })
-    --   end,
-    -- })
   end,
 }

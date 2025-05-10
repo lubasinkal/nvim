@@ -1,6 +1,6 @@
 return { -- Fuzzy Finder (files, lsp, etc)
   'nvim-telescope/telescope.nvim',
-  -- event = { 'BufReadPost' }, -- Consider 'VimEnter' if you use telescope early
+  event = { 'VimEnter' }, -- Consider 'VimEnter' if you use telescope early
   cmd = 'Telescope', -- Load on the first use of the Telescope command
   branch = '0.1.x',
   dependencies = {
