@@ -2,14 +2,9 @@ return {
   'akinsho/bufferline.nvim',
   lazy = true,
   dependencies = {
-    'moll/vim-bbye',
     'nvim-tree/nvim-web-devicons',
   },
   event = 'BufRead',
-  keys = {
-    { '<S-Tab>', '<cmd>BufferLineCyclePrev<cr>', desc = 'Prev Buffer' },
-    { '<Tab>', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },
-  },
   config = function()
     require('bufferline').setup {
       options = {
@@ -26,7 +21,7 @@ return {
         max_name_length = 30,
         max_prefix_length = 30, -- prefix used when a buffer is de-duplicated
         tab_size = 21,
-        diagnostics = false,
+        diagnostics = true,
         diagnostics_update_in_insert = false,
         color_icons = true,
         show_buffer_icons = true,

@@ -39,6 +39,17 @@ return {
       },
     }
 
+    local function lsp_clients()
+      local clients = vim.lsp.get_clients { bufnr = 0 }
+      if next(clients) == nil then
+        return 'No LSP'
+      end
+      local names = {}
+      for _, client in ipairs(clients) do
+        table.insert(names, client.name)
+      end
+      return 'lsp: ' .. table.concat(names, ', ')
+    end
     require('lualine').setup {
       options = {
         theme = bubbles_theme,
@@ -63,7 +74,7 @@ return {
         lualine_a = { 'mode' },
         lualine_b = { { 'branch', icon = '' }, 'diff', 'diagnostics' },
         lualine_c = { 'filename' },
-        lualine_x = { 'encoding', 'filetype' },
+        lualine_x = { lsp_clients, 'encoding', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location' },
       },

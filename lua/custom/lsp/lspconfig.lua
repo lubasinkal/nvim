@@ -1,5 +1,5 @@
 return {
-  -- Main LSP Configuration
+  -- Main LSP Configuration 
   'neovim/nvim-lspconfig',
   event = { 'BufReadPost', 'BufNewFile' }, -- Load after reading a file or creating a new one
   cmd = { 'LspInfo', 'LspInstall', 'LspUninstall' }, -- Allow running these commands manually
@@ -198,17 +198,27 @@ return {
         },
       }, -- GoLang LSPs
 
-      pyright = {
-        python = {
-          analysis = {
-            autoSearchPaths = true, -- Enable auto searching for Python packages
-            diagnosticMode = 'openFilesOnly', -- Analyze only open files
-            useLibraryCodeForTypes = true, -- Include library code for type analysis
-            extraPaths = { './.venv/Lib/site-packages' },
+      -- pyright = {
+      --   python = {
+      --     analysis = {
+      --       autoSearchPaths = true, -- Enable auto searching for Python packages
+      --       diagnosticMode = 'openFilesOnly', -- Analyze only open files
+      --       useLibraryCodeForTypes = true, -- Include library code for type analysis
+      --       extraPaths = { './.venv/Lib/site-packages' },
+      --     },
+      --     venvPath = '.', -- Look for the virtual environment in the current directory
+      --   },
+      -- },
+      pylsp = {
+        settings = {
+          plugins = {
+            jedi = {
+              environment = './.venv',
+            },
           },
-          venvPath = '.', -- Look for the virtual environment in the current directory
         },
       },
+      ruff = {},
       r_language_server = {
         -- Use a dynamic command based on OS and package availability
         root_dir = function(fname)
@@ -271,8 +281,15 @@ return {
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
+      'prettier',
+      'eslint_d',
+      'jq',
     })
-    require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+    require('mason-tool-installer').setup { ensure_installed = ensure_installed, 
+    auto_update = true,
+    run_on_start = true,
+   start_delay = 3000, -- 3 second delay
+    }
 
     require('mason-lspconfig').setup {
       ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)

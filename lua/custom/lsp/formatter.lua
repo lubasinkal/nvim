@@ -90,16 +90,16 @@ return { -- Formatter
       lua = { 'stylua' }, -- Use stylua for Lua files
       python = { 'ruff' }, -- Use ruff_format for Python files (assuming you have ruff installed via Mason)
       -- Add more formatters as needed
-      -- javascript = { "prettier", "eslint_d" }, -- Try prettier, then eslint_d
-      -- typescript = { "prettier", "eslint_d" },
+      javascript = { "prettier", "eslint_d" }, -- Try prettier, then eslint_d
+      typescript = { "prettier", "eslint_d" },
       -- go = { "gofumpt", "goimports" }, -- Try gofumpt, then goimports
-      -- html = { "prettier" },
-      -- css = { "prettier" },
-      -- json = { "jq" }, -- Example using jq for JSON
-      -- yaml = { "prettier" },
-      -- markdown = { "prettier" },
+      html = { "prettier" },
+      css = { "prettier" },
+      json = { "jq" }, -- Example using jq for JSON
+      yaml = { "prettier" },
+      markdown = { "prettier" },
       -- sh = { "shfmt" },
-      -- vue = { "prettier", "eslint_d" },
+      vue = { "prettier", "eslint_d" },
       -- Add '*-lsp' to use the LSP server's formatting capabilities
       -- lua = { "stylua", "lua_ls-lsp" },
     },

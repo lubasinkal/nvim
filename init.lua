@@ -16,7 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install and configure your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  { 'tpope/vim-sleuth', event = 'VeryLazy' }, -- Detect tabstop and shiftwidth automatically
 
   -- LSP configuration for Neovim Lua files
   {
@@ -95,10 +95,6 @@ require('lazy').setup({
       -- end
     end,
   },
-
-  -- Import autopairs configuration (assuming this sets up nvim-autopairs or similar)
-  -- If you are using mini.pairs, you can comment this out
-  require 'kickstart.plugins.autopairs',
 
   -- NOTE: The imports below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
