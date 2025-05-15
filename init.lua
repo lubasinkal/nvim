@@ -16,7 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install and configure your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  { 'tpope/vim-sleuth', event = 'VeryLazy' }, -- Detect tabstop and shiftwidth automatically
+  { 'tpope/vim-sleuth' }, -- Detect tabstop and shiftwidth automatically
 
   -- LSP configuration for Neovim Lua files
   {
@@ -57,7 +57,7 @@ require('lazy').setup({
       --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
-
+      require('mini.indentscope').setup()
       -- Autopairs (if not using another autopairs plugin like nvim-autopairs)
       -- If you are using kickstart.plugins.autopairs, you can comment this out:
       -- require('mini.pairs').setup()
@@ -104,7 +104,7 @@ require('lazy').setup({
   { import = 'custom.colourschemes' }, -- Imports colourscheme configurations
   { import = 'custom.lsp' }, -- Imports LSP configurations
 }, { -- lazy.nvim options
-
+  defaults = { lazy = true },
   ui = {
     -- Configure lazy.nvim UI icons
     -- If you are using a Nerd Font: set icons to an empty table which will use the
