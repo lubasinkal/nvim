@@ -4,6 +4,10 @@ return {
   dependencies = {
     'nvim-tree/nvim-web-devicons',
   },
+  keys = {
+    { '<Tab>', '<Cmd>BufferLineCycleNext<CR>', desc = 'Next tab' },
+    { '<S-Tab>', '<Cmd>BufferLineCyclePrev<CR>', desc = 'Prev tab' },
+  },
   event = 'BufRead',
   config = function()
     require('bufferline').setup {

@@ -1,5 +1,5 @@
 return {
-  -- Main LSP Configuration 
+  -- Main LSP Configuration
   'neovim/nvim-lspconfig',
   event = { 'BufReadPost', 'BufNewFile' }, -- Load after reading a file or creating a new one
   cmd = { 'LspInfo', 'LspInstall', 'LspUninstall' }, -- Allow running these commands manually
@@ -179,36 +179,17 @@ return {
 
     -- NOTE: This is where you add functionality for code analysis, static type checking and formating. Press :Mason search for the LSP, linter or formater for the programming languange, get the name and add it under servers.
 
-    local util = require 'lspconfig.util'
-
     local servers = {
 
       gopls = {
-
         cmd = { 'gopls' },
-
         filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
-
         settings = {
-
           gopls = {
-
             completeUnimported = true,
           },
         },
-      }, -- GoLang LSPs
-
-      -- pyright = {
-      --   python = {
-      --     analysis = {
-      --       autoSearchPaths = true, -- Enable auto searching for Python packages
-      --       diagnosticMode = 'openFilesOnly', -- Analyze only open files
-      --       useLibraryCodeForTypes = true, -- Include library code for type analysis
-      --       extraPaths = { './.venv/Lib/site-packages' },
-      --     },
-      --     venvPath = '.', -- Look for the virtual environment in the current directory
-      --   },
-      -- },
+      },
       pylsp = {
         settings = {
           plugins = {
@@ -218,15 +199,7 @@ return {
           },
         },
       },
-      ruff = {},
-      r_language_server = {
-        -- Use a dynamic command based on OS and package availability
-        root_dir = function(fname)
-          return require('lspconfig.util').root_pattern('DESCRIPTION', 'NAMESPACE', '.Rbuildignore')(fname)
-            or require('lspconfig.util').find_git_ancestor(fname)
-            or vim.loop.os_homedir()
-        end,
-      },
+      r_language_server = {},
       html = {},
       tailwindcss = {},
       cssls = {},
@@ -253,8 +226,6 @@ return {
             completion = {
               callSnippet = 'Replace',
             },
-            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-            -- diagnostics = { disable = { 'missing-fields' } },
             -- Add Neovim runtime to the Lua language server
             workspace = {
               library = {
@@ -269,31 +240,36 @@ return {
       },
 
       -- Add other servers here like:
-      -- ccls = { root_dir = root_pattern },
-      -- clangd = { root_dir = root_pattern },
-      -- rust_analyzer = { root_dir = root_pattern },
-      -- tsserver = { root_dir = root_pattern }, -- Standard TypeScript server if you don't use ts_ls
-      -- jsonls = { root_dir = root_pattern },
-      -- yamlls = { root_dir = root_pattern },
-      -- marksman = { root_dir = root_pattern }, -- Markdown LSP
+      -- ccls = {},
+      -- clangd = {},
+      -- rust_analyzer = {},
+      -- tsserver = {}, -- Standard TypeScript server if you don't use ts_ls
+      -- jsonls = {},
+      -- yamlls = {},
+      marksman = {}, -- Markdown LSP
     }
 
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
-      'prettier',
       'eslint_d',
       'jq',
+      'ruff',
     })
-    require('mason-tool-installer').setup { ensure_installed = ensure_installed, 
-    auto_update = true,
-    run_on_start = true,
-   start_delay = 3000, -- 3 second delay
-    }
 
+    require('mason-tool-installer').setup {
+      ensure_installed = ensure_installed,
+      run_on_start = false, -- disable here to manually control timing
+      auto_update = true,
+    }
+    -- Async install without blocking
+    vim.defer_fn(function()
+      vim.cmd 'MasonToolsUpdate'
+    end, 3000) -- 3 second delay
     require('mason-lspconfig').setup {
+
       ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-      automatic_installation = false,
+      automatic_installation = true,
       handlers = {
         function(server_name)
           local server = servers[server_name] or {}

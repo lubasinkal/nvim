@@ -25,31 +25,21 @@ return {
       opts = { -- LuaSnip setup options
         -- You can configure LuaSnip here if needed
         -- For example, disable flashing when jumping
-        -- store_selection_keys = true,
-        -- enable_snipmate_visual_paste = true,
-        -- update_events = { "TextChanged", "TextChangedI" },
+        store_selection_keys = true,
+        enable_snipmate_visual_paste = true,
+        update_events = { 'TextChanged', 'TextChangedI' },
       },
     },
     'saadparwaiz1/cmp_luasnip', -- nvim-cmp source for LuaSnip
     'onsails/lspkind.nvim', -- Adds icons and descriptions to completion items
-
-    -- Required for `lazydev` source
-    -- If you use the lazydev source, uncomment this:
-    -- { 'nvim-lazydev/nvim-lazydev', ft = 'lua' },
 
     -- Completion sources
     'hrsh7th/cmp-nvim-lsp', -- LSP source
     'hrsh7th/cmp-path', -- File system path source
     'hrsh7th/cmp-buffer', -- Current buffer source
     'hrsh7th/cmp-calc', -- Simple math calculator source
-    -- 'hrsh7th/cmp-nvim-lsp-signature-help', -- LSP signature help source (optional)
+    'hrsh7th/cmp-nvim-lsp-signature-help', -- LSP signature help source (optional)
     'hrsh7th/cmp-cmdline', -- Command line source (usually configured separately)
-
-    -- Optional: For specific completion needs
-    -- 'hrsh7th/cmp-nvim-lua', -- Neovim Lua API completion
-    -- 'petertriho/cmp-git', -- Git commit/branch/tag completion
-    -- 'hrsh7th/cmp-treesitter', -- Treesitter based completion
-    -- 'hrsh7th/cmp-emoji', -- Emoji completion
   },
   config = function()
     local cmp = require 'cmp'
@@ -76,6 +66,7 @@ return {
         -- 'noselect': do not auto-select the first item
         -- See `:help completeopt`
         completeopt = 'menu,menuone,noinsert', -- Added 'noselect' as a common preference
+        keyword_length = 2, -- Start showing completion after typing 3 characters
       },
 
       -- Experimental features
@@ -192,11 +183,11 @@ return {
         -- },
         { name = 'nvim_lsp', priority = 1000 }, -- LSP server completions
         { name = 'luasnip', priority = 750 }, -- Snippet completions
-        -- { name = 'nvim_lsp_signature_help', priority = 700 }, -- Signature help as completion items (optional)
+        { name = 'nvim_lsp_signature_help', priority = 700 }, -- Signature help as completion items (optional)
         { name = 'path', priority = 500 }, -- File system path completions
         { name = 'buffer', priority = 300 }, -- Completions from the current buffer
         { name = 'calc', priority = 200 }, -- Calculator results
-        { name = 'cmdline', priority = 100 }, -- Command line completion (usually configured separately)
+        -- { name = 'cmdline', priority = 100 }, -- Command line completion (usually configured separately)
       },
 
       -- Formatting of completion items using lspkind
@@ -211,8 +202,8 @@ return {
             path = '[path]',
             luasnip = '[snip]',
             calc = '[calc]',
-            -- lazydev = '[lazy]',
-            cmdline = '[cmd]',
+            lazydev = '[lazy]',
+            -- cmdline = '[cmd]',
           },
         },
       },
@@ -222,13 +213,13 @@ return {
       -- trigger = { enabled = true, auto_trigger = true}, -- Default behavior
     }
     -- `/` cmdline setup.
-    cmp.setup.cmdline('/', {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = {
-        { name = 'buffer' },
-      },
-    })
-    -- `:` cmdline setup.
+    -- cmp.setup.cmdline('/', {
+    --   mapping = cmp.mapping.preset.cmdline(),
+    --   sources = {
+    --     { name = 'buffer' },
+    --   },
+    -- })
+    -- -- `:` cmdline setup.
     -- cmp.setup.cmdline(':', {
     --   mapping = cmp.mapping.preset.cmdline(),
     --   sources = cmp.config.sources({
