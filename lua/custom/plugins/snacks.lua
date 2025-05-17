@@ -6,7 +6,6 @@ return {
   opts = {
     bigfile = { enabled = true },
     dashboard = {
-      -- { enabled = true },
       preset = {
         pick = nil,
         ---@type snacks.dashboard.Item[]
@@ -24,29 +23,26 @@ return {
       sections = {
         { section = 'header' },
         { section = 'keys', padding = 1 },
-        -- { pane = 2, icon = ' ', title = 'Recent Files', section = 'recent_files', indent = 2, padding = 1, limit = 3 },
         { section = 'startup' },
       },
     },
-    explorer = { enabled = true },
-    -- indent = { enabled = true },
-    -- input = { enabled = true },
-    -- notifier = {
-    -- enabled = true,
-    -- timeout = 3000,
-    -- },
+    indent = { enabled = true },
+    input = { enabled = true },
+    notifier = {
+      enabled = true,
+      timeout = 3000,
+    },
     picker = {
-      -- enabled = true
+      enabled = true,
     },
     quickfile = {
-      -- enabled = true
+      enabled = true,
     },
-    -- scope = { enabled = true },
-    -- scroll = {},
-    -- toggle = {},
-    -- scratch = {},
-    -- statuscolumn = { enabled = true },
-    -- words = { enabled = true },
+    scope = { enabled = true },
+    scroll = { enabled = true },
+    toggle = { enabled = true },
+    statuscolumn = { enabled = true },
+    words = { enabled = true },
   },
   keys = {
     -- Top Pickers & Explorer
@@ -61,13 +57,14 @@ return {
       end,
       desc = 'Notification History',
     },
-    {
-      '<leader>e',
-      function()
-        Snacks.explorer() -- Keeping the Snacks file explorer
-      end,
-      desc = 'File Explorer',
-    },
+    -- Removed: '<leader>e' (Snacks.explorer - overlaps with neotree)
+    -- {
+    --   '<leader>e',
+    --   function()
+    --     Snacks.explorer() -- Keeping the Snacks file explorer
+    --   end,
+    --   desc = 'File Explorer',
+    -- },
 
     -- find
     -- Removed: '<leader>fb' (Snacks.picker.buffers - overlaps with Telescope)

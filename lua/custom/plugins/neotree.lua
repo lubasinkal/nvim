@@ -9,18 +9,18 @@ return {
   },
   cmd = 'Neotree',
 
-  -- keys = {
-  --   { '<leader>e', ':Neotree float toggle<CR>', desc = 'Toggle Neotree (Root Dir in Float)', silent = true },
-  -- },
   keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    { '<leader>e', ':Neotree toggle<CR>', desc = 'Toggle Neotree (Root Dir)', silent = true },
   },
+  -- keys = {
+  --   { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+  -- },
 
   opts = {
     filesystem = {
       window = {
         mappings = {
-          ['\\'] = 'close_window',
+          ['<esc>'] = 'close_window',
         },
       },
     },
