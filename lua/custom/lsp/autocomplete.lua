@@ -1,237 +1,126 @@
 return {
-  -- Autocompletion
-  'hrsh7th/nvim-cmp',
-  event = 'InsertEnter', -- Load only when entering Insert mode
+  -- Autocompletion powered by blink.cmp
+  'saghen/blink.cmp',
+  event = { 'InsertEnter', 'CmdLineEnter' }, -- Loads after Vim is fully entered. Can be 'InsertEnter' for maximum lazy-loading if preferred.
+  version = '1.*', -- Ensure you're using a compatible version
   dependencies = {
     -- Snippet Engine
     {
       'L3MON4D3/LuaSnip',
+      version = '2.*',
       build = (function()
-        -- Build command for LuaSnip's JS regexp support
+        -- Build step for LuaSnip's JS regexp support.
+        -- Your conditional build is good for cross-platform compatibility.
         if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
           return
         end
         return 'make install_jsregexp'
       end)(),
       dependencies = {
+        -- `friendly-snippets` provides a wide range of pre-made snippets.
+        -- Uncomment and configure if you want these snippets loaded.
         {
-          'rafamadriz/friendly-snippets', -- Pre-made snippets
+          'rafamadriz/friendly-snippets',
           config = function()
-            -- Load VS Code style snippets from friendly-snippets
             require('luasnip.loaders.from_vscode').lazy_load()
           end,
         },
       },
-      opts = { -- LuaSnip setup options
-        -- You can configure LuaSnip here if needed
-        -- For example, disable flashing when jumping
+      opts = {
+        -- LuaSnip setup options. These apply globally for LuaSnip.
+        -- You might want to add similar options you had for nvim-cmp:
         store_selection_keys = true,
         enable_snipmate_visual_paste = true,
         update_events = { 'TextChanged', 'TextChangedI' },
       },
     },
-    'saadparwaiz1/cmp_luasnip', -- nvim-cmp source for LuaSnip
-    'onsails/lspkind.nvim', -- Adds icons and descriptions to completion items
-
-    -- Completion sources
-    'hrsh7th/cmp-nvim-lsp', -- LSP source
-    'hrsh7th/cmp-path', -- File system path source
-    'hrsh7th/cmp-buffer', -- Current buffer source
-    'hrsh7th/cmp-calc', -- Simple math calculator source
-    'hrsh7th/cmp-nvim-lsp-signature-help', -- LSP signature help source (optional)
-    'hrsh7th/cmp-cmdline', -- Command line source (usually configured separately)
+    'folke/lazydev.nvim', -- Integration for completions from lazy-loaded plugins
+    'onsails/lspkind.nvim', -- Still useful for customizing icons beyond blink.cmp's defaults
   },
-  config = function()
-    local cmp = require 'cmp'
-    local luasnip = require 'luasnip'
-    local lspkind = require 'lspkind'
+  --- @type blink.cmp.Config
+  opts = {
+    -- **Speed & Keymap Optimization**
+    keymap = {
+      -- 'default' is recommended for mappings similar to built-in completions.
+      -- It provides <c-y> to accept, handles auto-import, and snippet expansion.
+      -- It also includes <tab>/<s-tab> for snippet navigation, <c-space> to open menu/docs,
+      -- <c-n>/<c-p> for selection, <c-e> to hide, <c-k> to toggle signature help.
+      preset = 'default',
 
-    -- LuaSnip setup (minimal)
-    -- You can add more configuration in the 'opts' table above
-    luasnip.config.setup {}
+      -- If you wish to use `<CR>` to confirm, you can explicitly map it:
+      -- ['<CR>'] = blink.cmp.mapping.confirm({ select = true }),
+      -- (Note: confirm function for blink.cmp is directly integrated,
+      -- you usually don't map `confirm` explicitly like `cmp.mapping.confirm`
+      -- unless you're customizing beyond the presets. Default preset covers it.)
+    },
 
-    cmp.setup {
-      -- Snippet support
-      snippet = {
-        expand = function(args)
-          luasnip.lsp_expand(args.body) -- Use LuaSnip to expand snippets
-        end,
+    -- **Aesthetic Enhancements**
+    appearance = {
+      -- 'mono' aligns icons for 'Nerd Font Mono' users, 'normal' for 'Nerd Font'.
+      -- This helps with the visual alignment and cleanliness of the completion menu.
+      nerd_font_variant = 'mono',
+      -- You might not need extensive `winhighlight` settings here,
+      -- as `blink.cmp` handles much of the menu's aesthetics.
+      -- However, if you want specific borders or more control, you could use:
+      -- border = 'rounded', -- Add rounded borders to the completion menu
+    },
+
+    completion = {
+      ghost_text = { enabled = true },
+      menu = {
+        border = 'rounded',
       },
-
-      -- Completion behavior
-      completion = {
-        -- 'menu': show completion menu
-        -- 'menuone': show menu if only one completion
-        -- 'noinsert': prevent auto-inserting the common prefix
-        -- 'noselect': do not auto-select the first item
-        -- See `:help completeopt`
-        completeopt = 'menu,menuone,noinsert', -- Added 'noselect' as a common preference
-        keyword_length = 2, -- Start showing completion after typing 3 characters
-      },
-
-      -- Experimental features
-      experimental = {
-        ghost_text = true, -- Show ghost text preview of the selected completion
-        -- native_menu = false, -- Use Neovim's native popupmenu (less configurable styling)
-      },
-
-      -- Window appearance
-      window = {
-        completion = cmp.config.window.bordered {
-          border = 'rounded', -- Border style for completion menu
-          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None', -- Highlighting
-          zindex = 1001, -- Ensure window is on top
-          scrolloff = 0, -- No scrolloff in the window
-          col_offset = 0, -- Column offset
-          side_padding = 1, -- Padding
-          scrollbar = true, -- Show scrollbar
-        },
-        documentation = cmp.config.window.bordered {
-          border = 'rounded', -- Border style for documentation window
-          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None', -- Highlighting
-          zindex = 1001, -- Ensure window is on top
-          scrolloff = 0, -- No scrolloff in the window
-          col_offset = 0, -- Column offset
-          side_padding = 1, -- Padding
-          scrollbar = true, -- Show scrollbar
+      -- Documentation can auto-show after a delay for a smoother experience.
+      documentation = {
+        auto_show = true,
+        auto_show_delay_ms = 300,
+        window = {
+          border = 'rounded', -- or 'solid', 'double', etc.
         },
       },
+      -- Slightly reduced delay
+      -- You can control the `completeopt` behavior here if needed,
+      -- but `blink.cmp` aims to handle this intuitively.
+    },
 
-      -- Keymaps for completion and snippet navigation in Insert mode
-      mapping = cmp.mapping.preset.insert {
-        -- Select next/previous item
-        ['<C-n>'] = cmp.mapping.select_next_item(),
-        ['<C-p>'] = cmp.mapping.select_prev_item(),
-
-        -- Scroll documentation window
-        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
-
-        -- Accept currently selected item
-        -- See `:help cmp.mapping.confirm()`
-        ['<C-y>'] = cmp.mapping.confirm { select = true }, -- Accept with select=true (insert selected text)
-        ['<CR>'] = cmp.mapping.confirm { select = true }, -- Traditional accept with select=true
-
-        -- Manually trigger completion
-        ['<C-Space>'] = cmp.mapping.complete {},
-
-        -- Show hover documentation
-        -- Mapped in both insert and select modes of cmp
-        ['<C-k>'] = cmp.mapping(function()
-          if cmp.visible() then
-            cmp.abort() -- Abort completion if already visible
-          else
-            vim.lsp.buf.hover() -- Show hover docs if completion not visible
-          end
-        end, { 'i', 's' }),
-
-        -- Show signature help
-        -- Mapped in both insert and select modes of cmp
-        ['<C-s>'] = cmp.mapping(function()
-          if cmp.visible() then
-            cmp.abort() -- Abort completion if already visible
-          else
-            vim.lsp.buf.signature_help() -- Show signature help if completion not visible
-          end
-        end, { 'i', 's' }),
-
-        -- Snippet navigation (expand/jump forward)
-        -- Requires `cmp_luasnip` and `LuaSnip`
-        -- Check if LuaSnip can expand or jump before calling
-        ['<C-l>'] = cmp.mapping(function()
-          if luasnip.expand_or_locally_jumpable() then
-            luasnip.expand_or_jump()
-          end
-        end, { 'i', 's' }),
-
-        -- Snippet navigation (jump backward)
-        -- Requires `cmp_luasnip` and `LuaSnip`
-        -- Check if LuaSnip can jump backward before calling
-        ['<C-h>'] = cmp.mapping(function()
-          if luasnip.locally_jumpable(-1) then
-            luasnip.jump(-1)
-          end
-        end, { 'i', 's' }),
-
-        -- Optional: Integrate Tab for completion and snippet jumping
-        -- This is a common pattern, but requires careful mapping
-        -- ['<Tab>'] = cmp.mapping(function(fallback)
-        --   if cmp.visible() then
-        --     cmp.select_next_item()
-        --   elseif luasnip.expand_or_locally_jumpable() then
-        --     luasnip.expand_or_jump()
-        --   else
-        --     fallback()
-        --   end
-        -- end, { 'i', 's' }),
-        -- ['<S-Tab>'] = cmp.mapping(function(fallback)
-        --   if cmp.visible() then
-        --     cmp.select_prev_item()
-        --   elseif luasnip.locally_jumpable(-1) then
-        --     luasnip.jump(-1)
-        --   else
-        --     fallback()
-        --   end
-        -- end, { 'i', 's' }),
-      },
-
-      -- Completion sources and their order/priority
-      sources = cmp.config.sources {
-        -- {
-        --   name = 'lazydev', -- Completion from lazy-loaded plugins (requires nvim-lazydev)
-        --   group_index = 0, -- Ensure this source is checked early
+    -- **Source Prioritization for Speed & Relevance**
+    sources = {
+      -- Define the order of sources for relevance and perceived speed.
+      -- 'lsp' is typically the fastest and most relevant.
+      -- 'snippets' provides quick access to common patterns.
+      -- 'path' and 'buffer' are useful but might be slightly slower.
+      default = { 'lsp', 'snippets', 'path', 'buffer', 'lazydev' },
+      providers = {
+        lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+        -- If you want to integrate lspkind for more diverse icons, you might need
+        -- a custom formatter. Blink.cmp has good defaults, so this is often not needed.
+        -- lsp = {
+        --   format = require('lspkind').cmp_format({
+        --     mode = 'symbol_text',
+        --     maxwidth = 50,
+        --     ellipsis_char = '...',
+        --   }),
         -- },
-        { name = 'nvim_lsp', priority = 1000 }, -- LSP server completions
-        { name = 'luasnip', priority = 750 }, -- Snippet completions
-        { name = 'nvim_lsp_signature_help', priority = 700 }, -- Signature help as completion items (optional)
-        { name = 'path', priority = 500 }, -- File system path completions
-        { name = 'buffer', priority = 300 }, -- Completions from the current buffer
-        { name = 'calc', priority = 200 }, -- Calculator results
-        -- { name = 'cmdline', priority = 100 }, -- Command line completion (usually configured separately)
       },
+    },
 
-      -- Formatting of completion items using lspkind
-      formatting = {
-        format = lspkind.cmp_format {
-          mode = 'symbol_text', -- Show symbol icon and text
-          maxwidth = 50, -- Maximum width of completion items
-          ellipsis_char = '...', -- Character for truncation
-          menu = { -- Text to show next to source name
-            buffer = '[buf]',
-            nvim_lsp = '[LSP]',
-            path = '[path]',
-            luasnip = '[snip]',
-            calc = '[calc]',
-            lazydev = '[lazy]',
-            -- cmdline = '[cmd]',
-          },
-        },
-      },
+    snippets = {
+      preset = 'luasnip', -- Tells blink.cmp to use LuaSnip for snippet expansion
+    },
 
-      -- Autocompletion trigger configuration
-      -- trigger = { auto_attach = false }, -- Optional: Disable auto-triggering on attach
-      -- trigger = { enabled = true, auto_trigger = true}, -- Default behavior
-    }
-    -- `/` cmdline setup.
-    -- cmp.setup.cmdline('/', {
-    --   mapping = cmp.mapping.preset.cmdline(),
-    --   sources = {
-    --     { name = 'buffer' },
-    --   },
-    -- })
-    -- -- `:` cmdline setup.
-    -- cmp.setup.cmdline(':', {
-    --   mapping = cmp.mapping.preset.cmdline(),
-    --   sources = cmp.config.sources({
-    --     { name = 'path' },
-    --   }, {
-    --     {
-    --       name = 'cmdline',
-    --       option = {
-    --         ignore_cmds = { 'Man', '!' },
-    --       },
-    --     },
-    --   }),
-    -- })
-  end,
+    -- **Fuzzy Matching for Speed**
+    fuzzy = {
+      -- 'prefer_rust_with_warning' will download a prebuilt Rust binary for
+      -- faster fuzzy matching. This significantly improves search speed for large lists.
+      -- Set to 'lua' if you prefer to avoid the Rust binary.
+      implementation = 'prefer_rust_with_warning',
+    },
+
+    -- Shows a signature help window, improving context while typing function arguments.
+    signature = { enabled = true },
+    cmdline = { completion = { ghost_text = { enabled = true } } },
+
+    -- `blink.cmp` automatically handles 'ghost text' functionality,
+    -- so you won't find an explicit `ghost_text` option here.
+  },
 }
