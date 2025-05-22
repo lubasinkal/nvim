@@ -1,25 +1,29 @@
 return {
-  -- Autocompletion
-  'hrsh7th/nvim-cmp',
-  event = 'InsertEnter', -- Load only when entering Insert mode
+  -- Autocompletion powered by blink.cmp
+  'saghen/blink.cmp',
+  event = { 'InsertEnter', 'CmdLineEnter' }, -- Loads after Vim is fully entered. Can be 'InsertEnter' for maximum lazy-loading if preferred.
+  version = '1.*', -- Ensure you're using a compatible version
   dependencies = {
     'hrsh7th/cmp-buffer', -- source for text in buffer
     'hrsh7th/cmp-path', -- source for file system paths
     -- Snippet Engine
     {
       'L3MON4D3/LuaSnip',
+      version = '2.*',
       build = (function()
-        -- Build command for LuaSnip's JS regexp support
+        -- Build step for LuaSnip's JS regexp support.
+        -- Your conditional build is good for cross-platform compatibility.
         if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
           return
         end
         return 'make install_jsregexp'
       end)(),
       dependencies = {
+        -- `friendly-snippets` provides a wide range of pre-made snippets.
+        -- Uncomment and configure if you want these snippets loaded.
         {
-          'rafamadriz/friendly-snippets', -- Pre-made snippets
+          'rafamadriz/friendly-snippets',
           config = function()
-            -- Load VS Code style snippets from friendly-snippets
             require('luasnip.loaders.from_vscode').lazy_load()
           end,
         },
