@@ -1,6 +1,6 @@
 return {
-  -- Autocompletion powered by blink.cmp
-  'saghen/blink.cmp',
+  -- Autocompletion powered by nvim-cmp
+  'hrsh7th/nvim-cmp',
   event = { 'InsertEnter', 'CmdLineEnter' }, -- Loads after Vim is fully entered. Can be 'InsertEnter' for maximum lazy-loading if preferred.
   version = '1.*', -- Ensure you're using a compatible version
   dependencies = {
