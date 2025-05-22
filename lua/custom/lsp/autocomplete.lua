@@ -49,11 +49,23 @@ return {
       },
 
       completion = {
+
         -- 'menu,menuone,noinsert,noselect' is usually a good starting point.
         -- 'noselect' is important if you don't want the first item to be highlighted.
         completeopt = 'menu,menuone,noinsert,noselect',
+        autocomplete = { require('cmp.types').cmp.TriggerEvent.TextChanged },
+        keyword_length = 2,
       },
 
+      performance = {
+        throttle = 0,
+        filtering_context_budget = 10,
+        async_budget = 10,
+        confirm_resolve_timeout = 0,
+        fetching_timeout = 0,
+        debounce = 20, -- lower = faster but higher CPU
+        max_view_entries = 8, -- reduces clutter and speeds up filtering
+      },
       experimental = {
         ghost_text = true,
       },
