@@ -3,6 +3,8 @@ return {
   'hrsh7th/nvim-cmp',
   event = 'InsertEnter', -- Load only when entering Insert mode
   dependencies = {
+    'hrsh7th/cmp-buffer', -- source for text in buffer
+    'hrsh7th/cmp-path', -- source for file system paths
     -- Snippet Engine
     {
       'L3MON4D3/LuaSnip',
@@ -22,216 +24,93 @@ return {
           end,
         },
       },
-      opts = { -- LuaSnip setup options
-        -- You can configure LuaSnip here if needed
-        -- For example, disable flashing when jumping
-        store_selection_keys = true,
-        enable_snipmate_visual_paste = true,
-        update_events = { 'TextChanged', 'TextChangedI' },
-      },
     },
     'saadparwaiz1/cmp_luasnip', -- nvim-cmp source for LuaSnip
     'onsails/lspkind.nvim', -- Adds icons and descriptions to completion items
-
-    -- Completion sources
-    'hrsh7th/cmp-nvim-lsp', -- LSP source
-    'hrsh7th/cmp-path', -- File system path source
-    'hrsh7th/cmp-buffer', -- Current buffer source
-    'hrsh7th/cmp-calc', -- Simple math calculator source
-    'hrsh7th/cmp-nvim-lsp-signature-help', -- LSP signature help source (optional)
-    'hrsh7th/cmp-cmdline', -- Command line source (usually configured separately)
+    'hrsh7th/cmp-nvim-lsp-signature-help',
+    'hrsh7th/cmp-nvim-lsp',
   },
   config = function()
     local cmp = require 'cmp'
     local luasnip = require 'luasnip'
     local lspkind = require 'lspkind'
 
-    -- LuaSnip setup (minimal)
-    -- You can add more configuration in the 'opts' table above
     luasnip.config.setup {}
 
     cmp.setup {
-      -- Snippet support
       snippet = {
         expand = function(args)
-          luasnip.lsp_expand(args.body) -- Use LuaSnip to expand snippets
+          luasnip.lsp_expand(args.body)
         end,
       },
 
-      -- Completion behavior
       completion = {
-        -- 'menu': show completion menu
-        -- 'menuone': show menu if only one completion
-        -- 'noinsert': prevent auto-inserting the common prefix
-        -- 'noselect': do not auto-select the first item
-        -- See `:help completeopt`
-        completeopt = 'menu,menuone,noinsert', -- Added 'noselect' as a common preference
-        keyword_length = 2, -- Start showing completion after typing 3 characters
+        -- 'menu,menuone,noinsert,noselect' is usually a good starting point.
+        -- 'noselect' is important if you don't want the first item to be highlighted.
+        completeopt = 'menu,menuone,noinsert,noselect',
       },
 
-      -- Experimental features
       experimental = {
-        ghost_text = true, -- Show ghost text preview of the selected completion
-        -- native_menu = false, -- Use Neovim's native popupmenu (less configurable styling)
+        ghost_text = true,
       },
-
-      -- Window appearance
       window = {
         completion = cmp.config.window.bordered {
-          border = 'rounded', -- Border style for completion menu
-          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None', -- Highlighting
-          zindex = 1001, -- Ensure window is on top
-          scrolloff = 0, -- No scrolloff in the window
-          col_offset = 0, -- Column offset
-          side_padding = 1, -- Padding
-          scrollbar = true, -- Show scrollbar
+          border = 'rounded',
+          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+          zindex = 1001,
+          scrolloff = 0,
+          col_offset = 0,
+          side_padding = 1,
+          scrollbar = true,
         },
         documentation = cmp.config.window.bordered {
-          border = 'rounded', -- Border style for documentation window
-          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None', -- Highlighting
-          zindex = 1001, -- Ensure window is on top
-          scrolloff = 0, -- No scrolloff in the window
-          col_offset = 0, -- Column offset
-          side_padding = 1, -- Padding
-          scrollbar = true, -- Show scrollbar
+          border = 'rounded',
+          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+          zindex = 1000, -- Make it lower than completion/signature
+          scrolloff = 0,
+          col_offset = 0,
+          side_padding = 1,
+          scrollbar = true,
+          max_width = 80, -- Example max width
+          max_height = 10, -- Example max height
         },
       },
-
-      -- Keymaps for completion and snippet navigation in Insert mode
       mapping = cmp.mapping.preset.insert {
-        -- Select next/previous item
-        ['<C-n>'] = cmp.mapping.select_next_item(),
-        ['<C-p>'] = cmp.mapping.select_prev_item(),
+        ['<C-k>'] = cmp.mapping.select_next_item(),
+        ['<C-j>'] = cmp.mapping.select_prev_item(),
 
-        -- Scroll documentation window
+        -- Scroll documentation window: These will now only apply if the documentation window is explicitly open
         ['<C-b>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
 
-        -- Accept currently selected item
-        -- See `:help cmp.mapping.confirm()`
-        ['<C-y>'] = cmp.mapping.confirm { select = true }, -- Accept with select=true (insert selected text)
-        ['<CR>'] = cmp.mapping.confirm { select = true }, -- Traditional accept with select=true
-
-        -- Manually trigger completion
+        ['<C-y>'] = cmp.mapping.confirm { select = true },
+        ['<CR>'] = cmp.mapping.confirm { select = true },
+        ['<C-e>'] = cmp.mapping.abort(), -- close completion window
         ['<C-Space>'] = cmp.mapping.complete {},
-
-        -- Show hover documentation
-        -- Mapped in both insert and select modes of cmp
-        ['<C-k>'] = cmp.mapping(function()
-          if cmp.visible() then
-            cmp.abort() -- Abort completion if already visible
-          else
-            vim.lsp.buf.hover() -- Show hover docs if completion not visible
-          end
-        end, { 'i', 's' }),
-
-        -- Show signature help
-        -- Mapped in both insert and select modes of cmp
-        ['<C-s>'] = cmp.mapping(function()
-          if cmp.visible() then
-            cmp.abort() -- Abort completion if already visible
-          else
-            vim.lsp.buf.signature_help() -- Show signature help if completion not visible
-          end
-        end, { 'i', 's' }),
-
-        -- Snippet navigation (expand/jump forward)
-        -- Requires `cmp_luasnip` and `LuaSnip`
-        -- Check if LuaSnip can expand or jump before calling
-        ['<C-l>'] = cmp.mapping(function()
-          if luasnip.expand_or_locally_jumpable() then
-            luasnip.expand_or_jump()
-          end
-        end, { 'i', 's' }),
-
-        -- Snippet navigation (jump backward)
-        -- Requires `cmp_luasnip` and `LuaSnip`
-        -- Check if LuaSnip can jump backward before calling
-        ['<C-h>'] = cmp.mapping(function()
-          if luasnip.locally_jumpable(-1) then
-            luasnip.jump(-1)
-          end
-        end, { 'i', 's' }),
-
-        -- Optional: Integrate Tab for completion and snippet jumping
-        -- This is a common pattern, but requires careful mapping
-        -- ['<Tab>'] = cmp.mapping(function(fallback)
-        --   if cmp.visible() then
-        --     cmp.select_next_item()
-        --   elseif luasnip.expand_or_locally_jumpable() then
-        --     luasnip.expand_or_jump()
-        --   else
-        --     fallback()
-        --   end
-        -- end, { 'i', 's' }),
-        -- ['<S-Tab>'] = cmp.mapping(function(fallback)
-        --   if cmp.visible() then
-        --     cmp.select_prev_item()
-        --   elseif luasnip.locally_jumpable(-1) then
-        --     luasnip.jump(-1)
-        --   else
-        --     fallback()
-        --   end
-        -- end, { 'i', 's' }),
       },
 
-      -- Completion sources and their order/priority
       sources = cmp.config.sources {
-        -- {
-        --   name = 'lazydev', -- Completion from lazy-loaded plugins (requires nvim-lazydev)
-        --   group_index = 0, -- Ensure this source is checked early
-        -- },
-        { name = 'nvim_lsp', priority = 1000 }, -- LSP server completions
-        { name = 'luasnip', priority = 750 }, -- Snippet completions
-        { name = 'nvim_lsp_signature_help', priority = 700 }, -- Signature help as completion items (optional)
-        { name = 'path', priority = 500 }, -- File system path completions
-        { name = 'buffer', priority = 300 }, -- Completions from the current buffer
-        { name = 'calc', priority = 200 }, -- Calculator results
-        -- { name = 'cmdline', priority = 100 }, -- Command line completion (usually configured separately)
+        { name = 'nvim_lsp', priority = 1000 },
+        { name = 'luasnip', priority = 750 },
+        { name = 'path', priority = 500 },
+        { name = 'buffer', priority = 300 },
+        { name = 'nvim_lsp_signature_help' },
       },
 
-      -- Formatting of completion items using lspkind
       formatting = {
         format = lspkind.cmp_format {
-          mode = 'symbol_text', -- Show symbol icon and text
-          maxwidth = 50, -- Maximum width of completion items
-          ellipsis_char = '...', -- Character for truncation
-          menu = { -- Text to show next to source name
+          mode = 'symbol_text',
+          maxwidth = 50,
+          ellipsis_char = '...',
+          menu = {
             buffer = '[buf]',
             nvim_lsp = '[LSP]',
             path = '[path]',
             luasnip = '[snip]',
-            calc = '[calc]',
-            lazydev = '[lazy]',
-            -- cmdline = '[cmd]',
+            nvim_lsp_signature_help = '[sign]',
           },
         },
       },
-
-      -- Autocompletion trigger configuration
-      -- trigger = { auto_attach = false }, -- Optional: Disable auto-triggering on attach
-      -- trigger = { enabled = true, auto_trigger = true}, -- Default behavior
     }
-    -- `/` cmdline setup.
-    -- cmp.setup.cmdline('/', {
-    --   mapping = cmp.mapping.preset.cmdline(),
-    --   sources = {
-    --     { name = 'buffer' },
-    --   },
-    -- })
-    -- -- `:` cmdline setup.
-    -- cmp.setup.cmdline(':', {
-    --   mapping = cmp.mapping.preset.cmdline(),
-    --   sources = cmp.config.sources({
-    --     { name = 'path' },
-    --   }, {
-    --     {
-    --       name = 'cmdline',
-    --       option = {
-    --         ignore_cmds = { 'Man', '!' },
-    --       },
-    --     },
-    --   }),
-    -- })
   end,
 }

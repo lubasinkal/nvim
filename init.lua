@@ -16,8 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install and configure your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  { 'tpope/vim-sleuth' }, -- Detect tabstop and shiftwidth automatically
-
+  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
   -- LSP configuration for Neovim Lua files
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -39,7 +38,7 @@ require('lazy').setup({
   -- Collection of various small independent plugins/modules (Mini.nvim)
   {
     'echasnovski/mini.nvim',
-    event = 'BufReadPost', -- Load after reading a buffer
+    event = 'BufRead', -- Load after reading a buffer
 
     -- Make nvim-ts-context-commentstring a dependency of mini.nvim
     -- This ensures it's loaded when mini.comment needs it
@@ -60,7 +59,7 @@ require('lazy').setup({
       require('mini.indentscope').setup()
       -- Autopairs (if not using another autopairs plugin like nvim-autopairs)
       -- If you are using kickstart.plugins.autopairs, you can comment this out:
-      -- require('mini.pairs').setup()
+      require('mini.pairs').setup()
 
       -- Surrounded textobjects
       -- Examples:

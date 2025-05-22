@@ -1,8 +1,8 @@
 return { -- Highlight, edit, and navigate code
   'nvim-treesitter/nvim-treesitter',
   build = ':TSUpdate', -- Command to run after installation/update
-  event = { 'BufReadPost', 'BufNewFile' }, -- Load after reading a file or creating a new one
-  cmd = { 'TSUpdateSync' }, -- Allow running TSUpdateSync command manually
+  -- event = { 'BufReadPost', 'BufNewFile' }, -- Load after reading a file or creating a new one
+  cmd = { 'TSUpdate' },
   main = 'nvim-treesitter.configs', -- Specify the main module for Lazy.nvim's opts
   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
   opts = {
