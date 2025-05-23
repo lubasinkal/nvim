@@ -72,7 +72,7 @@ return {
       window = {
         completion = cmp.config.window.bordered {
           border = 'rounded',
-          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:CmpSel,Search:None',
           zindex = 1001,
           scrolloff = 0,
           col_offset = 0,

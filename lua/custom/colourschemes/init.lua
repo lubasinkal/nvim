@@ -56,6 +56,7 @@ return {
       -- Completion item matching
       hl(0, 'CmpItemAbbrMatch', { fg = '#7dcfff', bold = true })
       hl(0, 'CmpItemAbbrMatchFuzzy', { fg = '#7dcfff', italic = true })
+      hl(0, 'CmpSel', { bg = '#7a388b', fg = '#ffffff', bold = true })
 
       -- Item kinds
       local kind_groups = {
