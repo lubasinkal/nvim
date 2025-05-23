@@ -183,15 +183,16 @@ return {
           },
         },
       },
-      pylsp = {
-        settings = {
-          plugins = {
-            jedi = {
-              environment = './.venv',
-            },
-          },
-        },
-      },
+      pyright = {},
+      -- pylsp = {
+      --   settings = {
+      --     plugins = {
+      --       jedi = {
+      --         environment = './.venv',
+      --       },
+      --     },
+      --   },
+      -- },
       r_language_server = {},
       html = {},
       tailwindcss = {},
