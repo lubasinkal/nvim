@@ -1,115 +1,115 @@
 return {
-  'linux-cultist/venv-selector.nvim',
-  ft = 'python',
-  dependencies = {
-    'neovim/nvim-lspconfig',
-    'nvim-telescope/telescope.nvim',
-    {
-      'mfussenegger/nvim-dap-python',
-      ft = 'python',
-    },
-    {
-      'mfussenegger/nvim-dap',
-      ft = 'python',
-    },
-  },
-  branch = 'regexp',
-  opts = {
-    -- Set this to true if you want a notification every time a venv is activated
-    notify_user_on_venv_activation = false,
-    -- Configure paths to search for venvs, including .venv in the current directory/project root
-    search_dirs = {
-      '~/.virtualenvs', -- Common location for virtualenvs
-      '~/.pyenv/versions', -- Common location for pyenv environments
-      '.venv', -- Look for .venv in the current directory or project root
-      'venv', -- Look for venv in the current directory or project root
-    },
-  },
-  keys = {
-    { '<leader>vs', 'VenvSelect', desc = 'Select Python venv' },
-  },
-  config = function(_, opts)
-    -- Set up the plugin with provided options
-    require('venv-selector').setup(opts)
-
-    -- Autocommand to automatically activate venv when Python LSP attaches
-    vim.api.nvim_create_autocmd('LspAttach', {
-      desc = 'Auto activate venv for Python LSP',
-      callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        local bufnr = args.buf
-
-        -- Only trigger this logic for Python LSPs (pyright, pylsp, etc.)
-        if client and client.name and client.name:match 'py' then
-          vim.defer_fn(function()
-            local root_dir = client.config.root_dir
-            local venv_found = false
-
-            -- Prioritize finding a venv in the LSP root directory
-            if root_dir then
-              -- Define potential venv paths within the root directory
-              local potential_venvs = {
-                vim.fn.expand(root_dir .. '/.venv/bin/python'),
-                vim.fn.expand(root_dir .. '/venv/bin/python'),
-                vim.fn.expand(root_dir .. '/venv/Scripts/python'),
-                vim.fn.expand(root_dir .. '/.venv/Scripts/python'),
-                -- Add other potential paths relative to root_dir if needed
-              }
-
-              for _, venv_path in ipairs(potential_venvs) do
-                if vim.fn.filereadable(venv_path) == 1 then
-                  -- Found a venv executable in the root directory
-                  require('venv-selector').activate_from_path(venv_path)
-                  vim.notify('Activated project virtual environment: ' .. venv_path, vim.log.levels.INFO, { title = 'venv-selector' })
-                  venv_found = true
-                  break -- Stop searching once a venv is found in the root
-                end
-              end
-            end
-
-            -- If no venv was found in the root, check if venv-selector already activated one (e.g., from search_dirs)
-            if not venv_found then
-              local active_venv = require('venv-selector').venv()
-              if active_venv then
-                -- A venv was found and activated by venv-selector's automatic search
-                vim.notify('Activated virtual environment: ' .. active_venv, vim.log.levels.INFO, { title = 'venv-selector' })
-              else
-                -- No venv found in root and venv-selector didn't automatically find one.
-                -- Use global Python and notify the user.
-                -- venv-selector doesn't have an explicit "use global" command,
-                -- not activating any venv effectively means using the system/global python
-                -- vim.notify(
-                --   'No virtual environment found in project root or other configured paths. Using global Python.',
-                --   vim.log.levels.WARN,
-                --   { title = 'venv-selector' }
-                -- )
-                --
-                -- Optional: If you still want to offer selecting a venv manually, uncomment the following block
-                vim.ui.select(
-                  { 'Yes', 'No' },
-                  { prompt = 'No virtual environment found. Do you want to select one? (No will use global python)' },
-                  function(choice)
-                    if choice == 'Yes' then
-                      vim.cmd 'VenvSelect'
-                      -- Give user time to select and for venv-selector to activate
-                      vim.defer_fn(function()
-                        local final_active_venv = require('venv-selector').venv()
-                        if not final_active_venv then
-                          vim.notify('No virtual environment selected. Using global Python.', vim.log.levels.WARN, { title = 'venv-selector' })
-                        else
-                          vim.notify('Manually activated virtual environment: ' .. final_active_venv, vim.log.levels.INFO, { title = 'venv-selector' })
-                        end
-                      end, 500) -- Short delay
-                    else
-                      vim.notify('Using global Python.', vim.log.levels.WARN, { title = 'venv-selector' })
-                    end
-                  end
-                )
-              end
-            end
-          end, 100) -- A small delay to allow LSP to fully attach and root_dir to be available
-        end
-      end,
-    })
-  end,
+  -- 'linux-cultist/venv-selector.nvim',
+  -- ft = 'python',
+  -- dependencies = {
+  --   'neovim/nvim-lspconfig',
+  --   'nvim-telescope/telescope.nvim',
+  --   {
+  --     'mfussenegger/nvim-dap-python',
+  --     ft = 'python',
+  --   },
+  --   {
+  --     'mfussenegger/nvim-dap',
+  --     ft = 'python',
+  --   },
+  -- },
+  -- branch = 'regexp',
+  -- opts = {
+  --   -- Set this to true if you want a notification every time a venv is activated
+  --   notify_user_on_venv_activation = false,
+  --   -- Configure paths to search for venvs, including .venv in the current directory/project root
+  --   search_dirs = {
+  --     '~/.virtualenvs', -- Common location for virtualenvs
+  --     '~/.pyenv/versions', -- Common location for pyenv environments
+  --     '.venv', -- Look for .venv in the current directory or project root
+  --     'venv', -- Look for venv in the current directory or project root
+  --   },
+  -- },
+  -- keys = {
+  --   { '<leader>vs', 'VenvSelect', desc = 'Select Python venv' },
+  -- },
+  -- config = function(_, opts)
+  --   -- Set up the plugin with provided options
+  --   require('venv-selector').setup(opts)
+  --
+  --   -- Autocommand to automatically activate venv when Python LSP attaches
+  --   vim.api.nvim_create_autocmd('LspAttach', {
+  --     desc = 'Auto activate venv for Python LSP',
+  --     callback = function(args)
+  --       local client = vim.lsp.get_client_by_id(args.data.client_id)
+  --       local bufnr = args.buf
+  --
+  --       -- Only trigger this logic for Python LSPs (pyright, pylsp, etc.)
+  --       if client and client.name and client.name:match 'py' then
+  --         vim.defer_fn(function()
+  --           local root_dir = client.config.root_dir
+  --           local venv_found = false
+  --
+  --           -- Prioritize finding a venv in the LSP root directory
+  --           if root_dir then
+  --             -- Define potential venv paths within the root directory
+  --             local potential_venvs = {
+  --               vim.fn.expand(root_dir .. '/.venv/bin/python'),
+  --               vim.fn.expand(root_dir .. '/venv/bin/python'),
+  --               vim.fn.expand(root_dir .. '/venv/Scripts/python'),
+  --               vim.fn.expand(root_dir .. '/.venv/Scripts/python'),
+  --               -- Add other potential paths relative to root_dir if needed
+  --             }
+  --
+  --             for _, venv_path in ipairs(potential_venvs) do
+  --               if vim.fn.filereadable(venv_path) == 1 then
+  --                 -- Found a venv executable in the root directory
+  --                 require('venv-selector').activate_from_path(venv_path)
+  --                 vim.notify('Activated project virtual environment: ' .. venv_path, vim.log.levels.INFO, { title = 'venv-selector' })
+  --                 venv_found = true
+  --                 break -- Stop searching once a venv is found in the root
+  --               end
+  --             end
+  --           end
+  --
+  --           -- If no venv was found in the root, check if venv-selector already activated one (e.g., from search_dirs)
+  --           if not venv_found then
+  --             local active_venv = require('venv-selector').venv()
+  --             if active_venv then
+  --               -- A venv was found and activated by venv-selector's automatic search
+  --               vim.notify('Activated virtual environment: ' .. active_venv, vim.log.levels.INFO, { title = 'venv-selector' })
+  --             else
+  --               -- No venv found in root and venv-selector didn't automatically find one.
+  --               -- Use global Python and notify the user.
+  --               -- venv-selector doesn't have an explicit "use global" command,
+  --               -- not activating any venv effectively means using the system/global python
+  --               -- vim.notify(
+  --               --   'No virtual environment found in project root or other configured paths. Using global Python.',
+  --               --   vim.log.levels.WARN,
+  --               --   { title = 'venv-selector' }
+  --               -- )
+  --               --
+  --               -- Optional: If you still want to offer selecting a venv manually, uncomment the following block
+  --               vim.ui.select(
+  --                 { 'Yes', 'No' },
+  --                 { prompt = 'No virtual environment found. Do you want to select one? (No will use global python)' },
+  --                 function(choice)
+  --                   if choice == 'Yes' then
+  --                     vim.cmd 'VenvSelect'
+  --                     -- Give user time to select and for venv-selector to activate
+  --                     vim.defer_fn(function()
+  --                       local final_active_venv = require('venv-selector').venv()
+  --                       if not final_active_venv then
+  --                         vim.notify('No virtual environment selected. Using global Python.', vim.log.levels.WARN, { title = 'venv-selector' })
+  --                       else
+  --                         vim.notify('Manually activated virtual environment: ' .. final_active_venv, vim.log.levels.INFO, { title = 'venv-selector' })
+  --                       end
+  --                     end, 500) -- Short delay
+  --                   else
+  --                     vim.notify('Using global Python.', vim.log.levels.WARN, { title = 'venv-selector' })
+  --                   end
+  --                 end
+  --               )
+  --             end
+  --           end
+  --         end, 100) -- A small delay to allow LSP to fully attach and root_dir to be available
+  --       end
+  --     end,
+  --   })
+  -- end,
 }

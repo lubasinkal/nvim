@@ -176,7 +176,8 @@ return {
 
       gopls = {},
       -- pyright = {},
-      pylsp = {},
+      -- pylsp = {},
+      basedpyright = {},
       r_language_server = {},
       html = {},
       tailwindcss = {},
