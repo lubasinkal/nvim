@@ -174,25 +174,9 @@ return {
 
     local servers = {
 
-      gopls = {
-        cmd = { 'gopls' },
-        filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
-        settings = {
-          gopls = {
-            completeUnimported = true,
-          },
-        },
-      },
-      pyright = {},
-      -- pylsp = {
-      --   settings = {
-      --     plugins = {
-      --       jedi = {
-      --         environment = './.venv',
-      --       },
-      --     },
-      --   },
-      -- },
+      gopls = {},
+      -- pyright = {},
+      pylsp = {},
       r_language_server = {},
       html = {},
       tailwindcss = {},
@@ -215,34 +199,7 @@ return {
         },
       },
 
-      lua_ls = {
-        settings = {
-          Lua = {
-            format = {
-              defaultConfig = {
-                indent_style = 'space',
-                indent_size = '2',
-              },
-            },
-            runtime = { version = 'LuaJIT' },
-            diagnostics = {
-              globals = { 'vim' },
-              -- disable = {"unused-local"} -- Disable the "unused variable" error
-            },
-            workspace = {
-              checkThirdParty = false,
-              library = {
-                [vim.fn.expand '$VIMRUNTIME/lua'] = true,
-                [vim.fn.stdpath 'config' .. '/lua'] = true,
-              },
-              maxPreload = 500,
-              preLoadFileSize = 100,
-            },
-            telemetry = { enable = false },
-          },
-        },
-      },
-
+      lua_ls = {},
       -- Add other servers here like:
       -- ccls = {},
       -- clangd = {},
