@@ -38,7 +38,7 @@ require('lazy').setup({
   -- Collection of various small independent plugins/modules (Mini.nvim)
   {
     'echasnovski/mini.nvim',
-    event = 'BufRead', -- Load after reading a buffer
+    event = 'VeryLazy', -- Load on VeryLazy for faster startup
     config = function()
       require('mini.ai').setup { n_lines = 500 }
       require('mini.indentscope').setup()
@@ -58,7 +58,7 @@ require('lazy').setup({
   { import = 'custom.colourschemes' }, -- Imports colourscheme configurations
   { import = 'custom.lsp' }, -- Imports LSP configurations
 }, { -- lazy.nvim options
-  defaults = { lazy = true },
+  defaults = { lazy = true }, -- Set all plugins to lazy load by default
   ui = {
     -- Configure lazy.nvim UI icons
     -- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -81,11 +81,8 @@ require('lazy').setup({
   },
 
   performance = {
-    -- Optional: Enable caching for faster startup (requires 'fennel' or 'lua-bytecode')
-    -- cache = { enabled = true },
-    -- Optional: Reset packpath (usually fine with modern plugin managers)
-    -- reset_packpath = true,
-    -- Configure runtimepath behavior
+    cache = { enabled = true }, -- Enable caching for faster startup
+    reset_packpath = true, -- Reset packpath for a clean environment
     rtp = {
       reset = true, -- Reset the runtimepath
       disabled_plugins = { -- Disable built-in plugins you replace
@@ -98,6 +95,28 @@ require('lazy').setup({
         'tutor',
         'zipPlugin',
         'osc52', -- Terminal feature, sometimes causes issues
+        'man',
+        'shada',
+        'spellfile',
+        'rplugin',
+        'editorconfig',
+        'health',
+        'syntax',
+        '2html_plugin',
+        'getscript',
+        'getscriptPlugin',
+        'logipat',
+        'remote_plugins',
+        'rrhelper',
+        'spellfile_plugin',
+        'vimball',
+        'vimballPlugin',
+        'matchparen',
+        'shada_plugin',
+        'tar',
+        'tarPlugin',
+        'zip',
+        'zipPlugin',
       },
     },
   },

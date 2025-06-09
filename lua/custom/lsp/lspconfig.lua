@@ -1,7 +1,7 @@
 return {
   -- Main LSP Configuration
   'neovim/nvim-lspconfig',
-  event = { 'BufReadPost', 'BufNewFile' }, -- Load after reading a file or creating a new one
+  event = { 'BufReadPre' }, -- Load before reading a file for faster startup
   cmd = { 'LspInfo', 'LspInstall', 'LspUninstall' }, -- Allow running these commands manually
   dependencies = {
     -- Automatically install LSPs and related tools to stdpath for Neovim
@@ -12,8 +12,7 @@ return {
     -- Useful status updates for LSP.
     { 'j-hui/fidget.nvim', opts = {} },
 
-    -- Allows extra capabilities provided by blink.cmp
-    -- 'saghen/blink.cmp',
+    -- Allows extra capabilities provided by cmp-nvim-lsp
     'hrsh7th/cmp-nvim-lsp',
   },
   config = function()

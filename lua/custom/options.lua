@@ -2,7 +2,7 @@
 vim.g.have_nerd_font = true -- Set to true if you have a Nerd Font installed for icon support.
 
 -- General UI settings
-vim.opt.cmdheight = 1 -- Sets the height of the command line to 1.
+vim.opt.cmdheight = 0 -- Sets the height of the command line to 1.
 vim.opt.termguicolors = true -- Enables true colors in the terminal for better highlighting.
 vim.opt.background = 'dark' -- Assumes a dark background for color schemes.
 vim.opt.signcolumn = 'yes' -- Always show the sign column (for LSP, Git signs, etc.).

@@ -1,7 +1,7 @@
 return { -- Highlight, edit, and navigate code
   'nvim-treesitter/nvim-treesitter',
   build = ':TSUpdate', -- Command to run after installation/update
-  -- event = { 'BufReadPost', 'BufNewFile' }, -- Load after reading a file or creating a new one
+  event = { 'BufReadPre', 'BufNewFile' }, -- Load on BufReadPre or BufNewFile for lazy loading
   cmd = { 'TSUpdate' },
   main = 'nvim-treesitter.configs', -- Specify the main module for Lazy.nvim's opts
   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
@@ -9,7 +9,7 @@ return { -- Highlight, edit, and navigate code
     -- A list of parser names, or "all"
     ensure_installed = {
       'python',
-      'javascript', -- Removed duplicate 'javascript'
+      'javascript',
       'go',
       'r',
       'bash',
@@ -31,7 +31,7 @@ return { -- Highlight, edit, and navigate code
       enable = true,
       -- NOTE: `false` will disable the whole extension
       -- Setting this to true will enable vivification for e.g. ruby and vetur
-      additional_vim_regex_highlighting = { 'ruby' }, -- Keep this if needed
+      additional_vim_regex_highlighting = false, -- Removed unnecessary additional_vim_regex_highlighting
     },
 
     -- Enable indentation
