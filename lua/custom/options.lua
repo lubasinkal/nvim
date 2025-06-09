@@ -20,7 +20,7 @@ vim.opt.fillchars = { eob = ' ' } -- Removes the '~' at the end of buffer, makin
 vim.opt.hidden = true -- Allows background buffers to be modified even if they are no longer in a window.
 vim.opt.confirm = true -- Prompts for confirmation before unsaved changes are lost.
 vim.opt.inccommand = 'split' -- Shows live preview of commands like :substitute in a split window.
-vim.opt.colorcolumn = '100' -- Displays a vertical column at column 100 to indicate line length.
+-- vim.opt.colorcolumn = '100' -- Displays a vertical column at column 100 to indicate line length.
 
 -- Transparency settings
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' }) -- Sets background of normal mode to transparent.
