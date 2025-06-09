@@ -39,37 +39,10 @@ require('lazy').setup({
   {
     'echasnovski/mini.nvim',
     event = 'BufRead', -- Load after reading a buffer
-
-    -- Make nvim-ts-context-commentstring a dependency of mini.nvim
-    -- This ensures it's loaded when mini.comment needs it
-    -- dependencies = {
-    --   'JoosepAlviste/nvim-ts-context-commentstring',
-    -- },
-
     config = function()
-      -- [[ Configure Mini.nvim Modules ]]
-      -- See https://github.com/echasnovski/mini.nvim for more details and modules
-
-      -- Better Around/Inside textobjects
-      -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
-      --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
       require('mini.indentscope').setup()
-      -- Autopairs (if not using another autopairs plugin like nvim-autopairs)
-      -- If you are using kickstart.plugins.autopairs, you can comment this out:
       require('mini.pairs').setup()
-
-      -- Surrounded textobjects
-      -- Examples:
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      -- require('mini.surround').setup()
-
-      -- Commenting module
-      -- Uses ts_context_commentstring for intelligent commenting
       require('mini.comment').setup {
         options = {
           -- Function to get the comment string based on Treesitter context
@@ -78,27 +51,9 @@ require('lazy').setup({
           end,
         },
       }
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      -- local statusline = require 'mini.statusline'
-      -- -- set use_icons to true if you have a Nerd Font
-      -- statusline.setup { use_icons = vim.g.have_nerd_font }
-      -- -- You can configure sections in the statusline by overriding their
-      -- -- default behavior. For example, here we set the section for
-      -- -- cursor location to LINE:COLUMN
-      -- ---@diagnostic disable-next-line: duplicate-set-field
-      -- statusline.section_location = function()
-      --   return '%2l:%-2v'
-      -- end
     end,
   },
 
-  -- NOTE: The imports below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    This is the easiest way to modularize your config.
-  --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   { import = 'custom.plugins' }, -- Imports plugins defined in lua/custom/plugins/*.lua
   { import = 'custom.colourschemes' }, -- Imports colourscheme configurations
   { import = 'custom.lsp' }, -- Imports LSP configurations
@@ -146,11 +101,4 @@ require('lazy').setup({
       },
     },
   },
-  -- Add any other lazy.nvim options here
-  -- install = { colorscheme = { "habamax" } }, -- Example: install habamax colorscheme on first run
-  -- checker = { enabled = true }, -- Optional: Enable health check for plugins
-  -- change_detection = { notify = false }, -- Optional: Disable notification on file changes
 })
-
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et

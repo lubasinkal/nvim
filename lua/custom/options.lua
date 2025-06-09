@@ -1,57 +1,84 @@
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
-vim.opt.laststatus = 2
+-- Global settings
+vim.g.have_nerd_font = true -- Set to true if you have a Nerd Font installed for icon support.
 
-vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+-- General UI settings
+vim.opt.cmdheight = 1 -- Sets the height of the command line to 1.
+vim.opt.termguicolors = true -- Enables true colors in the terminal for better highlighting.
+vim.opt.background = 'dark' -- Assumes a dark background for color schemes.
+vim.opt.signcolumn = 'yes' -- Always show the sign column (for LSP, Git signs, etc.).
+vim.opt.laststatus = 2 -- Always show the status line.
+vim.opt.showtabline = 2 -- Always show the tab line, even with one tab open.
+vim.opt.number = true -- Shows absolute line numbers.
+vim.opt.relativenumber = true -- Shows relative line numbers, useful for quick jumps.
+vim.opt.numberwidth = 4 -- Sets the width of the line number column.
+vim.opt.cursorline = true -- Highlights the current line.
+vim.opt.scrolloff = 12 -- Minimal number of screen lines to keep above and below the cursor.
+vim.opt.sidescrolloff = 8 -- Minimal number of screen columns either side of cursor if wrapping is off.
+vim.opt.wrap = false -- Disables line wrapping; lines will extend horizontally.
+vim.opt.mouse = 'a' -- Enables mouse support in all modes.
+vim.opt.fillchars = { eob = ' ' } -- Removes the '~' at the end of buffer, making it blank.
+vim.opt.hidden = true -- Allows background buffers to be modified even if they are no longer in a window.
+vim.opt.confirm = true -- Prompts for confirmation before unsaved changes are lost.
+vim.opt.inccommand = 'split' -- Shows live preview of commands like :substitute in a split window.
+vim.opt.colorcolumn = '100' -- Displays a vertical column at column 100 to indicate line length.
 
-vim.opt.incsearch = true
-vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
+-- Transparency settings
+vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' }) -- Sets background of normal mode to transparent.
+vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' }) -- Sets background of floating windows to transparent.
+vim.opt.pumblend = 10 -- Makes the popup menu slightly transparent.
+vim.opt.winblend = 10 -- Makes floating windows slightly transparent.
 
-vim.opt.number = true -- Make line numbers default (default: false)
-vim.o.relativenumber = true -- Set relative numbered lines (default: false)
-vim.o.clipboard = 'unnamedplus' -- Sync clipboard between OS and Neovim. (default: '')
-vim.o.wrap = false -- Display lines as one long line (default: true)
-vim.o.linebreak = true -- Companion to wrap, don't split words (default: false)
-vim.o.mouse = 'a' -- Enable mouse mode (default: '')
-vim.o.autoindent = true -- Copy indent from current line when starting new one (default: true)
-vim.o.ignorecase = true -- Case-insensitive searching UNLESS \C or capital in search (default: false)
-vim.o.smartcase = true -- Smart case (default: false)
-vim.o.shiftwidth = 4 -- The number of spaces inserted for each indentation (default: 8)
-vim.o.tabstop = 4 -- Insert n spaces for a tab (default: 8)
-vim.o.softtabstop = 4 -- Number of spaces that a tab counts for while performing editing operations (default: 0)
-vim.o.expandtab = true -- Convert tabs to spaces (default: false)
-vim.o.scrolloff = 12 -- Minimal number of screen lines to keep above and below the cursor (default: 0)
-vim.o.sidescrolloff = 8 -- Minimal number of screen columns either side of cursor if wrap is `false` (default: 0)
+-- Indentation and formatting
+vim.opt.autoindent = true -- Copies indentation from the previous line when starting a new one.
+vim.opt.smartindent = true -- Smarter automatic indentation.
+vim.opt.tabstop = 4 -- Sets the width of a tab character to 4 spaces.
+vim.opt.shiftwidth = 4 -- Sets the number of spaces for each indentation level.
+vim.opt.softtabstop = 4 -- Number of spaces that a tab counts for while performing editing operations.
+vim.opt.expandtab = true -- Converts tabs to spaces when inserting.
+vim.opt.breakindent = true -- Maintains indentation when lines wrap.
+vim.opt.formatoptions:remove { 'c', 'r', 'o' } -- Prevents automatic comment insertion.
 
-vim.opt.splitright = true
-vim.o.splitbelow = true -- Force all horizontal splits to go below current window (default: false)
-vim.o.splitright = true -- Force all vertical splits to go to the right of current window (default: false)
-vim.o.hlsearch = true -- Set highlight on search (default: true)
--- vim.o.showmode = false -- We don't need to see things like -- INSERT -- anymore (default: true)
-vim.opt.termguicolors = true -- Set termguicolors to enable highlight groups (default: false)
-vim.o.whichwrap = 'bs<>[]hl' -- Which "horizontal" keys are allowed to travel to prev/next line (default: 'b,s')
-vim.o.numberwidth = 4 -- Set number column width to 2 {default 4} (default: 4)
-vim.o.swapfile = false -- Creates a swapfile (default: true)
--- vim.o.smartindent = true -- Make indenting smarter again (default: false)
-vim.o.showtabline = 2 -- Always show tabs (default: 1)
-vim.o.backspace = 'indent,eol,start' -- Allow backspace on (default: 'indent,eol,start')
-vim.o.pumheight = 10 -- Pop up menu height (default: 0)
-vim.o.conceallevel = 0 -- So that `` is visible in markdown files (default: 1)
-vim.wo.signcolumn = 'yes' -- Keep signcolumn on by default (default: 'auto')
-vim.o.fileencoding = 'utf-8' -- The encoding written to a file (default: 'utf-8')
-vim.o.cmdheight = 1 -- More space in the Neovim command line for displaying messages (default: 1)
--- vim.o.breakindent = true -- Enable break indent (default: false)
-vim.o.updatetime = 250 -- Decrease update time (default: 4000)
-vim.o.timeoutlen = 300 -- Time to wait for a mapped sequence to complete (in milliseconds) (default: 1000)
-vim.o.backup = false -- Creates a backup file (default: false)
-vim.o.writebackup = false -- If a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited (default: true)
-vim.o.undofile = true -- Save undo history (default: false)
-vim.o.completeopt = 'menuone,noselect' -- Set completeopt to have a better completion experience (default: 'menu,preview')
-vim.opt.shortmess:append 'c' -- Don't give |ins-completion-menu| messages (default: does not include 'c')
-vim.opt.iskeyword:append '-' -- Hyphenated words recognized by searches (default: does not include '-')
-vim.opt.formatoptions:remove { 'c', 'r', 'o' } -- Don't insert the current comment leader automatically for auto-wrapping comments using 'textwidth', hitting <Enter> in insert mode, or hitting 'o' or 'O' in normal mode. (default: 'croql')
-vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-vim.opt.cursorline = true
-vim.opt.confirm = true
+-- Search settings
+vim.opt.hlsearch = true -- Highlights all search matches.
+vim.opt.incsearch = true -- Highlights matches as you type.
+vim.opt.ignorecase = true -- Ignores case in search patterns.
+vim.opt.smartcase = true -- Uses case-sensitive search only if the pattern contains uppercase letters.
+vim.opt.whichwrap = 'bs<>[]hl' -- Allows cursor to wrap to next/previous line using specified keys.
+vim.opt.iskeyword:append '-' -- Includes hyphenated words as part of a keyword.
+
+-- Splits and buffers
+vim.opt.splitright = true -- Forces vertical splits to open to the right.
+vim.opt.splitbelow = true -- Forces horizontal splits to open below.
+
+-- Swap, backup, and undo files
+vim.opt.swapfile = false -- Disables creation of swap files.
+vim.opt.backup = false -- Disables creation of backup files.
+vim.opt.writebackup = false -- Disables write backup files.
+vim.opt.undofile = true -- Enables persistent undo history.
+vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir' -- Specifies directory for undo files.
+
+-- Completion and popup menu
+vim.opt.completeopt = 'menuone,noselect' -- Sets options for completion popups.
+vim.opt.pumheight = 10 -- Sets the maximum height of the completion popup menu.
+vim.opt.shortmess:append 'c' -- Suppresses "completion" messages.
+
+-- Conceal and appearance
+vim.opt.conceallevel = 0 -- Shows concealed text in its entirety (e.g., markdown links).
+vim.opt.concealcursor = 'nc' -- Conceals text only when the cursor is not on the line.
+
+-- File encoding and clipboard
+vim.opt.fileencoding = 'utf-8' -- Sets the default file encoding to UTF-8.
+vim.opt.encoding = 'utf-8' -- Sets the internal and script encoding to UTF-8.
+vim.opt.clipboard = 'unnamedplus' -- Syncs clipboard with the system clipboard.
+
+-- Performance and update times
+vim.opt.updatetime = 250 -- Sets the time (in ms) before `CursorHold` and `CursorHoldI` events are triggered.
+vim.opt.timeoutlen = 300 -- Sets the time (in ms) to wait for a mapped key sequence to complete.
+
+-- Invisible characters
+vim.opt.list = true -- Shows invisible characters.
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' } -- Customizes how invisible characters are displayed.
+
+-- Folding
+vim.opt.foldmethod = 'syntax' -- Sets folding method to syntax-based.
+vim.opt.foldlevelstart = 99 -- Opens all folds by default when a buffer is loaded.
