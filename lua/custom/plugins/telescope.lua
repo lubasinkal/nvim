@@ -1,6 +1,6 @@
 return { -- Fuzzy Finder (files, lsp, etc)
   'nvim-telescope/telescope.nvim',
-  -- event = { 'CmdlineEnter' }, -- Load only on CmdlineEnter or when :Telescope is called
+  event = { 'VeryLazy' }, -- Load only on CmdlineEnter or when :Telescope is called
   cmd = 'Telescope', -- Load on the first use of the Telescope command
   branch = '0.1.x',
   dependencies = {
