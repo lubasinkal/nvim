@@ -67,7 +67,10 @@ return {
         max_view_entries = 8, -- reduces clutter and speeds up filtering
       },
       experimental = {
-        ghost_text = true,
+        ghost_text = {
+          hl_group = 'CmpGhostText',
+          hl_group_selected = "CmpItemAbbrMatch"
+      }
       },
       window = {
         completion = cmp.config.window.bordered {
