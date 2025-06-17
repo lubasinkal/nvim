@@ -33,12 +33,16 @@ return {
     'onsails/lspkind.nvim', -- Adds icons and descriptions to completion items
     'hrsh7th/cmp-nvim-lsp-signature-help',
     'hrsh7th/cmp-nvim-lsp',
+    "roobert/tailwindcss-colorizer-cmp.nvim", -- Tailwind CSS colorizer for nvim-cmp
   },
   config = function()
     local cmp = require 'cmp'
     local luasnip = require 'luasnip'
     local lspkind = require 'lspkind'
-
+    local tail_col_cmp_ok, tailwindcss_colorizer_cmp = pcall(require, "tailwindcss-colorizer-cmp")                                                                                                  
+    if not tail_col_cmp_ok then                                                                                                                                                                     
+            return                                                                                                                                                                                  
+    end 
     luasnip.config.setup {}
 
     cmp.setup {
@@ -128,6 +132,7 @@ return {
             luasnip = '[snip]',
             nvim_lsp_signature_help = '[sign]',
           },
+          before = tailwindcss_colorizer_cmp.formatter,
         },
       },
     }
