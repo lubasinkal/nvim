@@ -54,21 +54,21 @@ return { -- Formatter
     -- Define formatters to use for each filetype
     formatters_by_ft = {
       lua = { 'stylua' }, -- Use stylua for Lua files
-      python = { 'ruff' }, -- Use ruff_format for Python files (assuming you have ruff installed via Mason)
-      javascript = { "prettier", "eslint_d" }, -- Try prettier, then eslint_d
-      typescript = { "prettier", "eslint_d" },
-      html = { "prettier" },
-      css = { "prettier" },
-      json = { "jq" }, -- Example using jq for JSON
-      yaml = { "prettier" },
-      markdown = { "prettier" },
-      vue = { "prettier", "eslint_d" },
+      python = { 'ruff_format' }, -- Use ruff_format for Python files (assuming you have ruff installed via Mason)
+      javascript = { 'prettier', 'eslint' }, -- Try prettier, then eslint
+      typescript = { 'prettier', 'eslint' },
+      html = { 'prettier' },
+      css = { 'prettier' },
+      json = { 'jq' }, -- Example using jq for JSON
+      yaml = { 'prettier' },
+      markdown = { 'prettier' },
+      vue = { 'prettier', 'eslint' },
     },
 
     -- Optional: Default formatters to try if no filetype specific formatter is found
     default_formatters = {
       'prettier',
-      'eslint_d',
+      'eslint',
     },
   },
 }
