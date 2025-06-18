@@ -14,7 +14,7 @@ vim.opt.numberwidth = 4 -- Sets the width of the line number column.
 vim.opt.cursorline = false -- Highlights the current line.
 vim.opt.scrolloff = 12 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.sidescrolloff = 8 -- Minimal number of screen columns either side of cursor if wrapping is off.
-vim.opt.wrap = false -- Disables line wrapping; lines will extend horizontally.
+vim.opt.wrap = true -- Disables line wrapping; lines will extend horizontally.
 vim.opt.mouse = 'a' -- Enables mouse support in all modes.
 vim.opt.fillchars = { eob = ' ' } -- Removes the '~' at the end of buffer, making it blank.
 vim.opt.hidden = true -- Allows background buffers to be modified even if they are no longer in a window.
@@ -84,7 +84,7 @@ vim.opt.foldmethod = 'syntax' -- Sets folding method to syntax-based.
 vim.opt.foldlevelstart = 99 -- Opens all folds by default when a buffer is loaded.
 
 -- Terminal configuration
-vim.opt.shell = vim.fn.executable('pwsh') == 1 and 'pwsh' or
-				vim.fn.executable('powershell') == 1 and 'powershell' or
-				vim.fn.executable('bash') == 1 and 'bash' or
-				vim.fn.expand('$SHELL')
+vim.opt.shell = vim.fn.executable 'pwsh' == 1 and 'pwsh'
+  or vim.fn.executable 'powershell' == 1 and 'powershell'
+  or vim.fn.executable 'bash' == 1 and 'bash'
+  or vim.fn.expand '$SHELL'

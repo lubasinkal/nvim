@@ -34,16 +34,16 @@ return {
         -- LSP keymaps using which-key for groupings and descriptions
         local wk = require 'which-key'
         wk.add {
-          { '<leader>gc', buffer = event.buf, group = 'Code' },
-          { '<leader>gcn', vim.lsp.buf.rename, buffer = event.buf, desc = 'Rename' },
-          { '<leader>gca', vim.lsp.buf.code_action, buffer = event.buf, desc = 'Code Action' },
-          { '<leader>gcr', require('telescope.builtin').lsp_references, buffer = event.buf, desc = 'References' },
-          { '<leader>gci', require('telescope.builtin').lsp_implementations, buffer = event.buf, desc = 'Implementations' },
-          { '<leader>gcd', require('telescope.builtin').lsp_definitions, buffer = event.buf, desc = 'Definitions' },
-          { '<leader>gcD', vim.lsp.buf.declaration, buffer = event.buf, desc = 'Declaration' },
-          { '<leader>gct', require('telescope.builtin').lsp_type_definitions, buffer = event.buf, desc = 'Type Definitions' },
-          { '<leader>gco', require('telescope.builtin').lsp_document_symbols, buffer = event.buf, desc = 'Document Symbols' },
-          { '<leader>gcw', require('telescope.builtin').lsp_dynamic_workspace_symbols, buffer = event.buf, desc = 'Workspace Symbols' },
+          { '<leader>c', buffer = event.buf, group = 'Code' },
+          { '<leader>cn', vim.lsp.buf.rename, buffer = event.buf, desc = 'Rename' },
+          { '<leader>ca', vim.lsp.buf.code_action, buffer = event.buf, desc = 'Code Action' },
+          { '<leader>cr', require('telescope.builtin').lsp_references, buffer = event.buf, desc = 'References' },
+          { '<leader>ci', require('telescope.builtin').lsp_implementations, buffer = event.buf, desc = 'Implementations' },
+          { '<leader>cd', require('telescope.builtin').lsp_definitions, buffer = event.buf, desc = 'Definitions' },
+          { '<leader>cD', vim.lsp.buf.declaration, buffer = event.buf, desc = 'Declaration' },
+          { '<leader>ct', require('telescope.builtin').lsp_type_definitions, buffer = event.buf, desc = 'Type Definitions' },
+          { '<leader>co', require('telescope.builtin').lsp_document_symbols, buffer = event.buf, desc = 'Document Symbols' },
+          { '<leader>cw', require('telescope.builtin').lsp_dynamic_workspace_symbols, buffer = event.buf, desc = 'Workspace Symbols' },
         }
 
         -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
