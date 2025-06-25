@@ -163,20 +163,17 @@ return {
       -- Vue 3 + TypeScript
       vue_ls = {},
       ts_ls = {
-        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
         init_options = {
           plugins = {
             {
               name = '@vue/typescript-plugin',
-              -- Adjust the path if necessary based on where Mason installs vue_ls
-
-              location = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server',
+              location = vim.fn.expand '$MASON/packages/vue-language-server/node_modules/@vue/language-server',
               languages = { 'vue' },
             },
           },
         },
+        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
       },
-
       lua_ls = {},
       marksman = {}, -- Markdown LSP
     }
