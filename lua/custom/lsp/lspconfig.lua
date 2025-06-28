@@ -2,7 +2,6 @@ return {
   -- Main LSP Configuration
   'neovim/nvim-lspconfig',
   event = { 'BufReadPre' }, -- Load before reading a file for faster startup
-  cmd = { 'LspInfo', 'LspInstall', 'LspUninstall' }, -- Allow running these commands manually
   dependencies = {
     -- Automatically install LSPs and related tools to stdpath for Neovim
     { 'williamboman/mason.nvim', opts = {} },

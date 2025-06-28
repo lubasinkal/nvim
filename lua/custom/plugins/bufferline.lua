@@ -1,6 +1,5 @@
 return {
   'akinsho/bufferline.nvim',
-  lazy = true,
   dependencies = {
     'nvim-tree/nvim-web-devicons',
   },
@@ -8,7 +7,7 @@ return {
     { '<Tab>', '<Cmd>BufferLineCycleNext<CR>', desc = 'Next tab' },
     { '<S-Tab>', '<Cmd>BufferLineCyclePrev<CR>', desc = 'Prev tab' },
   },
-  event = 'BufRead',
+  event = 'BufReadPost',
   config = function()
     require('bufferline').setup {
       options = {

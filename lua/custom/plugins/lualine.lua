@@ -1,7 +1,7 @@
 return {
   'nvim-lualine/lualine.nvim',
-  event = 'BufRead',
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
+  event = 'BufReadPost',
+  dependencies = 'nvim-web-devicons',
   config = function()
     local colors = {
       blue = '#80a0ff',

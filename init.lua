@@ -1,64 +1,55 @@
--- Load essential configuration first (keymaps and options)
+-- Load essential configs early (keymaps, options)
 require 'custom.keymaps'
 require 'custom.options'
 
--- Bootstrap lazy.nvim plugin manager
+-- Bootstrap lazy.nvim plugin manager if not installed
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
-  local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
+
+if not (vim.loop or vim.uv).fs_stat(lazypath) then
+  local lazy_repo = 'https://github.com/folke/lazy.nvim.git'
+  local clone_cmd = { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazy_repo, lazypath }
+  local output = vim.fn.system(clone_cmd)
   if vim.v.shell_error ~= 0 then
-    error('Error cloning lazy.nvim:\n' .. out)
+    error('Failed to clone lazy.nvim:\n' .. output)
   end
-end ---@diagnostic disable-next-line: undefined-field
+end
+
+-- Add lazy.nvim to runtime path
 vim.opt.rtp:prepend(lazypath)
 
--- NOTE: Here is where you install and configure your plugins.
+-- Plugin setup via lazy.nvim
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
-  -- LSP configuration for Neovim Lua files
+  -- Indentation detection plugin
   {
-    -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
-    -- used for completion, annotations and signatures of Neovim apis
+    'NMAC427/guess-indent.nvim',
+    event = 'BufReadPre',
+  },
+  -- Lua development support for Neovim config files only
+  {
     'folke/lazydev.nvim',
-    ft = 'lua', -- Only load for Lua files
+    ft = 'lua',
     opts = {
       library = {
-        -- Add luvit types when the `vim.uv` word is found (useful for async operations)
+        -- Add luvit types when 'vim.uv' word is found (async support)
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
       },
     },
   },
+
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
     lazy = true,
     opts = {},
   },
-  -- Collection of various small independent plugins/modules (Mini.nvim)
+  -- Mini.nvim modular plugins loaded on VeryLazy event for smooth startup
   {
     'echasnovski/mini.nvim',
-    event = 'VeryLazy', -- Load on VeryLazy for faster startup
+    event = 'VeryLazy',
     config = function()
-      require('mini.ai').setup { n_lines = 500 }
-      require('mini.indentscope').setup()
-      require('mini.surround').setup {
-        options = {
-          mappings = {
-            add = 'gsa', -- Add surrounding in Normal and Visual modes
-            delete = 'gsd', -- Delete surrounding
-            find = 'gsf', -- Find surrounding (to the right)
-            find_left = 'gsF', -- Find surrounding (to the left)
-            highlight = 'gsh', -- Highlight surrounding
-            replace = 'gsr', -- Replace surrounding
-            update_n_lines = 'gsn', -- Update `n_lines`
-          },
-        },
-      }
-      require('mini.pairs').setup()
+      require('mini.ai').setup()
+      require('mini.surround').setup()
       require('mini.comment').setup {
         options = {
-          -- Function to get the comment string based on Treesitter context
           custom_commentstring = function()
             return require('ts_context_commentstring.internal').calculate_commentstring() or vim.bo.commentstring
           end,
@@ -66,48 +57,29 @@ require('lazy').setup({
       }
     end,
   },
-
-  { import = 'custom.plugins' }, -- Imports plugins defined in lua/custom/plugins/*.lua
-  { import = 'custom.colourschemes' }, -- Imports colourscheme configurations
-  { import = 'custom.lsp' }, -- Imports LSP configurations
-}, { -- lazy.nvim options
-  defaults = { lazy = true }, -- Set all plugins to lazy load by default
-  ui = {
-    -- Configure lazy.nvim UI icons
-    -- If you are using a Nerd Font: set icons to an empty table which will use the
-    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-    icons = vim.g.have_nerd_font and {} or {
-      cmd = '⌘',
-      config = '🛠',
-      event = '📅',
-      ft = '📂',
-      init = '⚙',
-      keys = '🗝',
-      plugin = '🔌',
-      runtime = '💻',
-      require = '🌙',
-      source = '📄',
-      start = '🚀',
-      task = '📌',
-      lazy = '💤 ',
-    },
+  { import = 'custom.plugins' },
+  { import = 'custom.colourschemes' },
+  { import = 'custom.lsp' },
+}, {
+  defaults = {
+    lazy = true, -- lazy load plugins by default
   },
 
   performance = {
-    cache = { enabled = true }, -- Enable caching for faster startup
-    reset_packpath = true, -- Reset packpath for a clean environment
+    cache = { enabled = true }, -- cache plugin loader for faster startup
+    reset_packpath = true, -- reset packpath for clean environment
     rtp = {
-      reset = true, -- Reset the runtimepath
-      disabled_plugins = { -- Disable built-in plugins you replace
+      reset = true, -- reset runtime path
+      disabled_plugins = { -- disable built-in plugins you do not use
         'gzip',
         'matchit',
         'matchparen',
-        'netrwPlugin', -- Often replaced by a file explorer plugin
+        'netrwPlugin',
         'tarPlugin',
         'tohtml',
         'tutor',
         'zipPlugin',
-        'osc52', -- Terminal feature, sometimes causes issues
+        'osc52',
         'man',
         'shada',
         'spellfile',
@@ -134,3 +106,13 @@ require('lazy').setup({
     },
   },
 })
+
+-- Update plugins manually with <leader>pu
+vim.keymap.set('n', '<leader>pu', function()
+  require('lazy').update()
+end, { desc = 'Update plugins (lazy.nvim)' })
+
+-- Auto-update plugins every 24 hours (optional)
+vim.defer_fn(function()
+  require('lazy').update()
+end, 1000 * 60 * 60 * 24)
