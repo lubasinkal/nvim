@@ -5,10 +5,11 @@ return {
   dependencies = {
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-path',
-    'saadparwaiz1/cmp_luasnip',
-    'hrsh7th/cmp-nvim-lsp-signature-help',
+    'hrsh7th/cmp-nvim-lua',
     'hrsh7th/cmp-nvim-lsp',
+    'saadparwaiz1/cmp_luasnip',
     'onsails/lspkind.nvim',
+    'lukas-reineke/cmp-under-comparator',
     {
       'L3MON4D3/LuaSnip',
       version = '2.*',
@@ -43,7 +44,6 @@ return {
 
     luasnip.config.setup {}
 
-    -- Prepare lspkind formatter
     local kind_formatter = lspkind.cmp_format {
       mode = 'symbol_text',
       maxwidth = 50,
@@ -53,7 +53,7 @@ return {
         nvim_lsp = '[LSP]',
         path = '[path]',
         luasnip = '[snip]',
-        nvim_lsp_signature_help = '[sign]',
+        nvim_lua = '[lua]',
       },
     }
 
@@ -66,36 +66,30 @@ return {
       completion = {
         completeopt = 'menu,menuone,noinsert,noselect',
         autocomplete = { require('cmp.types').cmp.TriggerEvent.TextChanged },
-        keyword_length = 2,
       },
       performance = {
-        throttle = 0,
-        filtering_context_budget = 10,
-        async_budget = 10,
-        confirm_resolve_timeout = 0,
-        fetching_timeout = 0,
-        debounce = 20,
-        max_view_entries = 8,
+        debounce = 60,
+        throttle = 30,
+        confirm_resolve_timeout = 80,
+        fetching_timeout = 100,
+        async_budget = 20,
+        max_view_entries = 15,
       },
       experimental = {
         ghost_text = {
-          hl_group = 'CmpGhostText',
+          hl_group = 'Comment',
         },
+        -- native_menu = true, -- enable if you want native menu dropdown
       },
       window = {
         completion = cmp.config.window.bordered {
           border = 'rounded',
-          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:CmpSel,Search:None',
-          zindex = 1001,
-          scrollbar = true,
+          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:CmpSel',
         },
         documentation = cmp.config.window.bordered {
           border = 'rounded',
-          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
-          zindex = 1000,
           max_width = 80,
-          max_height = 10,
-          scrollbar = true,
+          max_height = 15,
         },
       },
       mapping = cmp.mapping.preset.insert {
@@ -107,27 +101,55 @@ return {
         ['<CR>'] = cmp.mapping.confirm { select = true },
         ['<C-e>'] = cmp.mapping.abort(),
         ['<C-Space>'] = cmp.mapping.complete {},
+        -- Smart Tab + Shift-Tab navigation
+        ['<Tab>'] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()
+          elseif luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()
+          else
+            fallback()
+          end
+        end, { 'i', 's' }),
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item()
+          elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+          else
+            fallback()
+          end
+        end, { 'i', 's' }),
       },
       sources = cmp.config.sources {
         { name = 'nvim_lsp', priority = 1000 },
+        { name = 'nvim_lua', priority = 900 },
         { name = 'luasnip', priority = 750 },
         { name = 'path', priority = 500 },
         { name = 'buffer', priority = 300 },
-        { name = 'nvim_lsp_signature_help' },
+      },
+      sorting = {
+        priority_weight = 2,
+        comparators = {
+          cmp.config.compare.offset,
+          cmp.config.compare.exact,
+          cmp.config.compare.score,
+          require('cmp-under-comparator').under,
+          cmp.config.compare.kind,
+          cmp.config.compare.sort_text,
+          cmp.config.compare.length,
+          cmp.config.compare.order,
+        },
       },
       formatting = {
         fields = { 'abbr', 'kind', 'menu' },
         expandable_indicator = true,
         format = function(entry, vim_item)
-          -- Apply lspkind icons and text
           vim_item = kind_formatter(entry, vim_item)
-
-          -- Apply tailwind colorizer if available
           local ok, colorizer = pcall(require, 'tailwindcss-colorizer-cmp')
           if ok then
             vim_item = colorizer.formatter(entry, vim_item)
           end
-
           return vim_item
         end,
       },
