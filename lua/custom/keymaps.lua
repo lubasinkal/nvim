@@ -69,3 +69,14 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+-- Quick file creation
+vim.keymap.set('n', '<leader>fn', ':enew<CR>', { desc = 'New file' })
+
+-- Better window management
+vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = 'Split vertically' })
+vim.keymap.set('n', '<leader>wh', '<C-w>s', { desc = 'Split horizontally' })
+vim.keymap.set('n', '<leader>wx', '<C-w>c', { desc = 'Close window' })
+
+-- Quick navigation
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Half page down (centered)' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Half page up (centered)' })

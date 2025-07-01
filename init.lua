@@ -24,6 +24,14 @@ require('lazy').setup({
     'NMAC427/guess-indent.nvim',
     event = 'BufReadPre',
   },
+  -- Auto-close brackets/quotes intelligently
+  { 'windwp/nvim-ts-autotag', ft = { 'html', 'javascript', 'typescript', 'jsx', 'tsx', 'vue' } },
+
+  -- Better quick fix list
+  { 'kevinhwang91/nvim-bqf', ft = 'qf' },
+
+  -- Smooth scrolling
+  { 'karb94/neoscroll.nvim', opts = {} },
   -- Lua development support for Neovim config files only
   {
     'folke/lazydev.nvim',
