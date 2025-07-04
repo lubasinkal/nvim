@@ -29,8 +29,6 @@ return {
       },
     },
     opts = {
-      -- Create a table with the options to be passed to setup()
-      R_args = { '--quiet', '--no-save' },
       hook = {
         on_filetype = function()
           -- This function will be called at the FileType event
@@ -59,7 +57,6 @@ return {
           }
         end,
       },
-      pdfviewer = '',
     },
     config = function(_, opts)
       vim.g.rout_follow_colorscheme = true

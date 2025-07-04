@@ -53,22 +53,21 @@ return { -- Formatter
 
     -- Define formatters to use for each filetype
     formatters_by_ft = {
-      lua = { 'stylua' }, -- Use stylua for Lua files
-      python = { 'ruff_format' }, -- Use ruff_format for Python files (assuming you have ruff installed via Mason)
-      javascript = { 'prettier', 'eslint' }, -- Try prettier, then eslint
-      typescript = { 'prettier', 'eslint' },
-      html = { 'prettier' },
-      css = { 'prettier' },
-      json = { 'jq' }, -- Example using jq for JSON
-      yaml = { 'prettier' },
-      markdown = { 'prettier' },
-      vue = { 'prettier', 'eslint' },
+      lua = { 'stylua' }, -- Lua: Stylua (Rust-based)
+      python = { 'ruff' }, -- Python: Ruff formatter (Rust-based)
+      javascript = { 'biome' }, -- JS/TS: Biome (Rust-based)
+      typescript = { 'biome' },
+      html = { 'biome' },
+      css = { 'biome' },
+      json = { 'biome' },
+      yaml = { 'biome' }, -- Optional: Biome supports YAML now
+      markdown = { 'biome' }, -- Optional: Biome supports Markdown
+      vue = { 'biome' }, -- Vue via Biome (partial support, improving)
     },
 
     -- Optional: Default formatters to try if no filetype specific formatter is found
     default_formatters = {
-      'prettier',
-      'eslint',
+      'biome',
     },
   },
 }
