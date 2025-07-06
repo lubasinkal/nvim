@@ -57,6 +57,12 @@ return {
       },
     }
 
+    cmp.setup.filetype({ 'sql', 'mysql', 'plsql' }, {
+      sources = cmp.config.sources {
+        { name = 'vim-dadbod-completion', priority = 1000 },
+        { name = 'buffer', priority = 300 },
+      },
+    })
     cmp.setup {
       snippet = {
         expand = function(args)
