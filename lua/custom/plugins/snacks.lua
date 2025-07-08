@@ -45,11 +45,6 @@ return {
     words = { enabled = true },
   },
   keys = {
-    -- Top Pickers & Explorer
-    -- Removed: '<leader><space>' (Snacks.picker.smart - overlaps with file finding)
-    -- Removed: '<leader>,' (Snacks.picker.buffers - overlaps with Telescope)
-    -- Removed: '<leader>/' (Snacks.picker.grep - overlaps with Telescope)
-    -- Removed: '<leader>:' (Snacks.picker.command_history - overlaps with Telescope)
     {
       '<leader>n',
       function()
@@ -57,19 +52,6 @@ return {
       end,
       desc = 'Notification History',
     },
-    -- Removed: '<leader>e' (Snacks.explorer - overlaps with neotree)
-    -- {
-    --   '<leader>e',
-    --   function()
-    --     Snacks.explorer() -- Keeping the Snacks file explorer
-    --   end,
-    --   desc = 'File Explorer',
-    -- },
-
-    -- find
-    -- Removed: '<leader>fb' (Snacks.picker.buffers - overlaps with Telescope)
-    -- Removed: '<leader>fc' (Snacks.picker.files cwd config - overlaps with Telescope)
-    -- Removed: '<leader>ff' (Snacks.picker.files - overlaps with Telescope)
     {
       '<leader>fg',
       function()
@@ -84,8 +66,6 @@ return {
       end,
       desc = 'Projects',
     },
-    -- Removed: '<leader>fr' (Snacks.picker.recent - overlaps with Telescope)
-
     -- git (Keeping all git-related pickers as they seem specific to Snacks or complementary)
     {
       '<leader>gb',
@@ -136,16 +116,6 @@ return {
       end,
       desc = 'Git Log File',
     },
-
-    -- Grep
-    -- Removed: '<leader>sb' (Snacks.picker.lines - duplicate and overlaps conceptually)
-    -- Removed: '<leader>sB' (Snacks.picker.grep_buffers - overlaps with Telescope)
-    -- Removed: '<leader>sg' (Snacks.picker.grep - overlaps with Telescope)
-    -- Removed: '<leader>sw' (Snacks.picker.grep_word - overlaps with Telescope)
-
-    -- search
-    -- Removed: '<leader>s"' (Snacks.picker.registers - overlaps with Telescope)
-    -- Removed: '<leader>s/' (Snacks.picker.search_history - overlaps with Telescope)
     {
       '<leader>sa',
       function()
@@ -153,8 +123,6 @@ return {
       end,
       desc = 'Autocmds',
     },
-    -- Removed: '<leader>sb' (Snacks.picker.lines - duplicate and overlaps conceptually)
-    -- Removed: '<leader>sc' (Snacks.picker.command_history - overlaps with Telescope)
     {
       '<leader>sC',
       function()
@@ -162,7 +130,6 @@ return {
       end,
       desc = 'Commands',
     },
-    -- Removed: '<leader>sd' (Snacks.picker.diagnostics - overlaps with Telescope)
     {
       '<leader>sD',
       function()
@@ -170,7 +137,6 @@ return {
       end,
       desc = 'Buffer Diagnostics',
     },
-    -- Removed: '<leader>sh' (Snacks.picker.help - overlaps with Telescope)
     {
       '<leader>sH',
       function()
@@ -185,8 +151,6 @@ return {
       end,
       desc = 'Icons',
     },
-    -- Removed: '<leader>sj' (Snacks.picker.jumps - overlaps with Telescope)
-    -- Removed: '<leader>sk' (Snacks.picker.keymaps - overlaps with Telescope)
     {
       '<leader>sl',
       function()
@@ -194,7 +158,6 @@ return {
       end,
       desc = 'Location List',
     },
-    -- Removed: '<leader>sm' (Snacks.picker.marks - overlaps with Telescope)
     {
       '<leader>sM',
       function()
@@ -202,7 +165,6 @@ return {
       end,
       desc = 'Man Pages',
     },
-    -- Removed: '<leader>sp' (Snacks.picker.lazy - overlaps with Telescope 'registers')
     {
       '<leader>sq',
       function()
@@ -210,7 +172,6 @@ return {
       end,
       desc = 'Quickfix List',
     },
-    -- Removed: '<leader>sR' (Snacks.picker.resume - overlaps with Telescope)
     {
       '<leader>su',
       function()
@@ -218,8 +179,6 @@ return {
       end,
       desc = 'Undo History',
     },
-    -- Removed: '<leader>uC' (Snacks.picker.colorschemes - overlaps with Telescope themes)
-
     -- LSP (Keeping all LSP pickers as they seem specific to Snacks or complementary)
     {
       'gd',
@@ -235,14 +194,6 @@ return {
       end,
       desc = 'Goto Declaration',
     },
-    -- {
-    --   'gr',
-    --   function()
-    --     Snacks.picker.lsp_references()
-    --   end,
-    --   nowait = true,
-    --   desc = 'References',
-    -- },
     {
       'gI',
       function()
@@ -286,27 +237,6 @@ return {
       end,
       desc = 'Toggle Zoom',
     },
-    -- {
-    --   '<leader>.',
-    --   function()
-    --     Snacks.scratch()
-    --   end,
-    --   desc = 'Toggle Scratch Buffer',
-    -- },
-    -- {
-    --   '<leader>S',
-    --   function()
-    --     Snacks.scratch.select()
-    --   end,
-    --   desc = 'Select Scratch Buffer',
-    -- },
-    {
-      '<leader>n',
-      function()
-        Snacks.notifier.show_history() -- Duplicate with the '<leader>n' above, removing the first one is an option.
-      end,
-      desc = 'Notification History',
-    },
     {
       '<leader>bd',
       function()
@@ -342,20 +272,6 @@ return {
         Snacks.notifier.hide()
       end,
       desc = 'Dismiss All Notifications',
-    },
-    {
-      '<c-/>',
-      function()
-        Snacks.terminal()
-      end,
-      desc = 'Toggle Terminal',
-    },
-    {
-      '<c-_>',
-      function()
-        Snacks.terminal()
-      end,
-      desc = 'which_key_ignore', -- Assuming this is for which-key integration
     },
     -- Keeping these unless you have specific Telescope mappings for next/prev reference
     {
