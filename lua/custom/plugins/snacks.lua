@@ -52,13 +52,9 @@ return {
       end,
       desc = 'Notification History',
     },
-    {
-      '<leader>fg',
-      function()
-        Snacks.picker.git_files() -- Keeping git files picker
-      end,
-      desc = 'Find Git Files',
-    },
+    -- NOTE: Most finder-related keymaps have been removed in favor of Telescope.
+    -- Snacks is now primarily used for its UI features (dashboard, notifier, zen mode)
+    -- and its excellent Git integration.
     {
       '<leader>fp',
       function()
@@ -66,7 +62,7 @@ return {
       end,
       desc = 'Projects',
     },
-    -- git (Keeping all git-related pickers as they seem specific to Snacks or complementary)
+    -- git (Keeping all git-related pickers as they are a great alternative)
     {
       '<leader>gb',
       function()
@@ -116,6 +112,7 @@ return {
       end,
       desc = 'Git Log File',
     },
+    -- Pickers for Neovim internals
     {
       '<leader>sa',
       function()
@@ -129,13 +126,6 @@ return {
         Snacks.picker.commands() -- Keeping commands picker
       end,
       desc = 'Commands',
-    },
-    {
-      '<leader>sD',
-      function()
-        Snacks.picker.diagnostics_buffer() -- Keeping buffer diagnostics (complementary to workspace diagnostics)
-      end,
-      desc = 'Buffer Diagnostics',
     },
     {
       '<leader>sH',
@@ -179,49 +169,7 @@ return {
       end,
       desc = 'Undo History',
     },
-    -- LSP (Keeping all LSP pickers as they seem specific to Snacks or complementary)
-    {
-      'gd',
-      function()
-        Snacks.picker.lsp_definitions()
-      end,
-      desc = 'Goto Definition',
-    },
-    {
-      'gD',
-      function()
-        Snacks.picker.lsp_declarations()
-      end,
-      desc = 'Goto Declaration',
-    },
-    {
-      'gI',
-      function()
-        Snacks.picker.lsp_implementations()
-      end,
-      desc = 'Goto Implementation',
-    },
-    {
-      'gy',
-      function()
-        Snacks.picker.lsp_type_definitions()
-      end,
-      desc = 'Goto T[y]pe Definition',
-    },
-    {
-      '<leader>ss',
-      function()
-        Snacks.picker.lsp_symbols()
-      end,
-      desc = 'LSP Symbols',
-    },
-    {
-      '<leader>sS',
-      function()
-        Snacks.picker.lsp_workspace_symbols()
-      end,
-      desc = 'LSP Workspace Symbols',
-    },
+    -- LSP Functionality is handled by Telescope and lspconfig keymaps
     -- Other (Keeping these as they are not standard Telescope pickers)
     {
       '<leader>z',

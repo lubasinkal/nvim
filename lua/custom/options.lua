@@ -14,7 +14,7 @@ vim.opt.numberwidth = 4 -- Sets the width of the line number column.
 vim.opt.cursorline = false -- Highlights the current line.
 vim.opt.scrolloff = 12 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.sidescrolloff = 8 -- Minimal number of screen columns either side of cursor if wrapping is off.
-vim.opt.wrap = true -- Disables line wrapping; lines will extend horizontally.
+vim.opt.wrap = false -- Disables line wrapping; lines will extend horizontally.
 vim.opt.mouse = 'a' -- Enables mouse support in all modes.
 vim.opt.fillchars = { eob = ' ' } -- Removes the '~' at the end of buffer, making it blank.
 vim.opt.hidden = true -- Allows background buffers to be modified even if they are no longer in a window.
