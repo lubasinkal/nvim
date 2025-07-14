@@ -26,11 +26,11 @@ return {
         -- https://github.com/nvim-telescope/telescope.nvim/blob/master/doc/telescope.txt#L112
         -- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/themes.lua
         --
-        -- border = true,
-        -- layout_config = {
-        --   width = 0.8, -- Can set width and height as percent of window
-        --   height = 0.5,
-        -- },
+        border = true,
+        layout_config = {
+          width = 0.8, -- Can set width and height as percent of window
+          height = 0.5,
+        },
 
         -- For Snacks, you can set layout options here, see:
         -- https://github.com/folke/snacks.nvim/blob/main/docs/picker.md#%EF%B8%8F-layouts
@@ -48,4 +48,3 @@ return {
     },
   },
 }
-
