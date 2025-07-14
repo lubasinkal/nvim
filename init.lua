@@ -73,7 +73,6 @@ require('lazy').setup({
     end,
   },
   { import = 'custom.plugins' },
-  { import = 'custom.colourschemes' },
   { import = 'custom.lsp' },
 }, {
   defaults = {

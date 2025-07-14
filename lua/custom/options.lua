@@ -55,7 +55,13 @@ vim.opt.swapfile = false -- Disables creation of swap files.
 vim.opt.backup = false -- Disables creation of backup files.
 vim.opt.writebackup = false -- Disables write backup files.
 vim.opt.undofile = true -- Enables persistent undo history.
-vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir' -- Specifies directory for undo files.
+
+-- Create undo directory if it doesn't exist
+local undodir = vim.fn.stdpath 'data' .. '/undodir'
+if vim.fn.isdirectory(undodir) == 0 then
+  vim.fn.mkdir(undodir, 'p')
+end
+vim.opt.undodir = undodir
 
 -- Completion and popup menu
 vim.opt.completeopt = 'menuone,noselect' -- Sets options for completion popups.
