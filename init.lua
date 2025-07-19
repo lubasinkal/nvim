@@ -121,10 +121,13 @@ require('lazy').setup({
   },
 })
 
--- Update plugins manually with <leader>pu
-vim.keymap.set('n', '<leader>pu', function()
+-- Update plugins manually with <leader>lu
+vim.keymap.set('n', '<leader>lu', function()
   require('lazy').update()
 end, { desc = 'Update plugins (lazy.nvim)' })
+vim.keymap.set('n', '<leader>lp', function()
+  require('lazy').profile()
+end, { desc = 'Profile (lazy.nvim)' })
 
 -- Auto-update plugins every 24 hours (optional)
 vim.defer_fn(function()

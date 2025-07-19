@@ -2,9 +2,9 @@ return { -- Useful plugin to show you pending keybinds.
   'folke/which-key.nvim',
   event = 'VeryLazy', -- Sets the loading event to 'VimEnter'
   opts = {
+    preset = 'classic', --classic,modern,helix
     -- delay between pressing a key and opening which-key (milliseconds)
     -- this setting is independent of vim.opt.timeoutlen
-    delay = 0,
     icons = {
       -- set icon mappings to true if you have a Nerd Font
       mappings = vim.g.have_nerd_font,
@@ -44,14 +44,14 @@ return { -- Useful plugin to show you pending keybinds.
 
     -- Document existing key chains
     spec = {
-      { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
-      { '<leader>d', group = '[D]adbod' },
-      { '<leader>r', group = '[R]ename' },
-      { '<leader>s', group = '[S]earch' },
-
-      { '<leader>u', group = '[U]I' },
-      { '<leader>w', group = '[W]orkspace' },
-      { '<leader>t', group = '[T]oggle' },
+      { '<leader>c', group = 'Code', mode = { 'n', 'x' } },
+      { '<leader>d', group = 'Datebase' },
+      { '<leader>s', group = 'Search' },
+      { '<leader>g', group = 'Git' },
+      { '<leader>u', group = 'UI' },
+      { '<leader>w', group = 'Window' },
+      { '<leader>t', group = 'Terminal' },
+      { '<leader>l', group = 'Lazy.nvim' },
       { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
     },
   },

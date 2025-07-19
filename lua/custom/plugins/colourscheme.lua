@@ -14,10 +14,10 @@ return {
       saturation = 1, -- accepts a value between 0 and 1. 0 will be fully desaturated (greyscale) and 1 will be the full color (default)
 
       -- Enable italics comments
-      italic_comments = false,
+      italic_comments = true,
 
       -- Replace all fillchars with ' ' for the ultimate clean look
-      hide_fillchars = false,
+      hide_fillchars = true,
 
       -- Apply a modern borderless look to pickers like Telescope, Snacks Picker & Fzf-Lua
       borderless_pickers = false,
@@ -48,6 +48,11 @@ return {
       'NeoTreeNormal',
       'NeoTreeNormalNC',
       'NeoTreeEndOfBuffer',
+      'WhichKeyFloat',
+      'WhichKey',
+      'WhichKeyBorder',
+      'WhichKeyTitle',
+      'WhichKeyNormal',
     }
 
     for _, hl in ipairs(transparent_groups) do
