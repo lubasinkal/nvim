@@ -25,7 +25,7 @@ require('lazy').setup({
     event = 'BufReadPre',
   },
   -- Auto-close brackets/quotes intelligently
-  { 'windwp/nvim-ts-autotag', ft = { 'html', 'javascript', 'typescript', 'jsx', 'tsx', 'vue' } },
+  { 'windwp/nvim-ts-autotag', opts = {} },
 
   -- Better quick fix list
   { 'kevinhwang91/nvim-bqf', ft = 'qf' },
@@ -55,6 +55,14 @@ require('lazy').setup({
     config = true,
     -- use opts = {} for passing setup options
     -- this is equivalent to setup({}) function
+  },
+  {
+    'NvChad/nvim-colorizer.lua',
+    opts = {
+      user_default_options = {
+        tailwind = true,
+      },
+    },
   },
   -- Mini.nvim modular plugins loaded on VeryLazy event for smooth startup
   {
