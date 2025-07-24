@@ -94,3 +94,23 @@ vim.opt.shell = vim.fn.executable 'pwsh' == 1 and 'pwsh'
   or vim.fn.executable 'powershell' == 1 and 'powershell'
   or vim.fn.executable 'bash' == 1 and 'bash'
   or vim.fn.expand '$SHELL'
+
+-- Give me some fenced codeblock goodness
+vim.g.markdown_fenced_languages = {
+  'html',
+  'javascript',
+  'javascriptreact',
+  'typescript',
+  'json',
+  'css',
+  'scss',
+  'lua',
+  'vim',
+  'bash',
+  'ts=typescript',
+  'js=javascript',
+}
+-- Vertically center document when entering insert mode
+vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
+  command = 'norm zz',
+})
