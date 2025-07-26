@@ -3,6 +3,7 @@ return {
   lazy = false, -- lazy loading handled internally
   -- optional: provides snippets for the snippet source
   dependencies = {
+    { 'L3MON4D3/LuaSnip', version = 'v2.*' },
     'rafamadriz/friendly-snippets',
     -- optional: provides icon support
     'onsails/lspkind.nvim',
@@ -81,12 +82,12 @@ return {
     -- default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'lazydev' },
+      default = { 'lsp', 'path', 'snippets', 'lazydev', 'buffer' },
       providers = {
         lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
       },
     },
-
+    snippets = { preset = 'luasnip' },
     -- experimental signature help support
     signature = { enabled = true },
 
