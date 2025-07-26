@@ -153,10 +153,11 @@ return {
 
     -- NOTE: This is where you add functionality for code analysis, static type checking and formating. Press :Mason search for the LSP, linter or formater for the programming languange, get the name and add it under servers.
 
+    local vue_typescript_plugin = vim.fn.expand(vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server')
     local servers = {
 
       gopls = {},
-      ty = {},
+      basedpyright = {},
       r_language_server = {},
       html = {},
       tailwindcss = {},
@@ -164,7 +165,40 @@ return {
       emmet_language_server = {
         filetypes = { 'html', 'css', 'javascriptreact', 'typescriptreact', 'vue' },
       },
-      ts_ls = {},
+      ts_ls = {
+        init_options = {
+          plugins = {
+            {
+              name = '@vue/typescript-plugin',
+              location = vue_typescript_plugin,
+              languages = { 'vue' },
+            },
+          },
+
+          filetypes = {
+            'javascript',
+            'typescript',
+            'vue',
+          },
+          settings = {
+            typescript = {
+              tsserver = {
+                useSyntaxServer = false,
+              },
+              inlayHints = {
+                includeInlayParameterNameHints = 'all',
+                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                includeInlayFunctionParameterTypeHints = true,
+                includeInlayVariableTypeHints = true,
+                includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+                includeInlayPropertyDeclarationTypeHints = true,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+              },
+            },
+          },
+        },
+      },
       lua_ls = {},
       marksman = {}, -- Markdown LSP
     }
