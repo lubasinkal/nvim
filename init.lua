@@ -1,6 +1,7 @@
 -- Load essential configs early (keymaps, options)
 require 'custom.keymaps'
 require 'custom.options'
+require 'custom.autocmds.sql-completion'
 
 -- Bootstrap lazy.nvim plugin manager if not installed
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
