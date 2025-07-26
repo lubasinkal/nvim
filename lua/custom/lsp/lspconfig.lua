@@ -208,7 +208,16 @@ return {
     }
     -- managed to get vue-language-server working with vtsls following https://github.com/vuejs/language-tools/wiki/Neovim
     local vue_language_server_path = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
-
+    -- Check if the plugin path exists
+    if vim.fn.isdirectory(vue_language_server_path) == 0 then
+      vim.schedule(function()
+        vim.notify(
+          '[vtsls] @vue/typescript-plugin is missing! Please run :MasonToolsUpdate or install vue-language-server manually.',
+          vim.log.levels.WARN,
+          { title = 'LSP Setup' }
+        )
+      end)
+    end
     local vue_plugin = {
       name = '@vue/typescript-plugin',
       location = vue_language_server_path,
