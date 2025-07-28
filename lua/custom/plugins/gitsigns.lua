@@ -1,6 +1,6 @@
 return { -- Adds git related signs to the gutter, as well as utilities for managing changes
   'lewis6991/gitsigns.nvim',
-  event = 'BufReadPost',
+  event = { 'BufReadPre', 'BufNewFile' },
   opts = {
     signs = {
       add = { text = '+' },
@@ -29,14 +29,22 @@ return { -- Adds git related signs to the gutter, as well as utilities for manag
 
       -- Navigation
       map('n', ']c', function()
-        if vim.wo.diff then return ']c' end
-        vim.schedule(function() gs.next_hunk() end)
+        if vim.wo.diff then
+          return ']c'
+        end
+        vim.schedule(function()
+          gs.next_hunk()
+        end)
         return '<Ignore>'
       end, { expr = true, desc = 'Next Hunk' })
 
       map('n', '[c', function()
-        if vim.wo.diff then return '[c' end
-        vim.schedule(function() gs.prev_hunk() end)
+        if vim.wo.diff then
+          return '[c'
+        end
+        vim.schedule(function()
+          gs.prev_hunk()
+        end)
         return '<Ignore>'
       end, { expr = true, desc = 'Prev Hunk' })
 
@@ -47,10 +55,14 @@ return { -- Adds git related signs to the gutter, as well as utilities for manag
       map('n', '<leader>hu', gs.undo_stage_hunk, { desc = 'Undo Stage Hunk' })
       map('n', '<leader>hR', gs.reset_buffer, { desc = 'Reset Buffer' })
       map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview Hunk' })
-      map('n', '<leader>hb', function() gs.blame_line { full = true } end, { desc = 'Blame Line' })
+      map('n', '<leader>hb', function()
+        gs.blame_line { full = true }
+      end, { desc = 'Blame Line' })
       map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'Toggle Blame' })
       map('n', '<leader>hd', gs.diffthis, { desc = 'Diff This' })
-      map('n', '<leader>hD', function() gs.diffthis('~') end, { desc = 'Diff This ~' })
+      map('n', '<leader>hD', function()
+        gs.diffthis '~'
+      end, { desc = 'Diff This ~' })
       map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'Select Hunk' })
     end,
   },

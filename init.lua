@@ -52,9 +52,10 @@ require('lazy').setup({
   },
   {
     'windwp/nvim-autopairs',
-    event = 'InsertEnter',
-    config = true,
-    -- use opts = {} for passing setup options
+    event = 'VeryLazy',
+    config = function(_, opts)
+      require('nvim-autopairs').setup(opts)
+    end, -- use opts = {} for passing setup options
     -- this is equivalent to setup({}) function
   },
   {

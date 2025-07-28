@@ -1,7 +1,7 @@
 return {
   -- Main LSP Configuration
   'neovim/nvim-lspconfig',
-  event = { 'BufReadPre' }, -- Load before reading a file for faster startup
+  event = { 'BufReadPre', 'BufNewFile' },
   dependencies = {
     -- Automatically install LSPs and related tools to stdpath for Neovim
     { 'williamboman/mason.nvim', opts = {} },

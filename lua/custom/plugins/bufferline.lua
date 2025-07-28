@@ -7,7 +7,7 @@ return {
     { '<Tab>', '<Cmd>BufferLineCycleNext<CR>', desc = 'Next tab' },
     { '<S-Tab>', '<Cmd>BufferLineCyclePrev<CR>', desc = 'Prev tab' },
   },
-  event = 'BufReadPost',
+  event = { 'BufReadPost', 'BufNewFile' },
   config = function()
     require('bufferline').setup {
       options = {
