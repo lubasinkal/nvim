@@ -48,7 +48,7 @@ return {
       for _, client in ipairs(clients) do
         table.insert(names, client.name)
       end
-      return 'lsp: ' .. table.concat(names, ', ')
+      return ' ' .. table.concat(names, ', ')
     end
     require('lualine').setup {
       options = {
@@ -63,7 +63,7 @@ return {
         ignore_focus = {},
         always_divide_middle = true,
         always_show_tabline = true,
-        globalstatus = false,
+        globalstatus = true,
         refresh = {
           statusline = 100,
           tabline = 100,
@@ -73,7 +73,7 @@ return {
       sections = {
         lualine_a = { 'mode' },
         lualine_b = { { 'branch', icon = '' }, 'diff', 'diagnostics' },
-        lualine_c = { 'filename' },
+        lualine_c = { '' },
         lualine_x = { lsp_clients, 'encoding', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location' },
@@ -87,9 +87,17 @@ return {
         lualine_z = {},
       },
       tabline = {},
-      winbar = {},
+      winbar = {
+        lualine_c = {
+          {
+            'filename',
+            path = 1,
+            file_status = true,
+          },
+        },
+      },
       inactive_winbar = {},
-      extensions = { 'nvim-tree' },
+      extensions = { 'nvim-tree', 'fugitive', 'lazy', 'trouble', 'quickfix', 'toggleterm' },
     }
   end,
 }
