@@ -26,13 +26,13 @@ require('lazy').setup({
     event = 'BufReadPre',
   },
   -- Auto-close brackets/quotes intelligently
-  { 'windwp/nvim-ts-autotag', opts = {} },
+  { 'windwp/nvim-ts-autotag', opts = {}, event = { 'BufReadPre', 'BufNewFile' } },
 
   -- Better quick fix list
   { 'kevinhwang91/nvim-bqf', ft = 'qf' },
 
   -- Smooth scrolling
-  { 'karb94/neoscroll.nvim', opts = {} },
+  { 'karb94/neoscroll.nvim', opts = {}, event = 'VeryLazy' },
   -- Lua development support for Neovim config files only
   {
     'folke/lazydev.nvim',
@@ -94,7 +94,8 @@ require('lazy').setup({
     reset_packpath = true, -- reset packpath for clean environment
     rtp = {
       reset = true, -- reset runtime path
-      disabled_plugins = { -- disable built-in plugins you do not use
+      disabled_plugins = {
+        -- These are safe and common to disable
         'gzip',
         'matchit',
         'matchparen',
@@ -103,29 +104,11 @@ require('lazy').setup({
         'tohtml',
         'tutor',
         'zipPlugin',
-        'osc52',
+        -- Rarely needed extras
         'man',
-        'shada',
-        'spellfile',
-        'rplugin',
-        'editorconfig',
-        'health',
-        'syntax',
-        '2html_plugin',
-        'getscript',
-        'getscriptPlugin',
-        'logipat',
-        'remote_plugins',
-        'rrhelper',
-        'spellfile_plugin',
-        'vimball',
-        'vimballPlugin',
-        'matchparen',
         'shada_plugin',
-        'tar',
-        'tarPlugin',
-        'zip',
-        'zipPlugin',
+        'spellfile_plugin',
+        'vimballPlugin',
       },
     },
   },
