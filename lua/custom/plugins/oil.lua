@@ -7,7 +7,7 @@ return {
   keys = {
     {
       '-',
-      '<CMD>Oil --float<CR>',
+      '<CMD>Oil --float --preview<CR>',
       desc = 'Open Oil (parent directory)',
     },
   },
