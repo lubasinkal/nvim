@@ -106,7 +106,6 @@ require('lazy').setup({
         'zipPlugin',
         -- Rarely needed extras
         'man',
-        'shada_plugin',
         'spellfile_plugin',
         'vimballPlugin',
       },
@@ -122,13 +121,14 @@ vim.keymap.set('n', '<leader>lp', function()
   require('lazy').profile()
 end, { desc = 'Profile (lazy.nvim)' })
 
--- -- Auto-update plugins every 24 hours (optional)
--- vim.defer_fn(function()
---   require('lazy').update()
--- end, 1000 * 60 * 60 * 24)
+-- Auto-update plugins every 24 hours (optional)
+vim.defer_fn(function()
+  require('lazy').update()
+end, 1000 * 60 * 60 * 24)
 
 -- Minimal Dev-Friendly ShaDa Setup
-vim.o.shada = [['10,<0,s0,h]]
+-- Keeps history, marks, registers, etc.
+vim.o.shada = "!,'300,<50,s10,h"
 
 -- Auto-cleanup lingering ShaDa temp files (cross-platform)
 -- vim.api.nvim_create_autocmd('VimEnter', {

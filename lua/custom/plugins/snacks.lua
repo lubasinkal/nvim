@@ -1,21 +1,39 @@
 return {
   'folke/snacks.nvim',
   priority = 1000,
-  lazy = false, -- Snacks is designed to load early
+  lazy = false,
   ---@type snacks.Config
   opts = {
+    -- Enable core modules
+    animate = { enabled = true },
     bigfile = { enabled = true },
+    dashboard = { enabled = true },
+    explorer = { enabled = true },
+    indent = { enabled = true },
+    input = { enabled = true },
+    layout = { enabled = true },
+    notifier = { enabled = true },
+    picker = { enabled = true },
+    quickfile = { enabled = true },
+    scope = { enabled = true },
+    scroll = { enabled = true },
+    statuscolumn = { enabled = true },
+    words = { enabled = true },
+    terminal = { enabled = true },
+    toggle = { enabled = true },
+    scratch = { enabled = true },
+    profiler = { enabled = true },
+    zen = { enabled = true },
+
+    -- Dashboard customization
     dashboard = {
       preset = {
         pick = nil,
-        ---@type snacks.dashboard.Item[]
         keys = {
-          { icon = ' ', key = 'f', desc = 'Find File', action = ":lua Snacks.dashboard.pick('files')" },
-          { icon = ' ', key = 'n', desc = 'New File', action = ':ene | startinsert' },
-          { icon = ' ', key = 'g', desc = 'Find Text', action = ":lua Snacks.dashboard.pick('live_grep')" },
-          { icon = ' ', key = 'r', desc = 'Recent Files', action = ":lua Snacks.dashboard.pick('oldfiles')" },
-          { icon = ' ', key = 'c', desc = 'Config', action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
-          { icon = ' ', key = 's', desc = 'Restore Session', action = ':SessionRestore' },
+          { icon = ' ', key = 'f', desc = 'Find File', action = ':lua Snacks.picker.files()' },
+          { icon = ' ', key = 'r', desc = 'Recent Files', action = ':lua Snacks.picker.recent()' },
+          { icon = ' ', key = 'g', desc = 'Grep Text', action = ':lua Snacks.picker.live_grep()' },
+          { icon = ' ', key = 'c', desc = 'Config', action = ":lua Snacks.picker.files({cwd = vim.fn.stdpath('config')})" },
           { icon = '󰒲 ', key = 'L', desc = 'Lazy', action = ':Lazy', enabled = package.loaded.lazy ~= nil },
           { icon = ' ', key = 'q', desc = 'Quit', action = ':qa' },
         },
@@ -30,196 +48,144 @@ return {
          ██████  █████████████████████ ████ █████ █████ ████ ██████ 
       ]],
       },
+      example = 'github',
       sections = {
-        { section = 'header' },
+        { section = 'header', hl = 'SpecialKey' },
         { section = 'keys', padding = 1 },
         { section = 'startup' },
       },
     },
-    indent = { enabled = true },
-    input = { enabled = true },
-    notifier = {
-      enabled = true,
-      timeout = 3000,
-    },
-    picker = {
-      enabled = true,
-    },
-    quickfile = {
-      enabled = true,
-    },
-    scope = { enabled = true },
-    scroll = { enabled = true },
-    toggle = { enabled = true },
-    statuscolumn = { enabled = true },
-    words = { enabled = true },
-    styles = {
-      notification = {
-        wo = { wrap = true }, -- Wrap notifications
+
+    -- Explorer tweaks
+    explorer = {
+      live_search = true,
+      follow_file = true,
+      auto_close = false,
+      focus = 'list',
+      move_swap = { live = true },
+      layout = { layout = { position = 'left' } },
+      win = {
+        list = {
+          keys = { ['m'] = 'explorer_move' },
+        },
       },
     },
+
+    -- Animation & scroll tuning
+    animate = {
+      enabled = vim.g.snacks_animate ~= false,
+    },
+    scroll = {
+      enabled = true,
+      animate = {
+        duration = { step = 10, total = 100 },
+        easing = 'linear',
+      },
+      animate_repeat = {
+        delay = 50,
+        duration = { step = 3, total = 20 },
+        easing = 'linear',
+      },
+    },
+
+    -- Scope customization
+    scope = {
+      keys = {
+        textobject = {
+          ii = { min_size = 2, edge = false, cursor = false },
+        },
+      },
+    },
+
+    -- Image support (new in v2.16+)
+    image = {
+      enabled = true,
+      hover = true,
+      img_dirs = { 'images', 'assets' },
+      formats = { 'png', 'jpg', 'gif', 'svg', 'pdf' },
+      conceal = false,
+    },
+
+    -- Notifier defaults
+    notifier = {
+      timeout = 3000,
+      width = { min = 40, max = 0.4 },
+      height = { min = 1, max = 0.25 },
+      padding = true,
+      sort = { 'level', 'added' },
+      level = vim.log.levels.INFO,
+      style = 'compact',
+      keep = function(n)
+        return vim.fn.getcmdpos() > 0
+      end,
+    },
   },
+
   keys = {
     {
       '<leader>n',
       function()
-        Snacks.picker.notifications() -- Keeping this as it's specific to Snacks notifications
+        Snacks.notifier.show_history()
       end,
       desc = 'Notification History',
     },
-    -- NOTE: Most finder-related keymaps have been removed in favor of Telescope.
-    -- Snacks is now primarily used for its UI features (dashboard, notifier, zen mode)
-    -- and its excellent Git integration.
     {
-      '<leader>fp',
+      '<leader>un',
       function()
-        Snacks.picker.projects() -- Keeping projects picker
+        Snacks.notifier.hide()
       end,
-      desc = 'Projects',
+      desc = 'Dismiss Notifications',
     },
-    -- git (Keeping all git-related pickers as they are a great alternative)
+    {
+      '<leader><space>',
+      function()
+        Snacks.picker.files()
+      end,
+      desc = 'Find File',
+    },
+    {
+      '<leader>st',
+      function()
+        Snacks.picker.grep {
+          prompt = ' ',
+          search = '^\\s*- \\[ \\]',
+          regex = true,
+          live = false,
+          dirs = { vim.fn.getcwd() },
+          args = { '--no-ignore' },
+          finder = 'grep',
+          layout = 'ivy',
+        }
+      end,
+      desc = 'Search TODOs',
+    },
     {
       '<leader>gb',
       function()
-        Snacks.picker.git_branches()
+        Snacks.picker.git_branches { layout = 'select' }
       end,
       desc = 'Git Branches',
     },
     {
       '<leader>gl',
       function()
-        Snacks.picker.git_log()
+        Snacks.picker.git_log { layout = 'vertical' }
       end,
       desc = 'Git Log',
-    },
-    {
-      '<leader>gL',
-      function()
-        Snacks.picker.git_log_line()
-      end,
-      desc = 'Git Log Line',
-    },
-    {
-      '<leader>gs',
-      function()
-        Snacks.picker.git_status()
-      end,
-      desc = 'Git Status',
-    },
-    {
-      '<leader>gS',
-      function()
-        Snacks.picker.git_stash()
-      end,
-      desc = 'Git Stash',
     },
     {
       '<leader>gd',
       function()
         Snacks.picker.git_diff()
       end,
-      desc = 'Git Diff (Hunks)',
-    },
-    {
-      '<leader>gf',
-      function()
-        Snacks.picker.git_log_file()
-      end,
-      desc = 'Git Log File',
-    },
-    -- Pickers for Neovim internals
-    {
-      '<leader>sa',
-      function()
-        Snacks.picker.autocmds() -- Keeping autocmds picker
-      end,
-      desc = 'Autocmds',
-    },
-    {
-      '<leader>sC',
-      function()
-        Snacks.picker.commands() -- Keeping commands picker
-      end,
-      desc = 'Commands',
-    },
-    {
-      '<leader>sH',
-      function()
-        Snacks.picker.highlights() -- Keeping highlights picker
-      end,
-      desc = 'Highlights',
-    },
-    {
-      '<leader>si',
-      function()
-        Snacks.picker.icons() -- Keeping icons picker
-      end,
-      desc = 'Icons',
-    },
-    {
-      '<leader>sl',
-      function()
-        Snacks.picker.loclist() -- Keeping location list picker
-      end,
-      desc = 'Location List',
-    },
-    {
-      '<leader>sM',
-      function()
-        Snacks.picker.man() -- Keeping man pages picker
-      end,
-      desc = 'Man Pages',
-    },
-    {
-      '<leader>sq',
-      function()
-        Snacks.picker.qflist() -- Keeping quickfix list picker
-      end,
-      desc = 'Quickfix List',
-    },
-    {
-      '<leader>su',
-      function()
-        Snacks.picker.undo() -- Keeping undo history picker
-      end,
-      desc = 'Undo History',
-    },
-    -- LSP Functionality is handled by Telescope and lspconfig keymaps
-    -- Other (Keeping these as they are not standard Telescope pickers)
-    {
-      '<leader>z',
-      function()
-        Snacks.zen()
-      end,
-      desc = 'Toggle Zen Mode',
-    },
-    {
-      '<leader>Z',
-      function()
-        Snacks.zen.zoom()
-      end,
-      desc = 'Toggle Zoom',
-    },
-    {
-      '<leader>bd',
-      function()
-        Snacks.bufdelete()
-      end,
-      desc = 'Delete Buffer',
-    },
-    {
-      '<leader>cR',
-      function()
-        Snacks.rename.rename_file()
-      end,
-      desc = 'Rename File',
+      desc = 'Git Diff Hunks',
     },
     {
       '<leader>gB',
       function()
         Snacks.gitbrowse()
       end,
-      desc = 'Git Browse',
+      desc = 'Browse in Browser',
       mode = { 'n', 'v' },
     },
     {
@@ -229,18 +195,47 @@ return {
       end,
       desc = 'Lazygit',
     },
+    -- toggles example
     {
-      '<leader>un',
+      '<leader>uz',
       function()
-        Snacks.notifier.hide()
+        Snacks.toggle.zen():toggle()
       end,
-      desc = 'Dismiss All Notifications',
+      desc = 'Toggle Zen Mode',
     },
-    -- Keeping these unless you have specific Telescope mappings for next/prev reference
+    {
+      '<leader>uD',
+      function()
+        Snacks.toggle.dim():toggle()
+      end,
+      desc = 'Toggle Dim',
+    },
+    {
+      '<leader>ua',
+      function()
+        Snacks.toggle.animate():toggle()
+      end,
+      desc = 'Toggle Animation',
+    },
+    {
+      '<leader>uS',
+      function()
+        Snacks.toggle.scroll():toggle()
+      end,
+      desc = 'Toggle Scroll',
+    },
+    {
+      '<leader>ug',
+      function()
+        Snacks.toggle.indent():toggle()
+      end,
+      desc = 'Toggle Indent Guides',
+    },
+    -- words navigation
     {
       ']]',
       function()
-        Snacks.words.jump(vim.v.count1)
+        Snacks.words.jump(vim.v.count1, true)
       end,
       desc = 'Next Reference',
       mode = { 'n', 't' },
@@ -248,55 +243,47 @@ return {
     {
       '[[',
       function()
-        Snacks.words.jump(-vim.v.count1)
+        Snacks.words.jump(-vim.v.count1, true)
       end,
       desc = 'Prev Reference',
       mode = { 'n', 't' },
     },
-    {
-      '<leader>N',
-      desc = 'Neovim News',
-      function()
-        Snacks.win {
-          file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1],
-          width = 0.6,
-          height = 0.6,
-          wo = {
-            spell = false,
-            wrap = false,
-            signcolumn = 'yes',
-            statuscolumn = ' ',
-            conceallevel = 3,
-          },
-        }
-      end,
-    },
   },
+
   init = function()
     vim.api.nvim_create_autocmd('User', {
       pattern = 'VeryLazy',
       callback = function()
-        -- Setup some globals for debugging (lazy-loaded)
         _G.dd = function(...)
           Snacks.debug.inspect(...)
         end
         _G.bt = function()
           Snacks.debug.backtrace()
         end
-        vim.print = _G.dd -- Override print to use snacks for `:=` command
+        vim.print = _G.dd
 
-        -- Create some toggle mappings
-        Snacks.toggle.option('spell', { name = 'Spelling' }):map '<leader>us'
-        Snacks.toggle.option('wrap', { name = 'Wrap' }):map '<leader>uw'
-        Snacks.toggle.option('relativenumber', { name = 'Relative Number' }):map '<leader>uL'
-        Snacks.toggle.diagnostics():map '<leader>ud'
-        Snacks.toggle.line_number():map '<leader>ul'
-        Snacks.toggle.option('conceallevel', { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map '<leader>uc'
-        Snacks.toggle.treesitter():map '<leader>uT'
-        Snacks.toggle.option('background', { off = 'light', on = 'dark', name = 'Dark Background' }):map '<leader>ub'
-        Snacks.toggle.inlay_hints():map '<leader>uh'
-        Snacks.toggle.indent():map '<leader>ug'
-        Snacks.toggle.dim():map '<leader>uD'
+        -- Auto-enable spell & wrap in text buffers
+        vim.api.nvim_create_autocmd('FileType', {
+          pattern = { 'markdown', 'text', 'gitcommit' },
+          callback = function()
+            vim.wo.spell = true
+            vim.wo.wrap = true
+          end,
+        })
+
+        -- Startup notification
+        vim.schedule(function()
+          local stats = require('lazy').stats()
+          Snacks.notify(string.format('Loaded %d/%d plugins in %.2fms', stats.loaded, stats.count, stats.startuptime), { title = 'Startup', icon = '🚀' })
+        end)
+      end,
+    })
+    vim.api.nvim_create_autocmd('LspAttach', {
+      callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client and client.supports_method 'textDocument/inlayHint' then
+          Snacks.toggle.inlay_hints():map('<leader>uh', { buffer = args.buf })
+        end
       end,
     })
   end,
