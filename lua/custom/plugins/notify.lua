@@ -1,1 +1,1 @@
-return { 'rcarriga/nvim-notify', opts = {} }
+return { 'rcarriga/nvim-notify', event = 'VeryLazy', opts = {} }
