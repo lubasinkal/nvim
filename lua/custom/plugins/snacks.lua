@@ -8,22 +8,13 @@ return {
     animate = { enabled = true },
     bigfile = { enabled = true },
     dashboard = { enabled = true },
-    explorer = { enabled = true },
     indent = { enabled = true },
-    input = { enabled = true },
-    layout = { enabled = true },
-    notifier = { enabled = true },
     picker = { enabled = true },
     quickfile = { enabled = true },
     scope = { enabled = true },
     scroll = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = true },
-    terminal = { enabled = true },
-    toggle = { enabled = true },
-    scratch = { enabled = true },
-    profiler = { enabled = true },
-    zen = { enabled = true },
 
     -- Dashboard customization
     dashboard = {
@@ -32,7 +23,7 @@ return {
         keys = {
           { icon = ' ', key = 'f', desc = 'Find File', action = ':lua Snacks.picker.files()' },
           { icon = ' ', key = 'r', desc = 'Recent Files', action = ':lua Snacks.picker.recent()' },
-          { icon = ' ', key = 'g', desc = 'Grep Text', action = ':lua Snacks.picker.live_grep()' },
+          { icon = ' ', key = 'g', desc = 'Grep Text', action = ':lua Snacks.picker.grep()' },
           { icon = ' ', key = 'c', desc = 'Config', action = ":lua Snacks.picker.files({cwd = vim.fn.stdpath('config')})" },
           { icon = '󰒲 ', key = 'L', desc = 'Lazy', action = ':Lazy', enabled = package.loaded.lazy ~= nil },
           { icon = ' ', key = 'q', desc = 'Quit', action = ':qa' },
@@ -48,76 +39,11 @@ return {
          ██████  █████████████████████ ████ █████ █████ ████ ██████ 
       ]],
       },
-      example = 'github',
       sections = {
         { section = 'header', hl = 'SpecialKey' },
         { section = 'keys', padding = 1 },
         { section = 'startup' },
       },
-    },
-
-    -- Explorer tweaks
-    explorer = {
-      live_search = true,
-      follow_file = true,
-      auto_close = false,
-      focus = 'list',
-      move_swap = { live = true },
-      layout = { layout = { position = 'left' } },
-      win = {
-        list = {
-          keys = { ['m'] = 'explorer_move' },
-        },
-      },
-    },
-
-    -- Animation & scroll tuning
-    animate = {
-      enabled = vim.g.snacks_animate ~= false,
-    },
-    scroll = {
-      enabled = true,
-      animate = {
-        duration = { step = 10, total = 100 },
-        easing = 'linear',
-      },
-      animate_repeat = {
-        delay = 50,
-        duration = { step = 3, total = 20 },
-        easing = 'linear',
-      },
-    },
-
-    -- Scope customization
-    scope = {
-      keys = {
-        textobject = {
-          ii = { min_size = 2, edge = false, cursor = false },
-        },
-      },
-    },
-
-    -- Image support (new in v2.16+)
-    image = {
-      enabled = true,
-      hover = true,
-      img_dirs = { 'images', 'assets' },
-      formats = { 'png', 'jpg', 'gif', 'svg', 'pdf' },
-      conceal = false,
-    },
-
-    -- Notifier defaults
-    notifier = {
-      timeout = 3000,
-      width = { min = 40, max = 0.4 },
-      height = { min = 1, max = 0.25 },
-      padding = true,
-      sort = { 'level', 'added' },
-      level = vim.log.levels.INFO,
-      style = 'compact',
-      keep = function(n)
-        return vim.fn.getcmdpos() > 0
-      end,
     },
   },
 
@@ -195,14 +121,6 @@ return {
       end,
       desc = 'Lazygit',
     },
-    -- toggles example
-    {
-      '<leader>uz',
-      function()
-        Snacks.toggle.zen():toggle()
-      end,
-      desc = 'Toggle Zen Mode',
-    },
     {
       '<leader>uD',
       function()
@@ -239,6 +157,76 @@ return {
       end,
       desc = 'Next Reference',
       mode = { 'n', 't' },
+    },
+    {
+      '<leader>si',
+      function()
+        Snacks.picker.icons()
+      end,
+      desc = 'Icons',
+    },
+    {
+      '<leader>sj',
+      function()
+        Snacks.picker.jumps()
+      end,
+      desc = 'Jumps',
+    },
+    {
+      '<leader>sk',
+      function()
+        Snacks.picker.keymaps()
+      end,
+      desc = 'Keymaps',
+    },
+    {
+      '<leader>sl',
+      function()
+        Snacks.picker.loclist()
+      end,
+      desc = 'Location List',
+    },
+    {
+      '<leader>sm',
+      function()
+        Snacks.picker.marks()
+      end,
+      desc = 'Marks',
+    },
+    {
+      '<leader>sM',
+      function()
+        Snacks.picker.man()
+      end,
+      desc = 'Man Pages',
+    },
+    {
+      '<leader>sp',
+      function()
+        Snacks.picker.lazy()
+      end,
+      desc = 'Search for Plugin Spec',
+    },
+    {
+      '<leader>sq',
+      function()
+        Snacks.picker.qflist()
+      end,
+      desc = 'Quickfix List',
+    },
+    {
+      '<leader>sR',
+      function()
+        Snacks.picker.resume()
+      end,
+      desc = 'Resume',
+    },
+    {
+      '<leader>su',
+      function()
+        Snacks.picker.undo()
+      end,
+      desc = 'Undo History',
     },
     {
       '[[',
