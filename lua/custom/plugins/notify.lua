@@ -5,7 +5,7 @@ return {
     -- Default timeout (in ms)
     timeout = 3000,
     -- Display newer notifications at top
-    top_down = false,
+    top_down = true,
     -- Minimum log level (optional use)
     level = vim.log.levels.INFO,
     -- Animation style: "fade_in_slide_out", "slide", etc.

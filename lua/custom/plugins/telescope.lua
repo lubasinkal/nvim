@@ -108,6 +108,34 @@ return {
       end,
       desc = '[S]earch [N]eovim files',
     },
+
+    -- 🔁 Buffer-related keymaps (your request)
+    {
+      '<leader>bb',
+      function()
+        require('telescope.builtin').buffers()
+      end,
+      desc = '[B]uffer List',
+    },
+    {
+      '<leader>br',
+      function()
+        require('telescope.builtin').oldfiles { only_cwd = true }
+      end,
+      desc = '[B]uffer [R]ecent (cwd)',
+    },
+    {
+      '<leader>bm',
+      function()
+        require('telescope.builtin').marks()
+      end,
+      desc = '[B]uffer [M]arks',
+    },
+    {
+      '<leader>bd',
+      '<cmd>bdelete<CR>',
+      desc = '[B]uffer [D]elete current',
+    },
   },
   config = function()
     require('telescope').setup {
