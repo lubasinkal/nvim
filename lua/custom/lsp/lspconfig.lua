@@ -156,16 +156,16 @@ return {
     local vue_typescript_plugin = vim.fn.expand(vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server')
     local servers = {
 
-      -- gopls = {}, --Golang
-      -- basedpyright = {}, --Python
+      gopls = {}, --Golang
+      pylsp = {}, --Python
       -- r_language_server = {}, --R
-      -- tailwindcss = {},
-      -- cssls = {},
-      -- zls = {}, -- Zig
-      -- emmet_language_server = {
-      --   filetypes = { 'html', 'css', 'javascriptreact', 'typescriptreact', 'vue' },
-      -- },
-      -- ts_ls = {},
+      tailwindcss = {},
+      cssls = {},
+      zls = {}, -- Zig
+      emmet_language_server = {
+        filetypes = { 'html', 'css', 'javascriptreact', 'typescriptreact', 'vue' },
+      },
+      ts_ls = {},
       lua_ls = {},
       marksman = {}, -- Markdown LSP
     }
@@ -173,10 +173,10 @@ return {
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code
-      -- 'ruff',
-      -- 'biome',
-      -- 'vue_ls',
-      -- 'vtsls',
+      'ruff',
+      'biome',
+      'vue_ls',
+      'vtsls',
     })
 
     require('mason-tool-installer').setup {
@@ -203,67 +203,67 @@ return {
         end,
       },
     }
-    -- -- managed to get vue-language-server working with vtsls following https://github.com/vuejs/language-tools/wiki/Neovim
-    -- local vue_language_server_path = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
-    -- -- Check if the plugin path exists
-    -- if vim.fn.isdirectory(vue_language_server_path) == 0 then
-    --   vim.schedule(function()
-    --     vim.notify(
-    --       '[vtsls] @vue/typescript-plugin is missing! Please run :MasonToolsUpdate or install vue-language-server manually.',
-    --       vim.log.levels.WARN,
-    --       { title = 'LSP Setup' }
-    --     )
-    --   end)
-    -- end
-    -- local vue_plugin = {
-    --   name = '@vue/typescript-plugin',
-    --   location = vue_language_server_path,
-    --   languages = { 'vue' },
-    --   configNamespace = 'typescript',
-    -- }
-    -- local vtsls_config = {
-    --   settings = {
-    --     vtsls = {
-    --       tsserver = {
-    --         globalPlugins = {
-    --           vue_plugin,
-    --         },
-    --       },
-    --     },
-    --   },
-    --   filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-    -- }
-    --
-    -- local vue_ls_config = {
-    --   on_init = function(client)
-    --     client.handlers['tsserver/request'] = function(_, result, context)
-    --       local clients = vim.lsp.get_clients { bufnr = context.bufnr, name = 'vtsls' }
-    --       if #clients == 0 then
-    --         vim.notify('Could not found `vtsls` lsp client, vue_lsp would not work without it.', vim.log.levels.ERROR)
-    --         return
-    --       end
-    --       local ts_client = clients[1]
-    --
-    --       local param = unpack(result)
-    --       local id, command, payload = unpack(param)
-    --       ts_client:exec_cmd({
-    --         title = 'vue_request_forward', -- You can give title anything as it's used to represent a command in the UI, `:h Client:exec_cmd`
-    --         command = 'typescript.tsserverRequest',
-    --         arguments = {
-    --           command,
-    --           payload,
-    --         },
-    --       }, { bufnr = context.bufnr }, function(_, r)
-    --         local response_data = { { id, r.body } }
-    --         ---@diagnostic disable-next-line: param-type-mismatch
-    --         client:notify('tsserver/response', response_data)
-    --       end)
-    --     end
-    --   end,
-    -- }
+    -- managed to get vue-language-server working with vtsls following https://github.com/vuejs/language-tools/wiki/Neovim
+    local vue_language_server_path = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+    -- Check if the plugin path exists
+    if vim.fn.isdirectory(vue_language_server_path) == 0 then
+      vim.schedule(function()
+        vim.notify(
+          '[vtsls] @vue/typescript-plugin is missing! Please run :MasonToolsUpdate or install vue-language-server manually.',
+          vim.log.levels.WARN,
+          { title = 'LSP Setup' }
+        )
+      end)
+    end
+    local vue_plugin = {
+      name = '@vue/typescript-plugin',
+      location = vue_language_server_path,
+      languages = { 'vue' },
+      configNamespace = 'typescript',
+    }
+    local vtsls_config = {
+      settings = {
+        vtsls = {
+          tsserver = {
+            globalPlugins = {
+              vue_plugin,
+            },
+          },
+        },
+      },
+      filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+    }
+
+    local vue_ls_config = {
+      on_init = function(client)
+        client.handlers['tsserver/request'] = function(_, result, context)
+          local clients = vim.lsp.get_clients { bufnr = context.bufnr, name = 'vtsls' }
+          if #clients == 0 then
+            vim.notify('Could not found `vtsls` lsp client, vue_lsp would not work without it.', vim.log.levels.ERROR)
+            return
+          end
+          local ts_client = clients[1]
+
+          local param = unpack(result)
+          local id, command, payload = unpack(param)
+          ts_client:exec_cmd({
+            title = 'vue_request_forward', -- You can give title anything as it's used to represent a command in the UI, `:h Client:exec_cmd`
+            command = 'typescript.tsserverRequest',
+            arguments = {
+              command,
+              payload,
+            },
+          }, { bufnr = context.bufnr }, function(_, r)
+            local response_data = { { id, r.body } }
+            ---@diagnostic disable-next-line: param-type-mismatch
+            client:notify('tsserver/response', response_data)
+          end)
+        end
+      end,
+    }
     -- nvim 0.11 or above
-    -- vim.lsp.config('vtsls', vtsls_config)
-    -- vim.lsp.config('vue_ls', vue_ls_config)
-    -- vim.lsp.enable { 'vtsls', 'vue_ls' }
+    vim.lsp.config('vtsls', vtsls_config)
+    vim.lsp.config('vue_ls', vue_ls_config)
+    vim.lsp.enable { 'vtsls', 'vue_ls' }
   end,
 }
