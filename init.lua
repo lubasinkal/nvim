@@ -31,8 +31,6 @@ require('lazy').setup({
   -- Better quick fix list
   { 'kevinhwang91/nvim-bqf', ft = 'qf' },
 
-  -- Smooth scrolling
-  { 'karb94/neoscroll.nvim', opts = {}, event = 'VeryLazy' },
   -- Lua development support for Neovim config files only
   {
     'folke/lazydev.nvim',
