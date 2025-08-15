@@ -26,7 +26,7 @@ return {
       terminal_colors = true,
 
       -- Improve start up time by caching highlights. Generate cache with :CyberdreamBuildCache and clear with :CyberdreamClearCache
-      cache = true,
+      cache = false,
     }
     -- Set the colorscheme
     -- vim.cmd 'colorscheme vesper'
