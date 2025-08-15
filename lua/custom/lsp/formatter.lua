@@ -33,6 +33,7 @@ return {
       'stylua',
       'ruff',
       'biome',
+      'black',
     }
 
     vim.schedule(function()
@@ -63,15 +64,12 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        python = { 'ruff' },
+        python = { 'black' },
         javascript = { 'biome' },
         typescript = { 'biome' },
         html = { 'biome' },
         css = { 'biome' },
         json = { 'biome' },
-        yaml = { 'biome' },
-        markdown = { 'biome' },
-        vue = { 'biome' },
       },
       default_formatters = { 'biome' },
     }
