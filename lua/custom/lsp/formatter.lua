@@ -28,20 +28,6 @@ return {
     },
   },
   opts = function()
-    -- Ensure required formatters are installed via Mason
-    local ensure = {
-      'stylua',
-      'ruff',
-      'biome',
-      'black',
-    }
-
-    require('mason-tool-installer').setup {
-      ensure_installed = ensure, -- correct variable here
-      run_on_start = false, -- disable auto-run, handled below
-      auto_update = true,
-    }
-
     return {
       notify_on_error = true,
       format_on_save = false,
