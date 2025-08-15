@@ -36,16 +36,11 @@ return {
       'black',
     }
 
-    vim.schedule(function()
-      local mr = require 'mason-registry'
-      for _, tool in ipairs(ensure) do
-        local ok, p = pcall(mr.get_package, tool)
-        if ok and not p:is_installed() then
-          p:install()
-          vim.notify('Installing formatter: ' .. tool, vim.log.levels.INFO, { title = 'Mason' })
-        end
-      end
-    end)
+    require('mason-tool-installer').setup {
+      ensure_installed = ensure, -- correct variable here
+      run_on_start = false, -- disable auto-run, handled below
+      auto_update = true,
+    }
 
     return {
       notify_on_error = true,
