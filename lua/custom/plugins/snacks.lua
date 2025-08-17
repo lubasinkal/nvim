@@ -12,7 +12,7 @@ return {
     picker = { enabled = true },
     quickfile = { enabled = true },
     scope = { enabled = true },
-    scroll = { enabled = true },
+    scroll = { enabled = false },
     statuscolumn = { enabled = true },
     words = { enabled = true },
 
@@ -258,12 +258,6 @@ return {
             vim.wo.wrap = true
           end,
         })
-
-        -- Startup notification
-        vim.schedule(function()
-          local stats = require('lazy').stats()
-          Snacks.notify(string.format('Loaded %d/%d plugins in %.2fms', stats.loaded, stats.count, stats.startuptime), { title = 'Startup', icon = '🚀' })
-        end)
       end,
     })
     vim.api.nvim_create_autocmd('LspAttach', {
