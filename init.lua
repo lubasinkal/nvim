@@ -121,38 +121,35 @@ end, 1000 * 60 * 60 * 24)
 -- Keeps history, marks, registers, etc.
 vim.o.shada = "!,'300,<50,s10,h"
 
--- Auto-cleanup lingering ShaDa temp files (cross-platform)
--- vim.api.nvim_create_autocmd('VimEnter', {
---   callback = function()
---     local notify = vim.notify
---     local is_windows = vim.loop.os_uname().sysname:match 'Windows'
---     local shada_dir = vim.fn.stdpath 'data' .. '/shada'
---
---     -- Check if the shada directory exists
---     if vim.fn.isdirectory(shada_dir) == 0 then
---       notify('ShaDa directory not found: ' .. shada_dir, vim.log.levels.WARN)
---       return
---     end
---
---     -- Look for temp files like main.shada.tmp.*
---     local pattern = shada_dir .. '/main.shada.tmp.*'
---     local files = vim.fn.glob(pattern, false, true)
---
---     if #files == 0 then
---       notify('ShaDa cleanup: No temp files to remove.', vim.log.levels.INFO)
---       return
---     end
---
---     notify('ShaDa cleanup: Found ' .. #files .. ' file(s) to remove.', vim.log.levels.INFO)
---
---     -- Try deleting each temp file
---     for _, file in ipairs(files) do
---       local ok, err = os.remove(file)
---       if ok then
---         notify('Deleted: ' .. file, vim.log.levels.DEBUG)
---       else
---         notify('Failed to delete ' .. file .. ': ' .. err, vim.log.levels.ERROR)
---       end
---     end
---   end,
--- })
+-- Function to clean up ShaDa temp files
+local function cleanup_shada()
+  local notify = vim.notify
+  local shada_dir = vim.fn.stdpath 'data' .. '/shada'
+
+  if vim.fn.isdirectory(shada_dir) == 0 then
+    notify('ShaDa directory not found: ' .. shada_dir, vim.log.levels.WARN)
+    return
+  end
+
+  local pattern = shada_dir .. '/main.shada.tmp.*'
+  local files = vim.fn.glob(pattern, false, true)
+
+  if #files == 0 then
+    notify('ShaDa cleanup: No temp files to remove.', vim.log.levels.INFO)
+    return
+  end
+
+  notify('ShaDa cleanup: Found ' .. #files .. ' file(s) to remove.', vim.log.levels.INFO)
+
+  for _, file in ipairs(files) do
+    local ok, err = os.remove(file)
+    if ok then
+      notify('Deleted: ' .. file, vim.log.levels.DEBUG)
+    else
+      notify('Failed to delete ' .. file .. ': ' .. err, vim.log.levels.ERROR)
+    end
+  end
+end
+
+-- Keymap: <leader>sc to clean up ShaDa files
+vim.keymap.set('n', '<leader>sc', cleanup_shada, { desc = 'Cleanup ShaDa temp files' })
