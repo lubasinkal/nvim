@@ -8,17 +8,7 @@ return { -- Highlight, edit, and navigate code
   opts = {
     -- A list of parser names, or "all"
     ensure_installed = {
-      'python',
-      'javascript',
-      'go',
-      'r',
-      'bash',
-      'diff',
       'lua',
-      'vue',
-      'html',
-      'css',
-      'typescript',
       -- Add other languages you work with frequently here
       -- 'c', 'cpp', 'java', 'ruby', 'rust', 'yaml', 'json', 'markdown',
     },

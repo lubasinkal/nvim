@@ -56,14 +56,6 @@ require('lazy').setup({
     end, -- use opts = {} for passing setup options
     -- this is equivalent to setup({}) function
   },
-  {
-    'NvChad/nvim-colorizer.lua',
-    opts = {
-      user_default_options = {
-        tailwind = true,
-      },
-    },
-  },
   -- Mini.nvim modular plugins loaded on VeryLazy event for smooth startup
   {
     'echasnovski/mini.nvim',

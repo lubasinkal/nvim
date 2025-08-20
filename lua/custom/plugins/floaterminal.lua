@@ -1,6 +1,6 @@
 local M = {}
 
--- Keymap to exit terminal mode
+-- Exit terminal mode quickly
 vim.keymap.set('t', '<esc><esc>', '<c-\\><c-n>')
 
 local state = {
@@ -10,59 +10,74 @@ local state = {
   },
 }
 
+-- Detect an available shell
+local function get_shell()
+  if vim.fn.has 'win32' == 1 then
+    if vim.fn.executable 'pwsh.exe' == 1 then
+      return { 'pwsh.exe', '-NoLogo' }
+    elseif vim.fn.executable 'powershell.exe' == 1 then
+      return { 'powershell.exe', '-NoLogo' }
+    end
+  else
+    if vim.fn.executable 'bash' == 1 then
+      return { 'bash' }
+    elseif vim.fn.executable 'zsh' == 1 then
+      return { 'zsh' }
+    elseif vim.fn.executable 'sh' == 1 then
+      return { 'sh' }
+    end
+  end
+  return { vim.o.shell } -- fallback
+end
+
 local function create_floating_window(opts)
   opts = opts or {}
   local width = opts.width or math.floor(vim.o.columns * 0.8)
   local height = opts.height or math.floor(vim.o.lines * 0.8)
 
-  -- Calculate the position to center the window
   local col = math.floor((vim.o.columns - width) / 2)
   local row = math.floor((vim.o.lines - height) / 2)
 
-  -- Create a buffer
-  local buf = nil
-  if vim.api.nvim_buf_is_valid(opts.buf) then
-    buf = opts.buf
-  else
-    buf = vim.api.nvim_create_buf(false, true) -- No file, scratch buffer
+  -- Reuse buffer if valid, else create a new scratch buffer
+  local buf = state.floating.buf
+  if not vim.api.nvim_buf_is_valid(buf) then
+    buf = vim.api.nvim_create_buf(false, true)
+    vim.bo[buf].buflisted = false
+    vim.bo[buf].swapfile = false
   end
 
-  -- Define window configuration
+  -- Floating window config
   local win_config = {
     relative = 'editor',
     width = width,
     height = height,
     col = col,
     row = row,
-    style = 'minimal', -- No borders or extra UI elements
+    style = 'minimal',
     border = 'rounded',
   }
 
-  -- Create the floating window
   local win = vim.api.nvim_open_win(buf, true, win_config)
+
+  -- Start terminal if buffer isn’t already one
+  if vim.bo[buf].buftype ~= 'terminal' then
+    vim.fn.termopen(get_shell())
+    vim.bo[buf].buflisted = false
+  end
 
   return { buf = buf, win = win }
 end
 
 local function toggle_terminal()
   if not vim.api.nvim_win_is_valid(state.floating.win) then
-    state.floating = create_floating_window { buf = state.floating.buf }
-
-    -- Open PowerShell in the terminal buffer
-    if vim.bo[state.floating.buf].buftype ~= 'terminal' then
-      -- vim.cmd 'terminal pwsh.exe -NoLogo -NoProfile' -- Use PowerShell with -NoLogo option on Windows
-      vim.cmd 'terminal '
-    end
+    state.floating = create_floating_window()
   else
     vim.api.nvim_win_hide(state.floating.win)
   end
 end
 
--- Create a user command to toggle the terminal in a floating window
+-- Command + keymap
 vim.api.nvim_create_user_command('Floaterminal', toggle_terminal, {})
+vim.keymap.set('n', '<Leader>tt', toggle_terminal, { desc = 'Toggle Floating Terminal' })
 
--- Set up key mapping for Leader + t to open the terminal
-vim.keymap.set('n', '<Leader>tt', toggle_terminal, { desc = 'Open Terminal' })
-
--- Return the module table for Lazy.nvim
 return M
