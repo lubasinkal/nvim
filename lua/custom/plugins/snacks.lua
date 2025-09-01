@@ -74,7 +74,7 @@ return {
       function()
         Snacks.picker.grep {
           prompt = ' ',
-          search = '^\\s*- \\[ \\]',
+          search = [[^\s*- \[ \]|(?:TODO|FIXME|BUG:|NOTE)]],
           regex = true,
           live = false,
           dirs = { vim.fn.getcwd() },
