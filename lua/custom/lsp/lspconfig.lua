@@ -168,11 +168,12 @@ return {
       ts_ls = {},
       lua_ls = {},
       marksman = {}, -- Markdown LSP
-      vue_ls = {},
+      clangd = {},
+      rust_analyzer = {},
     }
 
     local ensure_installed = vim.tbl_keys(servers or {})
-    vim.list_extend(ensure_installed, { 'stylua', 'ruff', 'biome', 'black' })
+    vim.list_extend(ensure_installed, { 'stylua', 'ruff', 'biome', 'black', 'vue_ls' })
 
     require('mason-tool-installer').setup {
       ensure_installed = ensure_installed,
