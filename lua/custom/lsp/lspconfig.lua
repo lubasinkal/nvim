@@ -195,12 +195,13 @@ return {
           -- by the server configuration above. Useful when disabling
           -- certain features of an LSP (for example, turning off formatting for ts_ls)
           server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          require('lspconfig')[server_name].setup(server)
+          vim.lsp.config[server_name].setup(server)
         end,
       },
     }
     local vue_ls_path = vim.fn.expand '$MASON/packages/vue-language-server/node_modules/@vue/language-server'
-    require('lspconfig').ts_ls.setup {
+
+    vim.lsp.start(vim.tbl_deep_extend('force', vim.lsp.config.ts_ls, {
       init_options = {
         plugins = {
           {
@@ -217,6 +218,6 @@ return {
           client.server_capabilities.semanticTokensProvider.full = false
         end
       end,
-    }
+    }))
   end,
 }

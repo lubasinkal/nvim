@@ -2,31 +2,6 @@ return {
   'stevearc/conform.nvim',
   event = 'BufWritePost',
   cmd = { 'ConformInfo', 'ConformFormat' },
-  keys = {
-    {
-      '<leader>fm',
-      function()
-        require('conform').format {
-          async = true,
-          lsp_fallback = true,
-        }
-      end,
-      mode = 'n',
-      desc = '[F]ormat [M]anually',
-    },
-    {
-      '<leader>ft',
-      function()
-        local conf = require 'conform'
-        conf.format_on_save = not conf.format_on_save
-        vim.notify('Format on Save: ' .. (conf.format_on_save and 'Enabled' or 'Disabled'), vim.log.levels.INFO, {
-          title = 'Conform',
-        })
-      end,
-      mode = 'n',
-      desc = '[F]ormat [T]oggle on Save',
-    },
-  },
   opts = function()
     return {
       notify_on_error = true,
