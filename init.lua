@@ -175,3 +175,9 @@ end
 
 -- Keymap: <leader>sc to clean up ShaDa files
 vim.keymap.set('n', '<leader>sc', cleanup_shada, { desc = 'Cleanup ShaDa temp files' })
+-- Autocmd to remove trailing whitespace on save for most file types
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = { '*' }, -- Apply to all files
+  command = [[:%s/\s\+$//e]],
+  desc = 'Remove trailing whitespace before saving',
+})
