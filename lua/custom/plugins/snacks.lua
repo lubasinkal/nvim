@@ -50,6 +50,13 @@ return {
 
   keys = {
     {
+      '<leader>e',
+      function()
+        Snacks.explorer()
+      end,
+      desc = 'Toggle Neotree',
+    },
+    {
       '<leader>n',
       function()
         Snacks.notifier.show_history()
