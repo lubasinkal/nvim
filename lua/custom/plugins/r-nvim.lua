@@ -6,8 +6,8 @@
 return {
   'R-nvim/R.nvim',
   -- Only load this plugin if the 'R' executable is found in the path
-  cond = vim.fn.executable 'R' == 1,
-  ft = { 'r', 'rnoweb', 'quarto' },
+  -- cond = vim.fn.executable 'R' == 1,
+  ft = { 'r', 'rnoweb', 'quarto', 'rmd' },
   dependencies = {
     { 'R-nvim/cmp-r' },
     {

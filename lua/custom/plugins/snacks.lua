@@ -1,8 +1,7 @@
 return {
   'folke/snacks.nvim',
-  priority = 1000,
-  lazy = false,
   ---@type snacks.Config
+  event = 'UIEnter',
   opts = {
     -- Enable core modules
     animate = { enabled = true },
