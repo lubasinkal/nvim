@@ -129,9 +129,9 @@ require('lazy').setup({
         'shada_plugin',
 
         -- Language providers (if you don't use them)
-        'node_provider',
+        -- 'node_provider',
         'perl_provider',
-        'python3_provider', -- Only disable if you use other Python LSP
+        -- 'python3_provider', -- Only disable if you use other Python LSP
         'ruby_provider',
       },
     },
