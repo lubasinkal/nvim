@@ -50,7 +50,7 @@ require('lazy').setup({
   },
   {
     'windwp/nvim-autopairs',
-    event = 'VeryLazy',
+    event = 'InsertEnter',
     config = function(_, opts)
       require('nvim-autopairs').setup(opts)
     end, -- use opts = {} for passing setup options
@@ -59,10 +59,8 @@ require('lazy').setup({
   -- Mini.nvim modular plugins loaded on VeryLazy event for smooth startup
   {
     'echasnovski/mini.nvim',
-    event = 'VeryLazy',
+    event = 'InsertEnter',
     config = function()
-      require('mini.ai').setup()
-      require('mini.surround').setup()
       require('mini.comment').setup {
         options = {
           custom_commentstring = function()
@@ -107,8 +105,9 @@ require('lazy').setup({
     reset_packpath = true, -- reset packpath for clean environment
     rtp = {
       reset = true, -- reset runtime path
+      -- Add these to your disabled_plugins list
       disabled_plugins = {
-        -- These are safe and common to disable
+        -- Your existing disabled plugins
         'gzip',
         'matchit',
         'matchparen',
@@ -117,10 +116,23 @@ require('lazy').setup({
         'tohtml',
         'tutor',
         'zipPlugin',
-        -- Rarely needed extras
         'man',
         'spellfile_plugin',
         'vimballPlugin',
+
+        -- Additional plugins that are safe to disable
+        '2html_plugin',
+        'getscript',
+        'getscriptPlugin',
+        'logipat',
+        'rrhelper',
+        'shada_plugin',
+
+        -- Language providers (if you don't use them)
+        'node_provider',
+        'perl_provider',
+        'python3_provider', -- Only disable if you use other Python LSP
+        'ruby_provider',
       },
     },
   },
