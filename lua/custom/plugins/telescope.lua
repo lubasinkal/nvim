@@ -3,14 +3,20 @@ return {
   cmd = 'Telescope',
   dependencies = {
     'nvim-lua/plenary.nvim',
-    {
-      'nvim-telescope/telescope-fzf-native.nvim',
-      build = 'make',
-      cond = function()
-        return vim.fn.executable 'make' == 1
-      end,
-    },
-    { 'nvim-telescope/telescope-ui-select.nvim' },
+   {
+  'nvim-telescope/telescope-fzf-native.nvim',
+  build = function()
+    if vim.fn.executable 'zig' == 1 then
+      return 'zig build -Doptimize=ReleaseFast'
+    else
+      return 'make'
+    end
+  end,
+  cond = function()
+    -- Check if either build system is available
+    return vim.fn.executable 'make' == 1 or vim.fn.executable 'zig' == 1
+  end,
+}  ,  { 'nvim-telescope/telescope-ui-select.nvim' },
     { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
   },
   keys = {
