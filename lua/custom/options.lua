@@ -20,7 +20,7 @@ vim.opt.mouse = 'a'
 vim.opt.fillchars:append { eob = ' ', diff = '╱' } -- clean buffer tail + prettier diffs
 vim.opt.confirm = true
 vim.opt.inccommand = 'split'
-vim.opt.winborder = 'rounder'
+vim.opt.winborder = 'rounded'
 
 -- Command height: modern Neovim lets you hide it
 vim.opt.cmdheight = 0
