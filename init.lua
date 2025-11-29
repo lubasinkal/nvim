@@ -121,18 +121,18 @@ require('lazy').setup({
         'vimballPlugin',
 
         -- Additional plugins that are safe to disable
-        '2html_plugin',
-        'getscript',
-        'getscriptPlugin',
-        'logipat',
-        'rrhelper',
-        'shada_plugin',
-
-        -- Language providers (if you don't use them)
-        -- 'node_provider',
-        'perl_provider',
-        -- 'python3_provider', -- Only disable if you use other Python LSP
-        'ruby_provider',
+        -- '2html_plugin',
+        -- 'getscript',
+        -- 'getscriptPlugin',
+        -- 'logipat',
+        -- 'rrhelper',
+        -- 'shada_plugin',
+        --
+        -- -- Language providers (if you don't use them)
+        -- -- 'node_provider',
+        -- 'perl_provider',
+        -- -- 'python3_provider', -- Only disable if you use other Python LSP
+        -- 'ruby_provider',
       },
     },
   },
@@ -193,3 +193,5 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   command = [[:%s/\s\+$//e]],
   desc = 'Remove trailing whitespace before saving',
 })
+
+

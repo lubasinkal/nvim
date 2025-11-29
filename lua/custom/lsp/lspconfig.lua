@@ -157,7 +157,7 @@ return {
     local servers = {
 
       gopls = {}, --Golang
-      pylsp = {}, --Python
+      ty = {}, --Python
       -- r_language_server = {}, --R
       tailwindcss = {},
       cssls = {},
