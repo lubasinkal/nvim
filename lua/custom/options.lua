@@ -5,7 +5,6 @@ vim.g.have_nerd_font = true -- set true if terminal font supports icons
 
 -- UI
 vim.opt.termguicolors = true
-vim.opt.background = 'dark'
 vim.opt.signcolumn = 'yes'
 vim.opt.laststatus = 3 -- global statusline (saves space if you use one statusline plugin)
 vim.opt.showtabline = 2
