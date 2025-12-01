@@ -57,6 +57,32 @@ return {
         'WhichKeyNormal',
       }
 
+      -- Extra transparency for floating windows and split borders
+      local extra = {
+        'FloatBorder',
+        'FloatTitle',
+        'Pmenu',
+        'PmenuSel',
+        'PmenuSbar',
+        'PmenuThumb',
+        'WinBar',
+        'WinBarNC',
+        'TabLine',
+        'TabLineFill',
+        'TabLineSel',
+        'TelescopeBorder',
+        'TelescopeNormal',
+        'TelescopePromptNormal',
+        'TelescopePromptBorder',
+        'TelescopeResultsNormal',
+        'TelescopeResultsBorder',
+        'TelescopePreviewNormal',
+        'TelescopePreviewBorder',
+      }
+
+      for _, hl in ipairs(extra) do
+        vim.api.nvim_set_hl(0, hl, { bg = 'none' })
+      end
       for _, hl in ipairs(transparent_groups) do
         vim.api.nvim_set_hl(0, hl, { bg = 'none' })
       end

@@ -9,7 +9,11 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
 
     -- Useful status updates for LSP.
-    { 'j-hui/fidget.nvim', opts = {} },
+    { 'j-hui/fidget.nvim', opts = {
+      notification = {
+        window = { winblend = 0 },
+      },
+    } },
 
     -- Allows extra capabilities provided by blink.cmp
     'saghen/blink.cmp',
@@ -183,22 +187,13 @@ return {
     -- Async install without blocking
     vim.defer_fn(function()
       vim.cmd 'MasonToolsUpdate'
-    end, 3000) -- 3 second delay
-    require('mason-lspconfig').setup {
+    end, 3000) -- 3 second delayindex
 
-      ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-      automatic_installation = true,
-      handlers = {
-        function(server_name)
-          local server = servers[server_name] or {}
-          -- This handles overriding only values explicitly passed
-          -- by the server configuration above. Useful when disabling
-          -- certain features of an LSP (for example, turning off formatting for ts_ls)
-          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          vim.lsp.config[server_name].setup(server)
-        end,
-      },
-    }
+    for server, cfg in pairs(servers) do
+      cfg.capabilities = vim.tbl_deep_extend('force', {}, capabilities, cfg.capabilities or {})
+      vim.lsp.config(server, cfg)
+      vim.lsp.enable(server)
+    end
     local vue_ls_path = vim.fn.expand '$MASON/packages/vue-language-server/node_modules/@vue/language-server'
 
     vim.lsp.start(vim.tbl_deep_extend('force', vim.lsp.config.ts_ls, {
