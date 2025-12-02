@@ -101,7 +101,6 @@ require('lazy').setup({
   },
   { import = 'custom.plugins' },
   { import = 'custom.lsp' },
-  { import = 'custom.utils' },
 }, {
   defaults = {
     lazy = true, -- lazy load plugins by default
