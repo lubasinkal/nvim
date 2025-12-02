@@ -273,6 +273,9 @@ return {
       callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         if client and client:supports_method 'textDocument/inlayHint' then
+          -- turn inlay hints ON by default
+          vim.lsp.inlay_hint.enable(true)
+
           Snacks.toggle.inlay_hints():map('<leader>uh', { buffer = args.buf })
         end
       end,
