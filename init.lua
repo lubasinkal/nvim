@@ -42,6 +42,14 @@ require('lazy').setup({
       },
     },
   },
+  {
+    'chomosuke/typst-preview.nvim',
+    ft = 'typst',
+    version = '1.*',
+    opts = {
+      port = 8181,
+    }, -- lazy.nvim will implicitly calls `setup {}`
+  },
 
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
@@ -193,5 +201,3 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   command = [[:%s/\s\+$//e]],
   desc = 'Remove trailing whitespace before saving',
 })
-
-

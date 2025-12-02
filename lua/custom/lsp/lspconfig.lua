@@ -174,6 +174,7 @@ return {
       marksman = {}, -- Markdown LSP
       clangd = {},
       rust_analyzer = {},
+      tinymist = {},
     }
 
     local ensure_installed = vim.tbl_keys(servers or {})
