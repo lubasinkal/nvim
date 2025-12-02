@@ -7,28 +7,9 @@ local state = {
   floating = {
     buf = -1,
     win = -1,
+    autocmd_id = nil,
   },
 }
-
--- Detect an available shell
-local function get_shell()
-  if vim.fn.has 'win32' == 1 then
-    if vim.fn.executable 'pwsh.exe' == 1 then
-      return { 'pwsh.exe', '-NoLogo' }
-    elseif vim.fn.executable 'powershell.exe' == 1 then
-      return { 'powershell.exe', '-NoLogo' }
-    end
-  else
-    if vim.fn.executable 'bash' == 1 then
-      return { 'bash' }
-    elseif vim.fn.executable 'zsh' == 1 then
-      return { 'zsh' }
-    elseif vim.fn.executable 'sh' == 1 then
-      return { 'sh' }
-    end
-  end
-  return { vim.o.shell } -- fallback
-end
 
 local function create_floating_window(opts)
   opts = opts or {}
@@ -44,6 +25,7 @@ local function create_floating_window(opts)
     buf = vim.api.nvim_create_buf(false, true)
     vim.bo[buf].buflisted = false
     vim.bo[buf].swapfile = false
+    state.floating.buf = buf
   end
 
   -- Floating window config
@@ -58,26 +40,123 @@ local function create_floating_window(opts)
   }
 
   local win = vim.api.nvim_open_win(buf, true, win_config)
+  state.floating.win = win
 
-  -- Start terminal if buffer isn’t already one
-  if vim.bo[buf].buftype ~= 'terminal' then
-    vim.fn.termopen(get_shell())
-    vim.bo[buf].buflisted = false
+  -- Clean up any existing autocmd
+  if state.floating.autocmd_id then
+    pcall(vim.api.nvim_del_autocmd, state.floating.autocmd_id)
+    state.floating.autocmd_id = nil
   end
+
+  -- Start terminal if buffer isn't already one
+  if vim.bo[buf].buftype ~= 'terminal' then
+    -- Save the current window to return to it later
+    local current_win = vim.api.nvim_get_current_win()
+
+    -- Switch to the floating window
+    vim.api.nvim_set_current_win(win)
+
+    -- Open terminal - using :terminal command which works like :terminal in normal Neovim
+    vim.cmd 'terminal'
+
+    -- Return to original window
+    vim.api.nvim_set_current_win(current_win)
+
+    vim.bo[buf].buflisted = false
+  else
+    -- Buffer is already a terminal, just ensure we're in the right window
+    local current_win = vim.api.nvim_get_current_win()
+    vim.api.nvim_set_current_win(win)
+    vim.cmd 'startinsert'
+    vim.api.nvim_set_current_win(current_win)
+  end
+
+  -- Set some window options for better experience
+  vim.api.nvim_win_set_option(win, 'winblend', 0)
+  vim.api.nvim_win_set_option(win, 'wrap', false)
+
+  -- Auto-close terminal when job ends
+  state.floating.autocmd_id = vim.api.nvim_create_autocmd('TermClose', {
+    buffer = buf,
+    callback = function()
+      if vim.api.nvim_win_is_valid(win) then
+        vim.api.nvim_win_close(win, true)
+        state.floating.win = -1
+      end
+      state.floating.autocmd_id = nil
+    end,
+    once = true,
+  })
 
   return { buf = buf, win = win }
 end
 
 local function toggle_terminal()
-  if not vim.api.nvim_win_is_valid(state.floating.win) then
-    state.floating = create_floating_window()
-  else
-    vim.api.nvim_win_hide(state.floating.win)
+  -- If window is valid and visible, hide it
+  if vim.api.nvim_win_is_valid(state.floating.win) then
+    local win_config = vim.api.nvim_win_get_config(state.floating.win)
+    if win_config.relative ~= '' then -- It's a floating window
+      vim.api.nvim_win_hide(state.floating.win)
+      return
+    end
   end
+
+  -- Otherwise, create/show the floating terminal
+  state.floating = create_floating_window()
 end
 
--- Command + keymap
+-- Optional: Function to close terminal completely
+local function close_terminal()
+  -- Clean up autocmd first
+  if state.floating.autocmd_id then
+    pcall(vim.api.nvim_del_autocmd, state.floating.autocmd_id)
+    state.floating.autocmd_id = nil
+  end
+
+  if vim.api.nvim_win_is_valid(state.floating.win) then
+    vim.api.nvim_win_close(state.floating.win, true)
+  end
+  if vim.api.nvim_buf_is_valid(state.floating.buf) then
+    vim.api.nvim_buf_delete(state.floating.buf, { force = true })
+  end
+  state.floating = { buf = -1, win = -1, autocmd_id = nil }
+end
+
+-- Command + keymaps
 vim.api.nvim_create_user_command('Floaterminal', toggle_terminal, {})
+vim.api.nvim_create_user_command('FloaterminalClose', close_terminal, {})
+
 vim.keymap.set('n', '<Leader>tt', toggle_terminal, { desc = 'Toggle Floating Terminal' })
+vim.keymap.set('n', '<Leader>tc', close_terminal, { desc = 'Close Floating Terminal' })
+
+-- Optional: Resize on VimResized event
+local resize_autocmd_id = nil
+local function setup_resize_autocmd()
+  if resize_autocmd_id then
+    vim.api.nvim_del_autocmd(resize_autocmd_id)
+  end
+
+  resize_autocmd_id = vim.api.nvim_create_autocmd('VimResized', {
+    callback = function()
+      if vim.api.nvim_win_is_valid(state.floating.win) then
+        -- Recalculate and update window size
+        local width = math.floor(vim.o.columns * 0.8)
+        local height = math.floor(vim.o.lines * 0.8)
+        local col = math.floor((vim.o.columns - width) / 2)
+        local row = math.floor((vim.o.lines - height) / 2)
+
+        vim.api.nvim_win_set_config(state.floating.win, {
+          relative = 'editor',
+          width = width,
+          height = height,
+          col = col,
+          row = row,
+        })
+      end
+    end,
+  })
+end
+
+setup_resize_autocmd()
 
 return M
