@@ -1,7 +1,7 @@
 return {
   'folke/snacks.nvim',
-  ---@type snacks.Config
-  event = 'VeryLazy',
+  priority = 1000,
+  lazy = false,
   opts = {
     -- Enable core modules
     animate = { enabled = true },
