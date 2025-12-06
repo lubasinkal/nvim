@@ -94,8 +94,8 @@ vim.opt.clipboard = 'unnamedplus'
 -- ===========
 -- Performance
 -- ===========
-vim.opt.updatetime = 200
-vim.opt.timeoutlen = 400 -- balance between speed and comfort
+vim.opt.updatetime = 250
+vim.opt.timeoutlen = 300 -- balance between speed and comfort
 
 -- ===========
 -- Invisible chars
