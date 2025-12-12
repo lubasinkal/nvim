@@ -1,36 +1,21 @@
 return {
-  'stevearc/oil.nvim',
-
-  -- Lazy-load on specific commands or very lazy startup
-  lazy = true,
-  cmd = { 'Oil', 'Oil --float' },
-  keys = {
-    {
-      '-',
-      '<CMD>Oil --float --preview<CR>',
-      desc = 'Open Oil (parent directory)',
+    'stevearc/oil.nvim',
+    dependencies = { { "nvim-mini/mini.icons", opts = {} } },
+    cmd = { 'Oil', 'Oil --float' },
+    keys = {
+        {
+            '-',
+            '<CMD>Oil --float --preview<CR>',
+            desc = 'Open Oil (parent directory)',
+        },
+        { '<leader>e', '<CMD>Oil --float<CR>', desc = 'File [E]xplorer' }
     },
-  },
-
-  -- Plugin options
-  opts = {
-    default_file_explorer = true, -- Replace netrw or other default explorer
-    columns = { 'icon' },
-    skip_confirm_for_simple_edits = false,
-    use_default_keymaps = true, -- Set false to map manually
-    view_options = {
-      show_hidden = true, -- Show dotfiles
-      natural_order = 'fast', -- Natural sorting (by type, then name)
-      case_insensitive = false,
-      sort = {
-        { 'type', 'asc' },
-        { 'name', 'asc' },
-      },
+    -- Plugin options
+    opts = {
+        lsp_file_methods = {
+            -- Enable or disable LSP file operations
+            enabled = false,
+        },
     },
-  },
 
-  -- Dependency for file icons
-  dependencies = {
-    'nvim-tree/nvim-web-devicons',
-  },
 }
