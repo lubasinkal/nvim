@@ -160,10 +160,10 @@ vim.keymap.set('n', '<leader>lp', function()
     require('lazy').profile()
 end, { desc = 'Profile (lazy.nvim)' })
 
--- Auto-update plugins every 24 hours (optional)
-vim.defer_fn(function()
-    require('lazy').update()
-end, 1000 * 60 * 60 * 24)
+-- -- Auto-update plugins every 24 hours (optional)
+-- vim.defer_fn(function()
+--     require('lazy').update()
+-- end, 1000 * 60 * 60 * 24)
 
 -- Minimal Dev-Friendly ShaDa Setup
 -- Keeps history, marks, registers, etc.
