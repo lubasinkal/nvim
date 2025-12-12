@@ -73,12 +73,6 @@ return {
         appearance = {
             nerd_font_variant = 'mono',
             -- optional small lspkind integration: will fall back to kind_icon if lspkind not available
-            kind = {
-                -- enable mapping to lspkind symbols; 'onsails/lspkind.nvim' must be installed/deferred elsewhere if you want custom symbols
-                enabled = true,
-                -- you can override symbol_map if you want (example commented)
-                -- symbol_map = { Function = 'ƒ', Method = 'm', Variable = '𝓍', Class = 'C' },
-            },
         },
 
         -- Sources: prioritise LSP & snippets, deprioritise buffer; small offsets tune ranking
@@ -92,15 +86,6 @@ return {
                 buffer = {
                     score_offset = 10,
                     min_keyword_length = 3,
-                    max_item_count = 200,
-                    -- prefer buffers that are currently visible (faster & more relevant)
-                    get_bufnrs = function()
-                        local bufs = {}
-                        for _, w in ipairs(vim.api.nvim_list_wins()) do
-                            bufs[#bufs + 1] = vim.api.nvim_win_get_buf(w)
-                        end
-                        return bufs
-                    end,
                 },
             },
         },
@@ -112,8 +97,6 @@ return {
 
         -- completion-specific settings
         completion = {
-            -- preselect none to avoid accidental accepts when popup appears
-            preselect = 'none',
 
             accept = {
                 auto_brackets = { enabled = true },
@@ -203,29 +186,9 @@ return {
             -- ghost text: visible but subtle
             ghost_text = {
                 enabled = true,
-                hl_group = 'Comment',
             },
 
-            -- sorting: put exact and LSP/snippet scores first
-            sort = {
-                comparators = {
-                    'exact',
-                    'score',
-                    'recently_used',
-                    'locality',
-                    'kind',
-                    'length',
-                },
-            },
 
-            -- filetype / buffer quick overrides
-            filetype = {
-                -- for gitcommit: prefer buffer suggestions, disable LSP/snippets noise
-                gitcommit = { sources = { 'buffer' } },
-                -- disable completion in these special buffers
-                TelescopePrompt = { enabled = false },
-                NvimTree = { enabled = false },
-            },
         },
 
         -- allow people to extend these defaults without copy-pasting everything
