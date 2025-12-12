@@ -1,6 +1,6 @@
 return {
   'scottmckendry/cyberdream.nvim',
-  event = { 'BufReadPost', 'BufNewFile' }, -- Only load when opening files
+  event = {"BufReadPost", "BufNewFile"}, -- Only load when opening files
   config = function()
     require('cyberdream').setup {
       -- Set light or dark variant
@@ -8,24 +8,6 @@ return {
 
       -- Enable transparent background
       transparent = true,
-
-      -- Reduce the overall saturation of colours for a more muted look
-      saturation = 1,
-
-      -- Enable italics comments
-      italic_comments = true,
-
-      -- Replace all fillchars with ' ' for the ultimate clean look
-      hide_fillchars = true,
-
-      -- Apply a modern borderless look to pickers like Telescope, Snacks Picker & Fzf-Lua
-      borderless_pickers = false,
-
-      -- Set terminal colors used in `:terminal`
-      terminal_colors = true,
-
-      -- Improve start up time by caching highlights. Generate cache with :CyberdreamBuildCache and clear with :CyberdreamClearCache
-      cache = true,
     }
 
     -- Set the colorscheme
