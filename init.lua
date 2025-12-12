@@ -2,6 +2,12 @@
 require 'custom.keymaps'
 require 'custom.options'
 require 'custom.statusline'
+
+-- Load custom native utility modules
+require 'custom.util.floaterminal'
+require 'custom.util.session'
+require 'custom.util.todo'
+
 -- Bootstrap lazy.nvim plugin manager if not installed
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 
