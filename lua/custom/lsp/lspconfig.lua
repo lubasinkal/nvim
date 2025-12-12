@@ -164,7 +164,6 @@ return {
 
             gopls = {}, --Golang
             ty = {},    --Python
-            -- r_language_server = {}, --R
             tailwindcss = {},
             cssls = {},
             zls = {}, -- Zig
