@@ -7,6 +7,7 @@ require 'custom.statusline'
 require 'custom.util.floaterminal'
 require 'custom.util.session'
 require 'custom.util.todo'
+require 'custom.util.screenkey'
 
 -- Bootstrap lazy.nvim plugin manager if not installed
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
