@@ -1,191 +1,266 @@
-# nvim
+# Neovim Configuration (`nvim`)
 
 ## Overview
 
-This is my custom Neovim configuration based on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). It provides:
+This repository contains my personal **Neovim configuration**, originally bootstrapped from
+[kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim).
 
-- A minimal, well-documented starting point.
-- A single-file configuration approach.
-- Easy customization for personal workflows.
+The goals of this setup are:
+
+* Minimal and readable configuration
+* Sensible defaults with room to grow
+* Fast startup and low dependency overhead
+* Practical tooling for development, research, and writing
+
+Although inspired by Kickstart, this configuration has evolved into a more opinionated, workflow-driven setup.
+
+---
+
+## Requirements
+
+### Neovim
+
+This configuration targets **Neovim stable or nightly**.
+
+* Minimum recommended version: **0.9+**
+* Nightly builds are supported
+
+---
+
+### Core External Dependencies (Required)
+
+These tools are used directly by Neovim or plugins:
+
+* `git` – plugin management
+* `ripgrep (rg)` – project-wide search (used heavily)
+* `make` + C compiler (`gcc` / `clang`) – native plugin builds
+* `unzip` – plugin installation
+
+---
+
+### Optional but Strongly Recommended
+
+* Clipboard provider:
+
+  * Linux: `xclip` or `xsel`
+  * Windows: `win32yank`
+* A [Nerd Font](https://www.nerdfonts.com/) (icons & UI polish)
+
+  * If installed, set:
+
+    ```lua
+    vim.g.have_nerd_font = true
+    ```
+
+---
+
+### Language Toolchains (Optional)
+
+Install only what you actually use:
+
+* `nodejs` / `npm` – JavaScript / TypeScript
+* `go` – Golang
+* `zig` – Zig toolchain & C compiler alternative which i used to build telescope native fzf
+* `python` – scripting & tooling
+
+---
 
 ## Installation
 
-### Install Neovim
-
-This configuration targets the latest **stable** and **nightly** versions of Neovim.  
-Ensure that you have the latest version installed.
-
-### External Requirements:
-- Basic utilities: `git`, `make`, `unzip`, and a C compiler (`gcc`).
-- [ripgrep](https://github.com/BurntSushi/ripgrep#installation)
-- Clipboard tool (`xclip`, `xsel`, `win32yank`, or equivalent for your OS).
-- A [Nerd Font](https://www.nerdfonts.com/) (optional, enhances icons).
-  - If installed, set `vim.g.have_nerd_font` to `true` in `init.lua`.
-- **Language Setup** (Optional, based on your workflow):
-  - `npm` (for TypeScript development)
-  - `go` (for Golang development)
-  - etc.
-
-> **Note:** [Backup](#faq) your previous Neovim configuration before proceeding.
-
 ### Configuration Paths
 
-Neovim's configurations are stored at different locations depending on the OS:
+| OS                   | Path                     |
+| -------------------- | ------------------------ |
+| Linux / macOS        | `~/.config/nvim`         |
+| Windows (PowerShell) | `$env:LOCALAPPDATA\nvim` |
+| Windows (cmd.exe)    | `%LOCALAPPDATA%\nvim`    |
 
-| OS | Configuration Path |
-| :- | :---------------- |
-| **Linux, macOS** | `$XDG_CONFIG_HOME/nvim`, `~/.config/nvim` |
-| **Windows (cmd)** | `%localappdata%\nvim\` |
-| **Windows (PowerShell)** | `$env:LOCALAPPDATA\nvim\` |
+---
 
-### Clone and Install
+### Clone the Configuration
 
-#### Linux/macOS
-
-```sh
-git clone https://github.com/lubasinkal/nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
-```
-
-#### Windows (cmd.exe)
+#### Linux / macOS
 
 ```sh
-git clone https://github.com/lubasinkal/nvim.git "%localappdata%\nvim"
+git clone https://github.com/lubasinkal/nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
 ```
 
 #### Windows (PowerShell)
 
-```sh
-git clone https://github.com/lubasinkal/nvim.git "${env:LOCALAPPDATA}\nvim"
+```powershell
+git clone https://github.com/lubasinkal/nvim.git "$env:LOCALAPPDATA\nvim"
+```
+
+#### Windows (cmd.exe)
+
+```cmd
+git clone https://github.com/lubasinkal/nvim.git "%LOCALAPPDATA%\nvim"
 ```
 
 ---
 
-### Post-Installation
+## First Launch
 
-Launch Neovim:
+Start Neovim:
 
 ```sh
 nvim
 ```
 
-On the first launch, `lazy.nvim` will install all required plugins.  
-Use `:Lazy` to check the current plugin status (press `q` to exit).
+On first launch:
 
-### Documentation
+* `lazy.nvim` will automatically install plugins
+* Native extensions will compile as needed
 
-Check `init.lua` inside your configuration folder for details on customization and additional plugins.  
+Check plugin status anytime with:
 
-> **Tip:** Read the documentation for each plugin in their respective repositories.
-
----
-
-## Getting Started
-
-[📺 The Only Video You Need to Get Started with Neovim](https://youtu.be/m8C0Cq9Uv9o)
-
----
-
-## FAQ
-
-### What should I do if I already have a Neovim configuration?
-1. **Backup your existing configuration** before installing:
-   ```sh
-   mv ~/.config/nvim ~/.config/nvim.backup
-   mv ~/.local/share/nvim ~/.local/share/nvim.backup
-   ```
-2. Then, proceed with the installation.
-
-### Can I keep my existing configuration while using this one?
-Yes! You can use the `NVIM_APPNAME` environment variable:
-
-```sh
-alias nvim-kickstart='NVIM_APPNAME="nvim-kickstart" nvim'
+```
+:Lazy
 ```
 
-This allows you to maintain multiple Neovim setups.
+---
 
-### How do I uninstall this configuration?
-See [lazy.nvim uninstall guide](https://lazy.folke.io/usage#-uninstalling).
+## Dependency Installation Recipes
 
-### Why is this configuration a single file?
-Kickstart.nvim is designed as an educational tool, keeping everything in a single `init.lua` for simplicity.  
-If you prefer a modular approach, consider [kickstart-modular.nvim](https://github.com/dam9000/kickstart-modular.nvim).
+### Windows (Recommended: Scoop)
+
+[Scoop](https://scoop.sh/) provides clean, scriptable installs and works well with Neovim.
+
+#### Install Scoop
+
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
+```
+
+#### Add Buckets
+
+```powershell
+scoop bucket add extras
+scoop bucket add nerd-fonts
+```
+
+#### Install Core Dependencies
+
+```powershell
+scoop install `
+  neovim `
+  git `
+  ripgrep `
+  fd `
+  unzip `
+  gzip `
+  make `
+  zig `
+  nodejs `
+  win32yank `
+  fzf `
+  lazygit `
+  zoxide
+```
+
+(Optional) Install a Nerd Font:
+
+```powershell
+scoop install CascadiaCode-NF
+```
+
+Restart your terminal after installing fonts.
 
 ---
 
-## Install Recipes
+### Windows (Alternative: Chocolatey)
 
-### Windows
-
-#### Using Microsoft C++ Build Tools and CMake
-
-Neovim may require additional build tools for certain plugins like `telescope-fzf-native`.  
-Ensure you have CMake and Microsoft C++ Build Tools installed.
-
-```lua
-{'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
-```
-
-#### Using GCC/Make via Chocolatey
-
-1. Install [Chocolatey](https://chocolatey.org/install):
-
-   ```sh
-   winget install --accept-source-agreements chocolatey.chocolatey
-   ```
-
-2. Install dependencies:
-
-   ```sh
-   choco install -y neovim git ripgrep wget fd unzip gzip fzf lazygit zoxide make zig nodejs
-   ```
-
-#### Windows Subsystem for Linux (WSL)
-
-```sh
-wsl --install
-wsl
-sudo add-apt-repository ppa:neovim-ppa/unstable -y
-sudo apt update
-sudo apt install make gcc ripgrep unzip git xclip neovim
+```powershell
+winget install --accept-source-agreements chocolatey.chocolatey
+choco install -y neovim git ripgrep fd unzip gzip make zig nodejs win32yank
 ```
 
 ---
 
 ### Linux
 
-#### Ubuntu
+#### Ubuntu / Debian (PPA)
 
 ```sh
 sudo add-apt-repository ppa:neovim-ppa/unstable -y
 sudo apt update
-sudo apt install make gcc ripgrep unzip git xclip neovim
-```
-
-#### Debian
-
-```sh
-sudo apt update
-sudo apt install make gcc ripgrep unzip git xclip curl
-
-curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-sudo rm -rf /opt/nvim-linux64
-sudo mkdir -p /opt/nvim-linux64
-sudo chmod a+rX /opt/nvim-linux64
-sudo tar -C /opt -xzf nvim-linux64.tar.gz
-
-sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/
+sudo apt install -y \
+  neovim \
+  git \
+  ripgrep \
+  fd-find \
+  unzip \
+  make \
+  gcc \
+  xclip
 ```
 
 #### Fedora
 
 ```sh
-sudo dnf install -y gcc make git ripgrep fd-find unzip neovim
+sudo dnf install -y neovim git ripgrep fd-find unzip make gcc
 ```
 
-#### Arch
+#### Arch Linux
 
 ```sh
-sudo pacman -S --noconfirm --needed gcc make git ripgrep fd unzip neovim
+sudo pacman -S --needed neovim git ripgrep fd unzip make gcc
 ```
+
+---
+
+## Multiple Neovim Configurations
+
+You can keep this configuration alongside others using `NVIM_APPNAME`.
+
+Example:
+
+```sh
+alias nvim-custom='NVIM_APPNAME="nvim-custom" nvim'
+```
+
+This allows parallel configs without conflicts.
+
+---
+
+## FAQ
+
+### I already have a Neovim config. What should I do?
+
+Back it up before installing:
+
+```sh
+mv ~/.config/nvim ~/.config/nvim.backup
+mv ~/.local/share/nvim ~/.local/share/nvim.backup
+```
+
+Then proceed with installation.
+
+---
+
+### How do I uninstall this configuration?
+
+Follow the official guide:
+[https://lazy.folke.io/usage#-uninstalling](https://lazy.folke.io/usage#-uninstalling)
+
+---
+
+### Why not split everything into modules?
+
+This configuration started from Kickstart’s single-file philosophy for clarity and learning.
+It is gradually modularized where it improves readability and maintenance.
+
+If you prefer a fully modular baseline, see:
+[https://github.com/dam9000/kickstart-modular.nvim](https://github.com/dam9000/kickstart-modular.nvim)
+
+---
+
+## Learning Resources
+
+* 🎥 [The Only Video You Need to Get Started with Neovim](https://youtu.be/m8C0Cq9Uv9o)
+* `:help nvim`
+* `:help lua-guide`
+
+---
 
