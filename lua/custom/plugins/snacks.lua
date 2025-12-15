@@ -73,22 +73,6 @@ return {
             desc = 'Find File',
         },
         {
-            '<leader>st',
-            function()
-                Snacks.picker.grep {
-                    prompt = ' ',
-                    search = [[^\s*- \[ \]|(?:TODO|FIXME|BUG:|NOTE)]],
-                    regex = true,
-                    live = false,
-                    dirs = { vim.fn.getcwd() },
-                    args = { '--no-ignore' },
-                    finder = 'grep',
-                    layout = 'ivy',
-                }
-            end,
-            desc = 'Search TODOs',
-        },
-        {
             '<leader>gb',
             function()
                 Snacks.picker.git_branches { layout = 'select' }
