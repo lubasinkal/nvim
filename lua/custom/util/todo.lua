@@ -113,19 +113,28 @@ end, { desc = 'Previous TODO' })
 -- [[ Ripgrep TODO Search (Quickfix) ]] ----------------------------------------
 
 vim.keymap.set('n', '<leader>st', function()
+    if vim.fn.executable('rg') ~= 1 then
+        vim.notify(
+            'ripgrep (rg) is not installed or not on PATH',
+            vim.log.levels.ERROR,
+            { title = 'TODO Search' }
+        )
+        return
+    end
+
     local pattern = [[\b(TODO|FIXME|BUG|NOTE|HACK|PERF)\b]]
 
     local cmd = {
         'rg',
-        '--vimgrep', -- file:line:col:text (perfect for quickfix)
+        '--vimgrep',
         '--no-ignore',
         pattern,
     }
 
     local result = vim.fn.systemlist(cmd)
 
-    if vim.v.shell_error ~= 0 then
-        vim.notify('rg failed or no matches found', vim.log.levels.WARN)
+    if vim.v.shell_error ~= 0 or vim.tbl_isempty(result) then
+        vim.notify('No TODOs found', vim.log.levels.INFO)
         return
     end
 
@@ -136,5 +145,6 @@ vim.keymap.set('n', '<leader>st', function()
 
     vim.cmd('copen')
 end, { desc = 'Search TODOs (ripgrep)' })
+
 
 return M
