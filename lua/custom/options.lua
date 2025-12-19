@@ -25,10 +25,11 @@ vim.opt.winborder = 'rounded'
 vim.opt.cmdheight = 0
 
 -- Transparency (optional)
+-- Keep normal background but fix floating window transparency for better readability
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
-vim.opt.pumblend = 10
-vim.opt.winblend = 10
+vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' }) -- Set a solid background for floating windows
+vim.opt.pumblend = 0                                   -- Disable popup menu blending
+vim.opt.winblend = 0                                   -- Disable window blending
 
 -- ===========
 -- Indentation
@@ -67,7 +68,7 @@ vim.opt.writebackup = false
 vim.opt.undofile = true
 local undodir = vim.fn.stdpath 'state' .. '/undo'
 if vim.fn.isdirectory(undodir) == 0 then
-  vim.fn.mkdir(undodir, 'p')
+    vim.fn.mkdir(undodir, 'p')
 end
 vim.opt.undodir = undodir
 
@@ -102,11 +103,11 @@ vim.opt.timeoutlen = 300 -- balance between speed and comfort
 -- ===========
 vim.opt.list = true
 vim.opt.listchars = {
-  tab = '»·',
-  trail = '·',
-  nbsp = '␣',
-  extends = '⟩',
-  precedes = '⟨',
+    tab = '»·',
+    trail = '·',
+    nbsp = '␣',
+    extends = '⟩',
+    precedes = '⟨',
 }
 
 -- ===========
@@ -120,23 +121,23 @@ vim.opt.foldlevelstart = 99
 -- Filetypes
 -- ===========
 vim.g.markdown_fenced_languages = {
-  'html',
-  'javascript',
-  'javascriptreact',
-  'typescript',
-  'json',
-  'css',
-  'scss',
-  'lua',
-  'vim',
-  'bash',
-  'ts=typescript',
-  'js=javascript',
+    'html',
+    'javascript',
+    'javascriptreact',
+    'typescript',
+    'json',
+    'css',
+    'scss',
+    'lua',
+    'vim',
+    'bash',
+    'ts=typescript',
+    'js=javascript',
 }
 
 -- ===========
 -- Autocommands
 -- ===========
 vim.api.nvim_create_autocmd('InsertEnter', {
-  command = 'norm zz',
+    command = 'norm zz',
 })
