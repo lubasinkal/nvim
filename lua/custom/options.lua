@@ -3,7 +3,9 @@
 -- ===========
 vim.g.have_nerd_font = true -- set true if terminal font supports icons
 
+-- ===========
 -- UI
+-- ===========
 vim.opt.termguicolors = true
 vim.opt.signcolumn = 'yes'
 vim.opt.laststatus = 3 -- global statusline (saves space if you use one statusline plugin)
@@ -12,35 +14,39 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.numberwidth = 4
 vim.opt.cursorline = true -- helps orient your eye; toggle off if distracting
-vim.opt.scrolloff = 8
-vim.opt.sidescrolloff = 8
+vim.opt.scrolloff = 5     -- reduced from 8 for better screen utilization
+vim.opt.sidescrolloff = 5 -- reduced from 8 for better screen utilization
 vim.opt.wrap = false
 vim.opt.mouse = 'a'
 vim.opt.fillchars:append { eob = ' ', diff = '╱' } -- clean buffer tail + prettier diffs
 vim.opt.confirm = true
 vim.opt.inccommand = 'split'
-vim.opt.winborder = 'rounded'
+vim.opt.showmode = false -- redundant with modern statusline plugins
 
 -- Command height: modern Neovim lets you hide it
 vim.opt.cmdheight = 0
 
--- Transparency (optional)
--- Keep normal background but fix floating window transparency for better readability
+-- Improved transparency settings for better readability
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' }) -- Set a solid background for floating windows
+vim.api.nvim_set_hl(0, 'NormalFloat', { bg = '#1e1e1e' }) -- Slightly darker background for floating windows
 
+-- ===========
+-- Modern UI Enhancements
+-- ===========
+vim.opt.smoothscroll = true   -- smooth scrolling for modern terminals
+vim.opt.splitkeep = 'screen'  -- keep screen content stable when splitting
+vim.opt.virtualedit = 'block' -- allow cursor to move freely in visual block mode
 
 -- ===========
 -- Indentation
 -- ===========
-vim.opt.autoindent = true
-vim.opt.smartindent = true
+vim.opt.smartindent = true -- autoindent is redundant when smartindent is enabled
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
 vim.opt.expandtab = true
 vim.opt.breakindent = true
-vim.opt.formatoptions:remove { 'c', 'r', 'o' } -- don’t auto-insert comments
+vim.opt.formatoptions:remove { 'c', 'r', 'o', 't' } -- don't auto-insert comments or auto-wrap text
 
 -- ===========
 -- Search
@@ -87,15 +93,16 @@ vim.opt.concealcursor = 'nc'
 -- ===========
 -- Encoding & Clipboard
 -- ===========
-vim.opt.encoding = 'utf-8'
-vim.opt.fileencoding = 'utf-8'
-vim.opt.clipboard = 'unnamedplus'
+-- Removed encoding and fileencoding as UTF-8 is default in modern Neovim
+vim.opt.clipboard = 'unnamed' -- Better compatibility on Windows than 'unnamedplus'
 
 -- ===========
 -- Performance
 -- ===========
 vim.opt.updatetime = 250
-vim.opt.timeoutlen = 300 -- balance between speed and comfort
+vim.opt.timeoutlen = 200 -- reduced for faster response
+vim.opt.redrawtime = 1500
+vim.opt.ttimeoutlen = 10
 
 -- ===========
 -- Invisible chars
@@ -115,6 +122,7 @@ vim.opt.listchars = {
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()' -- way more accurate than syntax
 vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true                       -- enable folding by default
 
 -- ===========
 -- Filetypes
@@ -140,3 +148,10 @@ vim.g.markdown_fenced_languages = {
 vim.api.nvim_create_autocmd('InsertEnter', {
     command = 'norm zz',
 })
+
+-- Additional modern improvements
+vim.opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
+vim.opt.grepformat = '%f:%l:%c:%m'
+vim.opt.wildmode = 'longest:full,full'
+vim.opt.wildoptions = 'pum'
+vim.opt.wildignorecase = true
