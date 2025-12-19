@@ -33,7 +33,6 @@ return {
             ['<CR>'] = { 'accept', 'fallback' },
             ['<C-e>'] = { 'cancel', 'fallback' },
             ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
-
             -- Tab / S-Tab: sensible fallbacks, snippet support, complete when appropriate
             ['<Tab>'] = {
                 function(cmp)
@@ -45,13 +44,6 @@ return {
                     if cmp.snippet_active() then
                         return cmp.snippet_forward()
                     end
-                    -- If there's a word before cursor, trigger completion
-                    local col = vim.fn.col('.') - 1
-                    if col > 0 and vim.fn.getline('.'):sub(col, col):match('%w') then
-                        cmp.complete()
-                        return cmp.select_next()
-                    end
-                    return cmp.fallback()
                 end,
                 'fallback',
             },
@@ -105,7 +97,6 @@ return {
             -- menu rendering and components
             menu = {
                 border = 'rounded',
-                winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:CmpSel',
                 draw = {
                     padding = 1,
                     gap = 1,
@@ -119,7 +110,7 @@ return {
                         source_name = {
                             text = function(ctx)
                                 local source_display_names = {
-                                    lsp = '[LSP]',
+                                    lsp = '[lsp]',
                                     path = '[path]',
                                     snippets = '[snip]',
                                     buffer = '[buf]',
@@ -128,46 +119,8 @@ return {
                             end,
                         },
                         kind_icon = {
-                            text = function(ctx)
-                                local icon = ctx.kind_icon or ''
-
-                                local ok, lspkind = pcall(require, 'lspkind')
-                                if ok and lspkind then
-                                    local sym
-
-                                    -- common layout: symbolic is a table mapping kinds -> icons
-                                    if type(lspkind.symbolic) == 'table' then
-                                        sym = lspkind.symbolic[ctx.kind]
-                                    end
-
-                                    -- some versions expose a function; try calling it safely
-                                    if not sym and type(lspkind.symbolic) == 'function' then
-                                        local ok1, res1 = pcall(lspkind.symbolic, ctx.kind)
-                                        if ok1 then
-                                            if type(res1) == 'string' then
-                                                sym = res1
-                                            elseif type(res1) == 'table' then
-                                                sym = res1[ctx.kind] or res1
-                                            end
-                                        end
-                                    end
-
-                                    -- fallback: symbol_map or symbols/table-like presets
-                                    if not sym and type(lspkind.symbol_map) == 'table' then
-                                        sym = lspkind.symbol_map[ctx.kind]
-                                    end
-                                    if not sym and type(lspkind.presets) == 'table' and type(lspkind.presets.default) == 'table' then
-                                        sym = lspkind.presets.default[ctx.kind]
-                                    end
-
-                                    if sym and type(sym) == 'string' and #sym > 0 then
-                                        icon = sym
-                                    end
-                                end
-
-                                return (icon or '') .. ' '
-                            end,
-                        },
+                            text = function(ctx) return ' ' .. ctx.kind_icon .. ctx.icon_gap .. ' ' end
+                        }
                     },
                 },
             },
@@ -178,8 +131,6 @@ return {
                 auto_show_delay_ms = 200,
                 window = {
                     border = 'rounded',
-                    max_width = 80,
-                    max_height = 15,
                 },
             },
 

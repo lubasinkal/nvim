@@ -34,9 +34,6 @@ require('lazy').setup({
     -- Auto-close brackets/quotes intelligently
     { 'windwp/nvim-ts-autotag', opts = {}, event = { 'BufReadPre', 'BufNewFile' } },
 
-    -- Better quick fix list
-    { 'kevinhwang91/nvim-bqf',  ft = 'qf' },
-
     -- Lua development support for Neovim config files only
     {
         'folke/lazydev.nvim',
@@ -48,15 +45,6 @@ require('lazy').setup({
             },
         },
     },
-    {
-        'chomosuke/typst-preview.nvim',
-        ft = 'typst',
-        version = '1.*',
-        opts = {
-            port = 8181,
-        }, -- lazy.nvim will implicitly calls `setup {}`
-    },
-
     {
         'JoosepAlviste/nvim-ts-context-commentstring',
         lazy = true,
@@ -85,28 +73,6 @@ require('lazy').setup({
             }
         end,
     },
-    {
-        'hat0uma/csvview.nvim',
-        ---@module "csvview"
-        ---@type CsvView.Options
-        opts = {
-            parser = { comments = { '#', '//' } },
-            keymaps = {
-                -- Text objects for selecting fields
-                textobject_field_inner = { 'if', mode = { 'o', 'x' } },
-                textobject_field_outer = { 'af', mode = { 'o', 'x' } },
-                -- Excel-like navigation:
-                -- Use <Tab> and <S-Tab> to move horizontally between fields.
-                -- Use <Enter> and <S-Enter> to move vertically between rows and place the cursor at the end of the field.
-                -- Note: In terminals, you may need to enable CSI-u mode to use <S-Tab> and <S-Enter>.
-                jump_next_field_end = { '<Tab>', mode = { 'n', 'v' } },
-                jump_prev_field_end = { '<S-Tab>', mode = { 'n', 'v' } },
-                jump_next_row = { '<Enter>', mode = { 'n', 'v' } },
-                jump_prev_row = { '<S-Enter>', mode = { 'n', 'v' } },
-            },
-        },
-        cmd = { 'CsvViewEnable', 'CsvViewDisable', 'CsvViewToggle' },
-    },
     { import = 'custom.plugins' },
     { import = 'custom.lsp' },
 }, {
@@ -115,38 +81,17 @@ require('lazy').setup({
     },
 
     performance = {
-        cache = { enabled = true }, -- cache plugin loader for faster startup
-        reset_packpath = true,      -- reset packpath for clean environment
         rtp = {
-            reset = true,           -- reset runtime path
-            -- Add these to your disabled_plugins list
+            reset = true, -- reset runtime path
             disabled_plugins = {
-                -- Your existing disabled plugins
-                'gzip',
-                'matchit',
-                'matchparen',
-                'netrwPlugin',
-                'tarPlugin',
-                'tohtml',
-                'tutor',
-                'zipPlugin',
-                'man',
-                'spellfile_plugin',
-                'vimballPlugin',
-
-                -- Additional plugins that are safe to disable
-                -- '2html_plugin',
-                -- 'getscript',
-                -- 'getscriptPlugin',
-                -- 'logipat',
-                -- 'rrhelper',
-                -- 'shada_plugin',
-                --
-                -- -- Language providers (if you don't use them)
-                -- -- 'node_provider',
-                -- 'perl_provider',
-                -- -- 'python3_provider', -- Only disable if you use other Python LSP
-                -- 'ruby_provider',
+                "gzip",
+                -- "matchit",
+                -- "matchparen",
+                -- "netrwPlugin",
+                "tarPlugin",
+                "tohtml",
+                "tutor",
+                "zipPlugin",
             },
         },
     },

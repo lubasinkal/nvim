@@ -18,8 +18,8 @@ vim.api.nvim_set_hl(0, "StModeInsert", { fg = colors.black, bg = colors.blue })
 vim.api.nvim_set_hl(0, "StModeVisual", { fg = colors.black, bg = colors.cyan })
 vim.api.nvim_set_hl(0, "StModeReplace", { fg = colors.black, bg = colors.red })
 vim.api.nvim_set_hl(0, "StModeCommand", { fg = colors.black, bg = colors.mustard })
-vim.api.nvim_set_hl(0, "StMiddle", { fg = colors.white, bg = colors.grey })
-vim.api.nvim_set_hl(0, "StText", { fg = colors.white, bg = "NONE" })
+vim.api.nvim_set_hl(0, "StMiddle", { fg = colors.white, bg = colors.black })
+vim.api.nvim_set_hl(0, "StText", { fg = colors.white, bg = colors.black })
 
 -- Mode names
 local modes = {

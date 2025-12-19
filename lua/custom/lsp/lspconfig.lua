@@ -166,20 +166,14 @@ return {
             ty = {},    --Python
             tailwindcss = {},
             cssls = {},
-            zls = {}, -- Zig
-            emmet_language_server = {
-                filetypes = { 'html', 'css', 'javascriptreact', 'typescriptreact', 'vue' },
-            },
+            emmet_language_server = {},
             ts_ls = {},
             lua_ls = {},
             marksman = {}, -- Markdown LSP
-            clangd = {},
-            rust_analyzer = {},
-            tinymist = {},
         }
 
         local ensure_installed = vim.tbl_keys(servers or {})
-        vim.list_extend(ensure_installed, { 'stylua', 'ruff', 'biome', 'black', 'vue_ls' })
+        vim.list_extend(ensure_installed, { 'stylua', 'ruff', 'biome', 'vue_ls' })
 
         require('mason-tool-installer').setup {
             ensure_installed = ensure_installed,
