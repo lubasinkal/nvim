@@ -45,6 +45,7 @@ require('lazy').setup({
             },
         },
     },
+    {'kevinhwang91/nvim-bqf', ft = 'qf'},
     {
         'JoosepAlviste/nvim-ts-context-commentstring',
         lazy = true,
