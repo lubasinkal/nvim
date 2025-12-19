@@ -164,6 +164,7 @@ return {
 
             gopls = {}, --Golang
             ty = {},    --Python
+            ruff = {},
             tailwindcss = {},
             cssls = {},
             emmet_language_server = {},
@@ -173,7 +174,7 @@ return {
         }
 
         local ensure_installed = vim.tbl_keys(servers or {})
-        vim.list_extend(ensure_installed, { 'stylua', 'ruff', 'biome', 'vue_ls' })
+        vim.list_extend(ensure_installed, { 'stylua', 'biome', 'vue_ls' })
 
         require('mason-tool-installer').setup {
             ensure_installed = ensure_installed,
