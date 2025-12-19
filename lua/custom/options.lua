@@ -28,8 +28,7 @@ vim.opt.cmdheight = 0
 -- Keep normal background but fix floating window transparency for better readability
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' }) -- Set a solid background for floating windows
-vim.opt.pumblend = 0                                   -- Disable popup menu blending
-vim.opt.winblend = 0                                   -- Disable window blending
+
 
 -- ===========
 -- Indentation
