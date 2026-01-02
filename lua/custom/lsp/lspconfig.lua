@@ -178,13 +178,8 @@ return {
 
         require('mason-tool-installer').setup {
             ensure_installed = ensure_installed,
-            run_on_start = false, -- disable here to manually control timing
             auto_update = true,
         }
-        -- Async install without blocking
-        vim.defer_fn(function()
-            vim.cmd 'MasonToolsUpdate'
-        end, 3000) -- 3 second delayindex
 
         for server, cfg in pairs(servers) do
             cfg.capabilities = vim.tbl_deep_extend('force', {}, capabilities, cfg.capabilities or {})
