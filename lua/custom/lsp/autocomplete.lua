@@ -2,11 +2,7 @@ return {
     'saghen/blink.cmp',
     event = 'InsertEnter',
     dependencies = {
-        { 'L3MON4D3/LuaSnip', version = 'v2.*' },
         'rafamadriz/friendly-snippets',
-        -- optional: provides icon support
-        'onsails/lspkind.nvim',
-        -- optional: tailwind css colorizer
         {
             'roobert/tailwindcss-colorizer-cmp.nvim',
             config = function()
@@ -64,36 +60,17 @@ return {
 
         appearance = {
             nerd_font_variant = 'mono',
-            -- optional small lspkind integration: will fall back to kind_icon if lspkind not available
         },
 
-        -- Sources: prioritise LSP & snippets, deprioritise buffer; small offsets tune ranking
         sources = {
             default = { 'lsp', 'snippets', 'path', 'buffer' },
-            providers = {
-                lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
-                lsp = { score_offset = 80, min_keyword_length = 1 },
-                snippets = { score_offset = 90, min_keyword_length = 1 },
-                path = { score_offset = 50, min_keyword_length = 1 },
-                buffer = {
-                    score_offset = 10,
-                    min_keyword_length = 3,
-                },
-            },
         },
 
-        -- keep your snippet preset
-        snippets = { preset = 'luasnip' },
-
         signature = { enabled = true },
-
-        -- completion-specific settings
         completion = {
-
             accept = {
                 auto_brackets = { enabled = true },
             },
-
             -- menu rendering and components
             menu = {
                 border = 'rounded',
@@ -124,26 +101,14 @@ return {
                     },
                 },
             },
-
-            -- documentation popup
             documentation = {
                 auto_show = true,
-                auto_show_delay_ms = 200,
                 window = {
                     border = 'rounded',
                 },
             },
-
-            -- ghost text: visible but subtle
-            ghost_text = {
-                enabled = true,
-            },
-
-
+            fuzzy = { implementation = "prefer_rust_with_warning" }
         },
-
-        -- allow people to extend these defaults without copy-pasting everything
-        -- opts_extend will merge 'sources.default' from above
     },
     opts_extend = { 'sources.default' },
 }
