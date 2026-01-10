@@ -15,6 +15,8 @@ vim.opt.mouse = "a"
 vim.opt.fillchars:append({ eob = " ", diff = "╱" }) -- clean buffer tail + prettier diffs
 vim.opt.inccommand = "split"
 
+vim.opt.swapfile = false
+
 -- Command height: modern Neovim lets you hide it
 vim.opt.cmdheight = 0
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
