@@ -50,14 +50,6 @@ vim.opt.concealcursor = "nc"
 vim.opt.clipboard = "unnamedplus"
 vim.opt.updatetime = 250
 vim.opt.timeoutlen = 200 -- reduced for faster response
-vim.opt.list = true
-vim.opt.listchars = {
-	tab = "»·",
-	trail = "·",
-	nbsp = "␣",
-	extends = "⟩",
-	precedes = "⟨",
-}
 vim.api.nvim_create_autocmd("InsertEnter", {
 	command = "norm zz",
 })
