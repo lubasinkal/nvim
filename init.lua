@@ -72,6 +72,10 @@ require("lazy").setup({
 					end,
 				},
 			})
+			require("mini.notify").setup({
+				lsp_progress = { enable = false },
+			})
+			require("mini.git").setup()
 		end,
 	},
 	{ import = "custom.plugins" },
