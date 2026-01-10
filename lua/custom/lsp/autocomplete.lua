@@ -79,7 +79,7 @@ return {
 					gap = 1,
 					columns = {
 						{ "label", gap = 1 },
-						vim.tbl_keys({ "kind_icon" }),
+						{ "kind_icon" },
 						{ "source_name" },
 					},
 					components = {
