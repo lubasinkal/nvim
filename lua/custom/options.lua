@@ -26,7 +26,6 @@ vim.opt.cmdheight = 0
 vim.opt.smoothscroll = true
 vim.opt.splitkeep = "screen" -- Keeps text in place when opening splits
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-vim.opt.shortmess:append("IsC") -- Don't pass messages to |ins-completion-menu|
 
 -- Tabs & Indentation
 vim.opt.tabstop = 4
