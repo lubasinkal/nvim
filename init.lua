@@ -76,6 +76,7 @@ require("lazy").setup({
 				lsp_progress = { enable = false },
 			})
 			require("mini.git").setup()
+			require("mini.indentscope").setup()
 		end,
 	},
 	{ import = "custom.plugins" },
