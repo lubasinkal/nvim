@@ -23,7 +23,6 @@ vim.opt.timeoutlen = 300 -- 200 is very fast; 300 is usually the "sweet spot" fo
 
 -- Modern UI behavior
 vim.opt.cmdheight = 0
-vim.opt.smoothscroll = true
 vim.opt.splitkeep = "screen" -- Keeps text in place when opening splits
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
