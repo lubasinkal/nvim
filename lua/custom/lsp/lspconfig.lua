@@ -162,7 +162,7 @@ return {
 		local vue_typescript_plugin = vim.fn.expand(
 			vim.fn.stdpath("data") .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
 		)
-		local ensure_installed = { "stylua", "biome", "black" }
+		local ensure_installed = { "stylua", "lua_ls" }
 		require("mason-lspconfig").setup({
 			ensure_installed = ensure_installed,
 			automatic_enable = true,
