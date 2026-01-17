@@ -5,10 +5,10 @@ return {
     keys = {
         {
             '-',
-            '<CMD>Oil --float --preview<CR>',
+            '<CMD>Oil<CR>',
             desc = 'Open Oil (parent directory)',
         },
-        { '<leader>e', '<CMD>Oil --float<CR>', desc = 'File [E]xplorer' }
+        { '<leader>e', '<CMD>Oil --float --preview<CR>', desc = 'File [E]xplorer' }
     },
     -- Plugin options
     opts = {
