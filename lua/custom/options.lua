@@ -8,6 +8,7 @@ vim.opt.relativenumber = true
 vim.opt.numberwidth = 4
 vim.opt.cursorline = true
 vim.opt.scrolloff = 10 -- Increased: keeps cursor more centered
+vim.opt.smoothscroll = true
 vim.opt.sidescrolloff = 8
 vim.opt.wrap = false
 vim.opt.mouse = "a"
