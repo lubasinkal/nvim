@@ -54,7 +54,7 @@ require("lazy").setup({
 	-- Mini.nvim modular plugins loaded on VeryLazy event for smooth startup
 	{
 		"echasnovski/mini.nvim",
-		event = "VimEnter",
+		event = "InsertEnter",
 		config = function()
 			require("mini.comment").setup({
 				options = {
