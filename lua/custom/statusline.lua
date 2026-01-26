@@ -1,6 +1,9 @@
 -- Native Neovim statusline (no lualine)
 -- A clean Lua-driven statusline inspired by your bubbles theme
 
+-- Enable truecolor so hex GUI colors are used when terminal supports it
+vim.o.termguicolors = true
+
 local colors = {
 	violet = "#d183e8",
 	grey = "#3a3a3a",
@@ -12,14 +15,23 @@ local colors = {
 	black = "#0d0d0f",
 }
 
--- Define highlight groups
-vim.api.nvim_set_hl(0, "StMode", { fg = colors.black, bg = colors.violet })
-vim.api.nvim_set_hl(0, "StModeInsert", { fg = colors.black, bg = colors.blue })
-vim.api.nvim_set_hl(0, "StModeVisual", { fg = colors.black, bg = colors.cyan })
-vim.api.nvim_set_hl(0, "StModeReplace", { fg = colors.black, bg = colors.red })
-vim.api.nvim_set_hl(0, "StModeCommand", { fg = colors.black, bg = colors.mustard })
-vim.api.nvim_set_hl(0, "StMiddle", { fg = colors.white, bg = colors.black })
-vim.api.nvim_set_hl(0, "StText", { fg = colors.white, bg = colors.black })
+-- Apply highlight groups (with cterm fallbacks)
+local function apply_highlights()
+	vim.api.nvim_set_hl(0, "StMode", { fg = colors.black, bg = colors.violet, ctermfg = 0, ctermbg = 5 })
+	vim.api.nvim_set_hl(0, "StModeInsert", { fg = colors.black, bg = colors.blue, ctermfg = 0, ctermbg = 4 })
+	vim.api.nvim_set_hl(0, "StModeVisual", { fg = colors.black, bg = colors.cyan, ctermfg = 0, ctermbg = 6 })
+	vim.api.nvim_set_hl(0, "StModeReplace", { fg = colors.black, bg = colors.red, ctermfg = 0, ctermbg = 1 })
+	vim.api.nvim_set_hl(0, "StModeCommand", { fg = colors.black, bg = colors.mustard, ctermfg = 0, ctermbg = 3 })
+	vim.api.nvim_set_hl(0, "StMiddle", { fg = colors.white, bg = colors.black, ctermfg = 15, ctermbg = 0 })
+	vim.api.nvim_set_hl(0, "StText", { fg = colors.white, bg = colors.black, ctermfg = 15, ctermbg = 0 })
+end
+
+-- Ensure highlights are reapplied after colorscheme changes (colorschemes often override custom highlights)
+apply_highlights()
+vim.api.nvim_create_autocmd("ColorScheme", {
+	pattern = "*",
+	callback = apply_highlights,
+})
 
 -- Mode names
 local modes = {
