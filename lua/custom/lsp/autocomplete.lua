@@ -4,6 +4,17 @@ return {
 	dependencies = {
 		"rafamadriz/friendly-snippets",
 		{
+			"folke/lazydev.nvim",
+			ft = "lua", -- only load on lua files
+			opts = {
+				library = {
+					-- See the configuration section for more details
+					-- Load luvit types when the `vim.uv` word is found
+					{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+				},
+			},
+		},
+		{
 			"roobert/tailwindcss-colorizer-cmp.nvim",
 			config = function()
 				require("tailwindcss-colorizer-cmp").setup({
@@ -63,7 +74,15 @@ return {
 		},
 
 		sources = {
-			default = { "lsp", "snippets", "path", "buffer" },
+			default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+			providers = {
+				lazydev = {
+					name = "LazyDev",
+					module = "lazydev.integrations.blink",
+					-- make lazydev completions top priority (see `:h blink.cmp`)
+					score_offset = 100,
+				},
+			},
 		},
 
 		signature = { enabled = true },

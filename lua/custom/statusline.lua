@@ -51,16 +51,16 @@ local function get_diagnostics()
 	local info = #vim.diagnostic.get(0, { severity = levels.info })
 
 	if err > 0 then
-		table.insert(res, "%#StErr# " .. err)
+		table.insert(res, "%#StErr#󰅚 " .. err)
 	end
 	if warn > 0 then
-		table.insert(res, "%#StWarn# " .. warn)
+		table.insert(res, "%#StWarn#󰀪 " .. warn)
 	end
 	if hint > 0 then
-		table.insert(res, "%#StHint# " .. hint)
+		table.insert(res, "%#StHint#󰌶 " .. hint)
 	end
 	if info > 0 then
-		table.insert(res, "%#StInfo# " .. info)
+		table.insert(res, "%#StInfo#󰋽 " .. info)
 	end
 
 	return table.concat(res, " ")
@@ -73,14 +73,14 @@ local function get_git_branch()
 	end
 
 	-- Fallback manual check (cached 5 seconds)
-	if vim.b.last_git_check == nil or vim.loop.now() - vim.b.last_git_check > 5000 then
+	if vim.b.last_git_check == nil or vim.uv.now() - vim.b.last_git_check > 5000 then
 		local branch = vim.fn.system("git branch --show-current 2>/dev/null"):gsub("\n$", "")
 		if vim.v.shell_error == 0 and branch ~= "" then
 			vim.b.git_branch = "%#StGit#  " .. branch .. " "
 		else
 			vim.b.git_branch = ""
 		end
-		vim.b.last_git_check = vim.loop.now()
+		vim.b.last_git_check = vim.uv.now()
 	end
 
 	return vim.b.git_branch or ""
