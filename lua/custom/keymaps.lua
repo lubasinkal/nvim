@@ -1,5 +1,5 @@
 -- NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = " " -- Sets the global leader key to space.
+vim.g.mapleader = " "      -- Sets the global leader key to space.
 vim.g.maplocalleader = " " -- Sets the local leader key to space.
 
 -- [[ Basic Keymaps ]]
@@ -11,20 +11,20 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highl
 
 -- Diagnostic keymaps (requires Neovim's built-in LSP or a plugin)
 local toggle_loclist = function()
-	local loclist_winid = vim.fn.getloclist(0, { winid = 0 }).winid
-	if loclist_winid ~= 0 then
-		vim.cmd.lclose()
-	else
-		vim.diagnostic.setloclist({ open = true })
-	end
+    local loclist_winid = vim.fn.getloclist(0, { winid = 0 }).winid
+    if loclist_winid ~= 0 then
+        vim.cmd.lclose()
+    else
+        vim.diagnostic.setloclist({ open = true })
+    end
 end
 
 vim.keymap.set("n", "<leader>q", toggle_loclist, { desc = "Toggle diagnostic [Q]uickfix list" })
 vim.keymap.set("n", "[d", function()
-	vim.diagnostic.jump({ count = -1, float = true })
+    vim.diagnostic.jump({ count = -1, float = true })
 end, { desc = "Go to previous [d]iagnostic message" })
 vim.keymap.set("n", "]d", function()
-	vim.diagnostic.jump({ count = 1, float = true })
+    vim.diagnostic.jump({ count = 1, float = true })
 end, { desc = "Go to next [d]iagnostic message" })
 
 -- Exit terminal mode in the builtin terminal.
@@ -75,11 +75,11 @@ vim.keymap.set("n", "<leader>x", "<cmd>wq<CR>", { desc = "[X] Write and Quit" })
 -- Try it with `yap` in normal mode.
 -- See `:help vim.hl.on_yank()`
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-	callback = function()
-		vim.hl.on_yank()
-	end,
+    desc = "Highlight when yanking (copying) text",
+    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+    callback = function()
+        vim.hl.on_yank()
+    end,
 })
 -- Quick file creation
 vim.keymap.set("n", "<leader>fn", ":enew<CR>", { desc = "New file" })
@@ -93,6 +93,6 @@ vim.keymap.set("n", "<leader>wx", "<C-w>c", { desc = "Close window" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Half page down (centered)" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Half page up (centered)" })
 vim.keymap.set("n", "gk", function()
-	local new_config = not vim.diagnostic.config().virtual_lines
-	vim.diagnostic.config({ virtual_lines = new_config })
+    local new_config = not vim.diagnostic.config().virtual_lines
+    vim.diagnostic.config({ virtual_lines = new_config })
 end, { desc = "Toggle diagnostic virtual_lines" })
