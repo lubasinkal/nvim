@@ -2,9 +2,13 @@ return {
     "saghen/blink.cmp",
     event = "InsertEnter",
     dependencies = {
-        "rafamadriz/friendly-snippets",
+        {
+            "rafamadriz/friendly-snippets",
+            event = "InsertEnter",
+        },
         {
             "roobert/tailwindcss-colorizer-cmp.nvim",
+            event = "InsertEnter",
             config = function()
                 require("tailwindcss-colorizer-cmp").setup({
                     color_square_width = 2,

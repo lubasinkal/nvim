@@ -38,7 +38,7 @@ require("lazy").setup({
 	-- Indentation detection plugin
 	{
 		"NMAC427/guess-indent.nvim",
-		event = "BufReadPre",
+		event = { "BufReadPost", "BufNewFile" },
 	},
 	-- Auto-close brackets/quotes intelligently
 	{ "windwp/nvim-ts-autotag", opts = {}, event = { "BufReadPre", "BufNewFile" } },
