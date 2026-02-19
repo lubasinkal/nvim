@@ -1,13 +1,22 @@
 -- Load essential configs early (keymaps, options)
 require("custom.keymaps")
 require("custom.options")
-require("custom.statusline")
 
--- Load custom native utility modules
-require("custom.util.floaterminal")
-require("custom.util.session")
-require("custom.util.todo")
-require("custom.util.screenkey")
+-- Defer statusline until first buffer (saves ~5-10ms)
+vim.api.nvim_create_autocmd({ "BufEnter", "UIEnter" }, {
+	once = true,
+	callback = function()
+		require("custom.statusline")
+	end,
+})
+
+-- Defer utility modules until first use
+local util_modules = { "floaterminal", "session", "todo", "screenkey" }
+for _, mod in ipairs(util_modules) do
+	vim.defer_fn(function()
+		require("custom.util." .. mod)
+	end, 0)
+end
 
 -- Bootstrap lazy.nvim plugin manager if not installed
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

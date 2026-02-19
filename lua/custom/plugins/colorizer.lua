@@ -1,22 +1,13 @@
 return {
-  'catgoose/nvim-colorizer.lua',
-  event = 'BufReadPre',
-  opts = { -- set to setup table
-    filetypes = {
-      'css',
-      'scss',
-      'html',
-      'javascript',
-      'javascriptreact',
-      'typescript',
-      'typescriptreact',
-      'vue',
-      'svelte',
-      'astro',
-      'tailwindcss', -- Add Tailwind CSS filetype
-    },
-    user_default_options = {
-      tailwind = true, -- Enable Tailwind CSS support
-    },
-  },
+	"catgoose/nvim-colorizer.lua",
+	event = { "BufReadPost", "BufNewFile" },
+	opts = {
+		user_default_options = {
+			tailwind = true, -- enables basic Tailwind color names (red-500 etc.)
+			-- tailwind = "both",          -- if you also use tailwindcss LSP and want custom colors
+			css = true, -- optional: enables #rrggbb, rgb(), hsl() etc.
+			css_fn = true,
+			mode = "background", -- or "foreground" / "virtualtext"
+		},
+	},
 }
