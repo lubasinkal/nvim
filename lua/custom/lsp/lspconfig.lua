@@ -126,7 +126,7 @@ return {
 		vim.diagnostic.config({
 			severity_sort = true,
 			float = { border = "rounded", source = "if_many" },
-			underline = { severity = vim.diagnostic.severity.ERROR },
+			underline = { severity = { min = vim.diagnostic.severity.WARN } },
 			signs = vim.g.have_nerd_font and {
 				text = {
 					[vim.diagnostic.severity.ERROR] = "󰅚 ",
@@ -135,19 +135,15 @@ return {
 					[vim.diagnostic.severity.HINT] = "󰌶 ",
 				},
 			} or {},
-			virtual_text = {
-				source = "if_many",
-				spacing = 2,
-				format = function(diagnostic)
-					local diagnostic_message = {
-						[vim.diagnostic.severity.ERROR] = diagnostic.message,
-						[vim.diagnostic.severity.WARN] = diagnostic.message,
-						[vim.diagnostic.severity.INFO] = diagnostic.message,
-						[vim.diagnostic.severity.HINT] = diagnostic.message,
-					}
-					return diagnostic_message[diagnostic.severity]
-				end,
-			},
+			virtual_text = false,
+		})
+		-- Diagnonstic floating window on cursorhold
+		vim.api.nvim_create_autocmd("CursorHold", {
+			callback = function()
+				if next(vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 })) then
+					vim.diagnostic.open_float(nil, { focusable = false, border = "rounded" })
+				end
+			end,
 		})
 		local capabilities = require("blink.cmp").get_lsp_capabilities()
 

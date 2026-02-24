@@ -74,5 +74,7 @@ vim.api.nvim_create_autocmd("InsertEnter", {
 })
 -- Automatic window resizing
 vim.api.nvim_create_autocmd({ "VimResized" }, {
-  callback = function() vim.cmd("redraw!") end,
+	callback = function()
+		vim.cmd("redraw!")
+	end,
 })
