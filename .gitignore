@@ -7,3 +7,23 @@ spell/
 lazy-lock.json
 Session.vim
 
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+node_modules/
+package-lock.json
+
+.cache/
+.luacheck/
+.scoped css
+.scoped.scss
+
