@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "UIEnter" }, {
 })
 
 -- Defer utility modules until first use
-local util_modules = { "floaterminal", "session", "todo", "screenkey" }
+local util_modules = { "floaterminal", "session", "todo", "screenkey", "tabs" }
 for _, mod in ipairs(util_modules) do
 	vim.defer_fn(function()
 		require("custom.util." .. mod)
