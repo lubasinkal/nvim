@@ -19,10 +19,11 @@ vim.opt.inccommand = "split" -- Great for previewing substitutions
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
-vim.opt.updatetime = 250
-vim.opt.timeoutlen = 300 -- 200 is very fast; 300 is usually the "sweet spot" for chorded keys
+vim.opt.updatetime = 200 -- faster CursorHold
+vim.opt.timeoutlen = 300 -- faster which-key
+vim.opt.ttimeoutlen = 10
+vim.g.loaded_matchparen = 1 -- disable builtin paren matcher (use treesitter instead)-- Modern UI behavior
 
--- Modern UI behavior
 vim.opt.cmdheight = 0
 vim.opt.splitkeep = "screen" -- Keeps text in place when opening splits
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode

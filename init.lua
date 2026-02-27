@@ -35,11 +35,6 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Plugin setup via lazy.nvim
 require("lazy").setup({
-	-- Indentation detection plugin
-	{
-		"NMAC427/guess-indent.nvim",
-		event = { "BufReadPost", "BufNewFile" },
-	},
 	-- Auto-close brackets/quotes intelligently
 	{ "windwp/nvim-ts-autotag", opts = {}, event = { "BufReadPre", "BufNewFile" } },
 
