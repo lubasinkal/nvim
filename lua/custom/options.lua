@@ -2,7 +2,7 @@
 vim.g.have_nerd_font = true
 vim.opt.signcolumn = "yes"
 vim.opt.laststatus = 3
-vim.opt.showtabline = 2
+vim.opt.showtabline = 0
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.numberwidth = 4
