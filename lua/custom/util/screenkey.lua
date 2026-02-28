@@ -1,151 +1,363 @@
-local M = {}
+-- Modern Screenkey Implementation
+-- Mimics screenkey.nvim architecture with proper separation of concerns
 
--- Configuration
-local config = {
-  win_opts = {
-    relative = 'editor',
-    style = 'minimal',
-    border = 'rounded',
-    focusable = false,
-    height = 1,
-    width = 30,
-    zindex = 50,
-  },
-  timeout = 2000, -- Clear after 2 seconds of inactivity
-}
+local api = vim.api
 
-local state = {
-  enabled = false,
-  buf = -1,
-  win = -1,
-  timer = nil,
-  keys = {},
-  ns_id = vim.api.nvim_create_namespace('native_screenkey'),
-}
+---@class ScreenkeyConfig
+---@field win_opts table Window options
+---@field timeout number Clear timeout in milliseconds
+---@field compress_after number Compress keys after N repeats
+---@field keys table<string, string> Key translations
+---@field show_leader boolean Show leader key
+---@field disable table Disable conditions
+---@field separator string Separator between keys
+local Config = {}
 
-local function get_win_config()
-  local height = config.win_opts.height
-  local width = config.win_opts.width
-  -- Position at bottom right
-  local row = vim.o.lines - vim.o.cmdheight - height - 2
-  local col = vim.o.columns - width - 1
-
-  return vim.tbl_extend('force', config.win_opts, {
-    row = row,
-    col = col,
-  })
+function Config:new()
+	local obj = {
+		-- Window configuration
+		win_opts = {
+			relative = "editor",
+			style = "minimal",
+			border = "rounded",
+			focusable = false,
+			height = 1,
+			width = 30,
+			zindex = 50,
+			anchor = "SE",
+		},
+		timeout = 3000,
+		compress_after = 3,
+		keys = {
+			["<TAB>"] = "󰌒",
+			["<CR>"] = "󰌑",
+			["<ESC>"] = "Esc",
+			["<SPACE>"] = "␣",
+			["<BS>"] = "󰌥",
+			["<DEL>"] = "Del",
+			["<LEFT>"] = "←",
+			["<RIGHT>"] = "→",
+			["<UP>"] = "↑",
+			["<DOWN>"] = "↓",
+			["<HOME>"] = "Home",
+			["<END>"] = "End",
+			["<PAGEUP>"] = "PgUp",
+			["<PAGEDOWN>"] = "PgDn",
+			["CTRL"] = "Ctrl",
+			["ALT"] = "Alt",
+			["<leader>"] = "<leader>",
+		},
+		show_leader = true,
+		separator = " ",
+		disable = {
+			filetypes = { "vim-plug", "qf" },
+			buftypes = { "nofile", "prompt" },
+			modes = {},
+		},
+	}
+	setmetatable(obj, self)
+	self.__index = self
+	return obj
 end
 
-local function update_window()
-  if not state.enabled then return end
+---@class KeyUtils
+local KeyUtils = {}
 
-  -- Create buffer if needed
-  if not vim.api.nvim_buf_is_valid(state.buf) then
-    state.buf = vim.api.nvim_create_buf(false, true)
-    vim.bo[state.buf].buftype = 'nofile'
-    vim.bo[state.buf].filetype = 'screenkey'
-  end
+---@param key string
+---@return table Transformed key structure
+function KeyUtils.transform_input(key)
+	-- Use keytrans for proper Vim key translation
+	local trans_key = vim.fn.keytrans(key)
 
-  -- Create window if needed
-  if not vim.api.nvim_win_is_valid(state.win) then
-    state.win = vim.api.nvim_open_win(state.buf, false, get_win_config())
-    vim.wo[state.win].winblend = 20 -- Transparent background
-  else
-    -- Update position in case of resize
-    vim.api.nvim_win_set_config(state.win, get_win_config())
-  end
+	-- Check if this is a special key
+	if trans_key:match("^<") then
+		-- Handle modifier keys
+		local modifier = trans_key:match("^<([CMAD])%-")
+		local base_key = trans_key:match("^<.%-(.+)>$") or trans_key:match("^<(.+)>$")
 
-  -- Update content
-  local text = table.concat(state.keys, ' ')
-  -- Truncate from left if too long
-  if #text > config.win_opts.width - 2 then
-    text = '...' .. string.sub(text, #text - (config.win_opts.width - 5))
-  end
-  
-  -- Center text
-  local padding = math.floor((config.win_opts.width - #text) / 2)
-  local line = string.rep(' ', padding) .. text
-  
-  vim.api.nvim_buf_set_lines(state.buf, 0, -1, false, { line })
+		if base_key then
+			if modifier == "C" then
+				return {
+					key = "Ctrl+" .. base_key,
+					is_mapping = false,
+					count = 1,
+				}
+			elseif modifier == "A" or modifier == "M" then
+				return {
+					key = "Alt+" .. base_key,
+					is_mapping = false,
+					count = 1,
+				}
+			end
+		end
+		return {
+			key = trans_key,
+			is_mapping = false,
+			count = 1,
+		}
+	end
+
+	return {
+		key = trans_key,
+		is_mapping = false,
+		count = 1,
+	}
 end
 
-local function clear_keys()
-  state.keys = {}
-  if vim.api.nvim_buf_is_valid(state.buf) then
-    vim.api.nvim_buf_set_lines(state.buf, 0, -1, false, {})
-  end
-  if vim.api.nvim_win_is_valid(state.win) then
-    vim.api.nvim_win_close(state.win, true)
-    state.win = -1
-  end
+---@param queued_keys table[]
+---@param new_key table
+---@return table[]
+function KeyUtils.append_key(queued_keys, new_key)
+	if #queued_keys > 0 and queued_keys[#queued_keys].key == new_key.key then
+		-- Increment count for repeated keys
+		queued_keys[#queued_keys].count = queued_keys[#queued_keys].count + 1
+	else
+		table.insert(queued_keys, new_key)
+	end
+	return queued_keys
 end
 
-local function on_key(char)
-  if not state.enabled then return end
-  
-  -- Ignore empty chars
-  if not char or char == '' then return end
-
-  -- Translate special keys
-  local key = vim.fn.keytrans(char)
-  
-  -- Skip some boring keys if needed, but keytrans handles most well
-  if key == '<Nop>' then return end
-
-  table.insert(state.keys, key)
-  
-  -- Keep history reasonable
-  if #state.keys > 10 then
-    table.remove(state.keys, 1)
-  end
-
-  update_window()
-
-  -- Reset timer to clear
-  if state.timer then
-    state.timer:stop()
-    state.timer:close()
-  end
-  
-  state.timer = vim.loop.new_timer()
-  state.timer:start(config.timeout, 0, vim.schedule_wrap(clear_keys))
+---@param queued_keys table[]
+---@param config ScreenkeyConfig
+---@return string
+function KeyUtils.to_string(queued_keys, config)
+	local result = {}
+	for _, qkey in ipairs(queued_keys) do
+		if qkey.count >= (config.compress_after or 3) then
+			table.insert(result, qkey.key .. "x" .. qkey.count)
+		else
+			for _ = 1, qkey.count do
+				table.insert(result, qkey.key)
+			end
+		end
+	end
+	return table.concat(result, config.separator or " ")
 end
 
-function M.toggle()
-  state.enabled = not state.enabled
-  if state.enabled then
-    vim.notify('ScreenKey Enabled', vim.log.levels.INFO)
-    -- Start listening
-    if not state.on_key_ns then
-      state.on_key_ns = vim.on_key(on_key, state.ns_id)
-    end
-  else
-    vim.notify('ScreenKey Disabled', vim.log.levels.INFO)
-    clear_keys()
-    -- Stop listening (vim.on_key returns existing callback if called again, 
-    -- but actually to remove it we pass nil? No, vim.on_key doc says: 
-    -- "The function is removed by calling it with nil."
-    -- Wait, vim.on_key(func, ns) registers it.
-    -- To remove, we should probably just rely on state.enabled flag for simplicity 
-    -- because removing global on_key listeners can be tricky if not careful.
-    -- But let's try to be clean.
-    -- Actually, simple flag check is safest and fastest.
-  end
+---@class ScreenkeyUI
+local UI = {}
+
+function UI:new()
+	local obj = {
+		active = false,
+		ns_id = vim.api.nvim_create_namespace("screenkey"),
+		buf = -1,
+		win = -1,
+	}
+	setmetatable(obj, self)
+	self.__index = self
+	return obj
 end
 
--- Resize handler
-vim.api.nvim_create_autocmd('VimResized', {
-  callback = function()
-    if state.enabled and vim.api.nvim_win_is_valid(state.win) then
-      vim.api.nvim_win_set_config(state.win, get_win_config())
-    end
-  end
+function UI:is_active()
+	return self.active
+end
+
+---@param config ScreenkeyConfig
+function UI:open_win(config)
+	if not vim.api.nvim_buf_is_valid(self.buf) then
+		self.buf = api.nvim_create_buf(false, true)
+		api.nvim_set_option_value("buftype", "nofile", { buf = self.buf })
+		api.nvim_set_option_value("filetype", "screenkey", { buf = self.buf })
+	end
+
+	if not vim.api.nvim_win_is_valid(self.win) then
+		local win_config = vim.tbl_extend("force", config.win_opts, {
+			row = vim.o.lines - vim.o.cmdheight - config.win_opts.height - 1,
+			col = vim.o.columns - config.win_opts.width - 1,
+		})
+		self.win = api.nvim_open_win(self.buf, false, win_config)
+		api.nvim_set_option_value("winblend", 20, { win = self.win })
+	end
+
+	self.active = true
+end
+
+function UI:close_win()
+	if vim.api.nvim_win_is_valid(self.win) then
+		api.nvim_win_close(self.win, true)
+		self.win = -1
+	end
+	self.active = false
+end
+
+---@param text string
+function UI:update_text(text)
+	if not self.active or not vim.api.nvim_buf_is_valid(self.buf) then
+		return
+	end
+
+	-- Truncate text if too long
+	if #text > 28 then
+		text = "..." .. text:sub(-25)
+	end
+
+	-- Center the text
+	local padding = math.max(0, math.floor((30 - #text) / 2))
+	local line = string.rep(" ", padding) .. text
+
+	api.nvim_buf_set_lines(self.buf, 0, -1, false, { line })
+end
+
+function UI:clear()
+	if vim.api.nvim_buf_is_valid(self.buf) then
+		api.nvim_buf_set_lines(self.buf, 0, -1, false, {})
+	end
+end
+
+---@class Screenkey
+local Screenkey = {}
+
+function Screenkey:new(config)
+	local obj = {
+		enabled = false,
+		config = config or Config:new(),
+		ui = UI:new(),
+		queued_keys = {},
+		timer = nil,
+		ns_id = vim.api.nvim_create_namespace("screenkey"),
+	}
+	setmetatable(obj, self)
+	self.__index = self
+	return obj
+end
+
+---@private
+function Screenkey:should_disable()
+	local buftype = api.nvim_get_option_value("buftype", { buf = 0 })
+	if vim.tbl_contains(self.config.disable.buftypes, buftype) then
+		return true
+	end
+
+	local filetype = api.nvim_get_option_value("filetype", { buf = 0 })
+	if vim.tbl_contains(self.config.disable.filetypes, filetype) then
+		return true
+	end
+
+	return false
+end
+
+---@private
+function Screenkey:reset_timer()
+	if self.timer then
+		self.timer:stop()
+		self.timer:close()
+		self.timer = nil
+	end
+
+	if self.config.timeout > 0 then
+		self.timer = vim.uv.new_timer()
+		self.timer:start(
+			self.config.timeout,
+			0,
+			vim.schedule_wrap(function()
+				self:clear_keys()
+			end)
+		)
+	end
+end
+
+---@private
+function Screenkey:on_key_callback(char)
+	if not self.enabled then
+		return
+	end
+
+	if not char or char == "" or self:should_disable() then
+		return
+	end
+
+	local key = KeyUtils.transform_input(char)
+	self.queued_keys = KeyUtils.append_key(self.queued_keys, key)
+
+	-- Limit history to prevent excessive memory use
+	if #self.queued_keys > 20 then
+		table.remove(self.queued_keys, 1)
+	end
+
+	local text = KeyUtils.to_string(self.queued_keys, self.config)
+	self.ui:update_text(text)
+
+	self:reset_timer()
+end
+
+function Screenkey:clear_keys()
+	self.queued_keys = {}
+	self.ui:clear()
+	if self.timer then
+		self.timer:stop()
+		self.timer:close()
+		self.timer = nil
+	end
+end
+
+function Screenkey:toggle()
+	self.enabled = not self.enabled
+
+	if self.enabled then
+		self.ui:open_win(self.config)
+		-- Register key listener
+		vim.on_key(function(char)
+			self:on_key_callback(char)
+		end, self.ns_id)
+		vim.notify("Screenkey enabled", vim.log.levels.INFO)
+	else
+		self:clear_keys()
+		self.ui:close_win()
+		vim.notify("Screenkey disabled", vim.log.levels.INFO)
+	end
+end
+
+function Screenkey:redraw()
+	if self.enabled then
+		self.ui:open_win(self.config)
+		local text = KeyUtils.to_string(self.queued_keys, self.config)
+		self.ui:update_text(text)
+	end
+end
+
+-- Singleton instance
+local screenkey = Screenkey:new()
+
+-- Setup commands
+api.nvim_create_user_command("Screenkey", function()
+	screenkey:toggle()
+end, {
+	desc = "Toggle Screenkey display",
 })
 
--- Command
-vim.api.nvim_create_user_command('ScreenKeyToggle', M.toggle, {})
+api.nvim_create_user_command("ScreenkeyRedraw", function()
+	screenkey:redraw()
+end, {
+	desc = "Redraw Screenkey window",
+})
 
--- Keymap matching previous plugin
-vim.keymap.set('n', '<leader>tsk', M.toggle, { desc = '[T]oggle [S]creen[K]ey' })
+-- Setup keymaps
+vim.keymap.set("n", "<leader>tsk", function()
+	screenkey:toggle()
+end, {
+	noremap = true,
+	silent = true,
+	desc = "[T]oggle [S]creen[K]ey",
+})
 
-return M
+-- Handle window resize
+api.nvim_create_autocmd("VimResized", {
+	callback = function()
+		screenkey:redraw()
+	end,
+})
+
+return {
+	setup = function(opts)
+		if opts then
+			screenkey.config = vim.tbl_extend("force", screenkey.config, opts)
+		end
+	end,
+	toggle = function()
+		screenkey:toggle()
+	end,
+	redraw = function()
+		screenkey:redraw()
+	end,
+}
