@@ -20,7 +20,18 @@ return {
 	keys = {
 		{ "<leader>sh", "<cmd>Telescope help_tags<CR>", desc = "[S]earch [H]elp" },
 		{ "<leader>sk", "<cmd>Telescope keymaps<CR>", desc = "[S]earch [K]eymaps" },
-		{ "<leader>sf", "<cmd>Telescope git_files<CR>", desc = "[S]earch [F]iles" },
+		{
+			"<leader>sf",
+			function()
+				local builtin = require("telescope.builtin")
+				-- pcall (protected call) catches the error if we aren't in a git repo
+				local is_git = pcall(builtin.git_files)
+				if not is_git then
+					builtin.find_files()
+				end
+			end,
+			desc = "[S]earch [F]iles (Smart Git)",
+		},
 		{ "<leader>ss", "<cmd>Telescope builtin<CR>", desc = "[S]earch [S]elect Telescope" },
 		{ "<leader>sw", "<cmd>Telescope grep_string<CR>", desc = "[S]earch current [W]ord" },
 		{ "<leader>sg", "<cmd>Telescope live_grep<CR>", desc = "[S]earch by [G]rep" },
