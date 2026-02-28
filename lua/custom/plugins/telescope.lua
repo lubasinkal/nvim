@@ -14,7 +14,6 @@ return {
 					return nil -- Skip build, will use Lua fallback
 				end
 			end,
-			optional = true, -- Don't fail if build or loading fails
 		},
 		"nvim-telescope/telescope-ui-select.nvim",
 	},
