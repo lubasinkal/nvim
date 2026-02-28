@@ -145,7 +145,6 @@ return {
 				end
 			end,
 		})
-		local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 		local function prevent_oil_attach(client, bufnr)
 			local name = vim.api.nvim_buf_get_name(bufnr)
@@ -155,32 +154,11 @@ return {
 			end
 			return false
 		end
-		local vue_typescript_plugin = vim.fn.expand(
-			vim.fn.stdpath("data") .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
-		)
+
 		local ensure_installed = { "stylua", "lua_ls" }
 		require("mason-lspconfig").setup({
 			ensure_installed = ensure_installed,
 			automatic_enable = true,
 		})
-		local vue_ls_path = vim.fn.expand("$MASON/packages/vue-language-server/node_modules/@vue/language-server")
-
-		vim.lsp.start(vim.tbl_deep_extend("force", vim.lsp.config.ts_ls, {
-			init_options = {
-				plugins = {
-					{
-						name = "@vue/typescript-plugin",
-						location = vue_ls_path,
-						languages = { "vue" },
-					},
-				},
-			},
-			filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-			on_attach = function(client)
-				if vim.bo.filetype == "vue" then
-					client.server_capabilities.semanticTokensProvider.full = false
-				end
-			end,
-		}))
 	end,
 }
