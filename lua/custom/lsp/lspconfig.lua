@@ -164,8 +164,8 @@ return {
 						library = {
 							-- Neovim runtime
 							vim.env.VIMRUNTIME,
-							-- If you have your config somewhere non-standard, add it too:
-							-- vim.fn.stdpath('config'),
+							"${3rd}/luv/library",
+							vim.fn.stdpath("config"),
 						},
 						-- Recommended for performance & to avoid 3rd-party prompts
 						checkThirdParty = false,
