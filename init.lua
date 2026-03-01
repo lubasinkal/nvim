@@ -90,16 +90,19 @@ require("lazy").setup({
 
 	performance = {
 		rtp = {
-			reset = true, -- reset runtime path
+			reset = false, -- reset runtime path
 			disabled_plugins = {
 				"gzip",
-				-- "matchit",
-				-- "matchparen",
-				-- "netrwPlugin",
 				"tarPlugin",
-				"tohtml",
-				"tutor",
 				"zipPlugin",
+				"netrwPlugin",
+				"tohtml",
+				"matchit",
+				"matchparen",
+				"rplugin",
+				"editorconfig",
+				"man",
+				"spellfile",
 			},
 		},
 	},
