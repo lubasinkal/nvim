@@ -18,11 +18,6 @@ return {
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 			callback = function(event)
-				local map = function(keys, func, desc, mode)
-					mode = mode or "n"
-					vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
-				end
-
 				local wk = require("which-key")
 				wk.add({
 					{ "<leader>c", buffer = event.buf, group = "Code" },
@@ -146,16 +141,40 @@ return {
 			end,
 		})
 
-		local function prevent_oil_attach(client, bufnr)
-			local name = vim.api.nvim_buf_get_name(bufnr)
-			if name:match("^oil://") then
-				client.stop()
-				return true
-			end
-			return false
-		end
-
 		local ensure_installed = { "stylua", "lua_ls" }
+		vim.lsp.config("lua_ls", {
+			settings = {
+				Lua = {
+					runtime = {
+						-- Tell lua_ls you're using Neovim's LuaJIT
+						version = "LuaJIT",
+						-- Optional: mimic Neovim's package.path for require("…")
+						-- Usually not strictly needed if you set workspace.library correctly
+						path = {
+							"lua/?.lua",
+							"lua/?/init.lua",
+						},
+					},
+					diagnostics = {
+						-- Stop "undefined global vim" warnings
+						globals = { "vim" },
+					},
+					workspace = {
+						-- Very important: make lua_ls aware of Neovim's runtime files
+						library = {
+							-- Neovim runtime
+							vim.env.VIMRUNTIME,
+							-- If you have your config somewhere non-standard, add it too:
+							-- vim.fn.stdpath('config'),
+						},
+						-- Recommended for performance & to avoid 3rd-party prompts
+						checkThirdParty = false,
+					},
+					-- Optional: disable telemetry
+					telemetry = { enable = false },
+				},
+			},
+		})
 		require("mason-lspconfig").setup({
 			ensure_installed = ensure_installed,
 			automatic_enable = true,

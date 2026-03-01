@@ -38,17 +38,6 @@ require("lazy").setup({
 	-- Auto-close brackets/quotes intelligently
 	{ "windwp/nvim-ts-autotag", opts = {}, event = { "BufReadPre", "BufNewFile" } },
 
-	-- Lua development support for Neovim config files only
-	{
-		"folke/lazydev.nvim",
-		ft = "lua",
-		opts = {
-			library = {
-				-- Add luvit types when 'vim.uv' word is found (async support)
-				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
-			},
-		},
-	},
 	{ "kevinhwang91/nvim-bqf", ft = "qf" },
 	{
 		"JoosepAlviste/nvim-ts-context-commentstring",
