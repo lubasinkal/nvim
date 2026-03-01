@@ -2,11 +2,14 @@ return {
 	"vague-theme/vague.nvim",
 	event = "VeryLazy",
 	config = function()
-		-- NOTE: you do not need to call setup if you don't want to.
-		require("vague").setup({
-			-- optional configuration here
-			transparent = true,
-		})
+		require("vague").setup({ transparent = true })
 		vim.cmd("colorscheme vague")
+
+		-- Defer statusline activation one more tick
+		vim.schedule(function()
+			require("custom.statusline").apply_highlights()
+			vim.o.statusline = "%!v:lua.statusline()"
+			vim.cmd("redrawstatus!")
+		end)
 	end,
 }

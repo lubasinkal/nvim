@@ -145,3 +145,8 @@ _G.statusline = function()
 end
 
 vim.o.statusline = "%!v:lua.statusline()"
+
+-- Export it
+return {
+	apply_highlights = apply_highlights,
+}
