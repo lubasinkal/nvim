@@ -166,6 +166,7 @@ return {
 							vim.env.VIMRUNTIME,
 							"${3rd}/luv/library",
 							vim.fn.stdpath("config"),
+							"${3rd}/busted/library",
 						},
 						-- Recommended for performance & to avoid 3rd-party prompts
 						checkThirdParty = false,
