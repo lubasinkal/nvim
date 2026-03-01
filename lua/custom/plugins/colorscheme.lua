@@ -1,6 +1,6 @@
 return {
 	"vague-theme/vague.nvim",
-	lazy = false,
+	event = "VeryLazy",
 	config = function()
 		-- NOTE: you do not need to call setup if you don't want to.
 		require("vague").setup({
