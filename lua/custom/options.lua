@@ -1,5 +1,6 @@
 -- UI & General
 vim.g.have_nerd_font = true
+vim.opt.termguicolors = true
 vim.opt.signcolumn = "yes"
 vim.opt.laststatus = 3
 vim.opt.showtabline = 0
