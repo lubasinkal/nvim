@@ -7,7 +7,6 @@ vim.opt.showtabline = 0
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.numberwidth = 4
-vim.opt.cursorline = true
 vim.opt.scrolloff = 10 -- Increased: keeps cursor more centered
 vim.opt.smoothscroll = true
 vim.opt.sidescrolloff = 8
@@ -78,5 +77,33 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 vim.api.nvim_create_autocmd({ 'VimResized' }, {
   callback = function()
     vim.cmd 'redraw!'
+  end,
+})
+vim.api.nvim_create_autocmd({ 'VimResized' }, {
+  callback = function()
+    vim.cmd 'wincmd ='
+  end,
+})
+
+-- Vertical Help Page
+vim.api.nvim_create_autocmd({ 'Filetype' }, {
+  pattern = 'help',
+  command = 'wincmd L',
+})
+
+-- enable cursorline only in the active/current buffer/window and disable it when you leave
+vim.api.nvim_create_augroup('CursorLineActive', { clear = true })
+
+vim.api.nvim_create_autocmd({ 'WinEnter', 'BufWinEnter' }, {
+  group = 'CursorLineActive',
+  callback = function()
+    vim.wo.cursorline = true
+  end,
+})
+
+vim.api.nvim_create_autocmd('WinLeave', {
+  group = 'CursorLineActive',
+  callback = function()
+    vim.wo.cursorline = false
   end,
 })
