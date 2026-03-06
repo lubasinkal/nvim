@@ -150,15 +150,4 @@ local function cleanup_shada()
 end
 
 -- Keymap: <leader>sc to clean up ShaDa files
-vim.keymap.set('n', '<leader>sc', cleanup_shada, { desc = 'Cleanup ShaDa temp files' })
-
--- Prevent LSP from sending ANY requests for oil:// buffers
-local old_request = vim.lsp.buf_request
-vim.lsp.buf_request = function(bufnr, method, params, handler)
-  local name = vim.api.nvim_buf_get_name(bufnr)
-  if name:match '^oil://' then
-    -- Skip the request entirely
-    return
-  end
-  return old_request(bufnr, method, params, handler)
-end
+vim.keymap.set('n', '<leader>wc', cleanup_shada, { desc = 'Cleanup ShaDa temp files' })
