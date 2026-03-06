@@ -1,21 +1,37 @@
-# Check Lua Formatting
-name: Check Lua Formatting
-on: pull_request_target
+name: Format Lua
+
+on:
+  pull_request:
+    paths:
+      - '**.lua'
+      - '.stylua.toml'
+  push:
+    branches:
+      - main
+    paths:
+      - '**.lua'
+      - '.stylua.toml'
 
 jobs:
-  stylua-check:
-    if: github.repository == 'nvim-lua/kickstart.nvim'
-    name: Stylua Check
+  stylua:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Stylua Check
+      - uses: actions/checkout@v4
+
+      - name: Run Stylua
         uses: JohnnyMorganz/stylua-action@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: latest
-          args: --check .
 
+      - name: Create Pull Request
+        if: github.event_name == 'push'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'style: format Lua files with stylua'
+          title: 'style: format Lua files with stylua'
+          body: |
+            Formatted Lua files using [stylua](https://github.com/JohnnyMorganz/StyLua)
+            according to the config in `.stylua.toml`.
+          branch: stylua-format
+          delete-branch: true
