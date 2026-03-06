@@ -23,6 +23,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: latest
+          args: lua/
 
       - name: Create Pull Request
         if: github.event_name == 'push'
