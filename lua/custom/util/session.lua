@@ -1,26 +1,25 @@
 local M = {}
+local e = vim.fn.fnameescape
 
--- Define the central storage path
 local session_dir = vim.fn.stdpath("data") .. "/sessions/"
 
--- Ensure the directory exists
 if vim.fn.isdirectory(session_dir) == 0 then
 	vim.fn.mkdir(session_dir, "p")
 end
 
 local function get_session_path()
 	local cwd = vim.fn.getcwd()
-	-- Check if we are in a git repo
-	local is_git = vim.fn.system("git rev-parse --is-inside-work-tree 2> nil"):find("true")
+	local is_git = vim.uv.fs_stat(".git") ~= nil
 
 	local session_name
 	if is_git then
 		local git_root = vim.fn.trim(vim.fn.system("git rev-parse --show-toplevel"))
 		local branch = vim.fn.trim(vim.fn.system("git branch --show-current"))
-		-- Format: C_Users_Name_Project_main.vim
-		session_name = (git_root .. "_" .. branch):gsub("[\\/:]+", "_")
+		session_name = git_root:gsub("[\\/:]+", "_")
+		if branch and branch ~= "main" and branch ~= "master" then
+			session_name = session_name .. "%%" .. branch:gsub("[\\/:]+", "_")
+		end
 	else
-		-- Format: C_Users_Name_Folder.vim
 		session_name = cwd:gsub("[\\/:]+", "_")
 	end
 
@@ -29,14 +28,14 @@ end
 
 function M.save_session()
 	local path = get_session_path()
-	vim.cmd("mksession! " .. vim.fn.fnameescape(path))
+	vim.cmd("mks! " .. e(path))
 	vim.notify("Session saved to: " .. path, vim.log.levels.INFO)
 end
 
 function M.restore_session()
 	local path = get_session_path()
 	if vim.fn.filereadable(path) == 1 then
-		vim.cmd("source " .. vim.fn.fnameescape(path))
+		vim.cmd("source " .. e(path))
 		vim.notify("Session restored", vim.log.levels.INFO)
 	else
 		vim.notify("No session found for this branch/folder", vim.log.levels.WARN)
