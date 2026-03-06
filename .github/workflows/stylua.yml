@@ -12,6 +12,10 @@ on:
       - '**.lua'
       - '.stylua.toml'
 
+permissions:
+  contents: write          # required for create-pull-request to push
+  pull-requests: write     # required
+
 jobs:
   stylua:
     runs-on: ubuntu-latest
@@ -19,11 +23,11 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run Stylua
-        uses: JohnnyMorganz/stylua-action@v3
+        uses: JohnnyMorganz/stylua-action@v3   # consider upgrading to v4 if stable
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: latest
-          args: lua/
+          args: -- lua/ init.lua               # adjust to your actual structure
 
       - name: Create Pull Request
         if: github.event_name == 'push'
@@ -32,7 +36,7 @@ jobs:
           commit-message: 'style: format Lua files with stylua'
           title: 'style: format Lua files with stylua'
           body: |
-            Formatted Lua files using [stylua](https://github.com/JohnnyMorganz/StyLua)
+            Formatted Lua files using [StyLua](https://github.com/JohnnyMorganz/StyLua)
             according to the config in `.stylua.toml`.
           branch: stylua-format
           delete-branch: true
