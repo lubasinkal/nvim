@@ -11,5 +11,9 @@ return {
   ---@type neotree.Config
   opts = {
     -- options go here
+    window = {
+      position = 'right',
+      width = 25,
+    },
   },
 }
