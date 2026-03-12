@@ -9,7 +9,6 @@ return {
     auto_install = true,
     indent = { enable = true },
     highlight = { enable = true },
-    folds = { enable = true },
     context_commentstring = {
       enable = true,
       enable_autocmd = true,

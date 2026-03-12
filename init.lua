@@ -60,7 +60,7 @@ require('lazy').setup({
         lsp_progress = { enable = false },
         -- Window options
         window = {
-          winblend = 75,
+          winblend = 80,
         },
       }
       require('mini.indentscope').setup()
