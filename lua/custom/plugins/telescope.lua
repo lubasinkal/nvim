@@ -78,7 +78,7 @@ return {
         },
       },
       pickers = {
-        find_files = { hidden = true },
+        -- find_files = { hidden = true },
         buffers = {
           sort_lastused = true,
           theme = 'dropdown',
