@@ -94,3 +94,36 @@ vim.keymap.set('n', 'gk', function()
   local new_config = not vim.diagnostic.config().virtual_lines
   vim.diagnostic.config { virtual_lines = new_config }
 end, { desc = 'Toggle diagnostic virtual_lines' })
+
+-- Function to clean up ShaDa temp files
+local function cleanup_shada()
+  local notify = vim.notify
+  local shada_dir = vim.fn.stdpath 'data' .. '/shada'
+
+  if vim.fn.isdirectory(shada_dir) == 0 then
+    notify('ShaDa directory not found: ' .. shada_dir, vim.log.levels.WARN)
+    return
+  end
+
+  local pattern = shada_dir .. '/main.shada.tmp.*'
+  local files = vim.fn.glob(pattern, false, true)
+
+  if #files == 0 then
+    notify('ShaDa cleanup: No temp files to remove.', vim.log.levels.INFO)
+    return
+  end
+
+  notify('ShaDa cleanup: Found ' .. #files .. ' file(s) to remove.', vim.log.levels.INFO)
+
+  for _, file in ipairs(files) do
+    local ok, err = os.remove(file)
+    if ok then
+      notify('Deleted: ' .. file, vim.log.levels.DEBUG)
+    else
+      notify('Failed to delete ' .. file .. ': ' .. err, vim.log.levels.ERROR)
+    end
+  end
+end
+
+-- Keymap: <leader>sc to clean up ShaDa files
+vim.keymap.set('n', '<leader>wc', cleanup_shada, { desc = 'Cleanup ShaDa temp files' })
