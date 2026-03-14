@@ -3,13 +3,7 @@ return {
   'echasnovski/mini.nvim',
   event = 'VeryLazy',
   config = function()
-    require('mini.comment').setup {
-      options = {
-        custom_commentstring = function()
-          return require('ts_context_commentstring.internal').calculate_commentstring() or vim.bo.commentstring
-        end,
-      },
-    }
+    require('mini.comment').setup()
     require('mini.notify').setup {
       lsp_progress = { enable = false },
       -- Window options
