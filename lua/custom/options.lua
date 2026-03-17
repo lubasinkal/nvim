@@ -55,7 +55,9 @@ vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
 
 -- System Integration
-vim.opt.clipboard = 'unnamedplus'
+vim.schedule(function()
+  vim.o.clipboard = 'unnamedplus'
+end)
 vim.opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
 vim.opt.grepformat = '%f:%l:%c:%m'
 
@@ -102,5 +104,26 @@ vim.api.nvim_create_autocmd('WinLeave', {
   group = 'CursorLineActive',
   callback = function()
     vim.wo.cursorline = false
+  end,
+})
+
+vim.diagnostic.config {
+  update_in_insert = false,
+  severity_sort = true,
+  float = { border = 'rounded', source = 'if_many' },
+  underline = { severity = { min = vim.diagnostic.severity.WARN } },
+
+  -- Can switch between these as you prefer
+  virtual_text = true, -- Text shows up at the end of the line
+  virtual_lines = false, -- Text shows up underneath the line, with virtual lines
+
+  -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
+  jump = { float = true },
+} -- Diagnonstic floating window on cursorhold
+vim.api.nvim_create_autocmd('CursorHold', {
+  callback = function()
+    if next(vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 })) then
+      vim.diagnostic.open_float(nil, { focusable = false, border = 'rounded' })
+    end
   end,
 })

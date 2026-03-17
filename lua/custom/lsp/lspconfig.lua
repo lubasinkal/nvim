@@ -111,29 +111,6 @@ return {
       end,
     })
 
-    vim.diagnostic.config {
-      severity_sort = true,
-      float = { border = 'rounded', source = 'if_many' },
-      underline = { severity = { min = vim.diagnostic.severity.WARN } },
-      signs = vim.g.have_nerd_font and {
-        text = {
-          [vim.diagnostic.severity.ERROR] = '󰅚 ',
-          [vim.diagnostic.severity.WARN] = '󰀪 ',
-          [vim.diagnostic.severity.INFO] = '󰋽 ',
-          [vim.diagnostic.severity.HINT] = '󰌶 ',
-        },
-      } or {},
-      virtual_text = false,
-    }
-    -- Diagnonstic floating window on cursorhold
-    vim.api.nvim_create_autocmd('CursorHold', {
-      callback = function()
-        if next(vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 })) then
-          vim.diagnostic.open_float(nil, { focusable = false, border = 'rounded' })
-        end
-      end,
-    })
-
     local ensure_installed = { 'stylua', 'lua_ls' }
     vim.lsp.config('lua_ls', {
       settings = {
