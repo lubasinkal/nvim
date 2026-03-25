@@ -13,7 +13,7 @@ vim.opt.wrap = false
 vim.opt.mouse = 'a'
 vim.opt.fillchars:append { eob = ' ', diff = '╱' }
 vim.opt.inccommand = 'split' -- Great for previewing substitutions
-
+vim.o.winborder = 'rounded'
 -- Performance & Files
 vim.opt.swapfile = false
 vim.opt.backup = false
