@@ -1,24 +1,277 @@
-================================================================================
-INTRODUCTION                                                  *kickstart.nvim*
+*nvim-config.txt*  Personal Neovim Configuration
 
-Kickstart.nvim is a project to help you get started on your neovim journey.
+==============================================================================
+INTRODUCTION                                              *nvim-config-intro*
 
-                                                            *kickstart-is-not*
-It is not:
-- Complete framework for every plugin under the sun
-- Place to add every plugin that could ever be useful
+Personal Neovim config bootstrapped from kickstart.nvim. Uses lazy.nvim for
+plugin management with fast startup via lazy-loading.
 
-                                                                *kickstart-is*
-It is:
-- Somewhere that has a good start for the most common "IDE" type features:
-    - autocompletion
-    - goto-definition
-    - find references
-    - fuzzy finding
-    - and hinting at what more can be done :)
-- A place to _kickstart_ your journey.
-    - You should fork this project and use/modify it so that it matches your
-      style and preferences. If you don't want to do that, there are probably
-      other projects that would fit much better for you (and that's great!)!
+Leader key: <Space>
+
+==============================================================================
+PLUGINS                                                    *nvim-config-plugins*
+
+Telescope       Fuzzy finder
+Treesitter      Syntax highlighting & text objects
+Neotree         File explorer
+Oil             Edit filesystem like a buffer
+Gitsigns        Git gutters & hunks
+Flash           Jump to any visible text
+Lazygit         Git TUI
+which-key       Keymap hints
+mini.nvim      Comment, surround, pairs, indent-scope, ai, notify
+nvim-lspconfig  LSP client configuration (mason managed)
+Blink.cmp       Autocompletion
+Formatting      Auto-format on save
+Todo-comments   Highlight & search TODO/FIX/HACK/etc.
+
+==============================================================================
+OPTIONS                                                    *nvim-config-options*
+
+UI & General~
+  - Nerd Font enabled (vim.g.have_nerd_font = true)
+  - Relative line numbers
+  - Transparent background (Normal bg = none)
+  - cmdheight = 0
+  - scrolloff = 10, smoothscroll
+  - 4-space tabs (expandtab)
+  - Clipboard: unnamedplus (system clipboard)
+  - ripgrep for grep (:grep uses rg)
+
+File Management~
+  - No swap/backup files
+  - Persistent undo (undofile)
+  - shada limited for fast startup
+
+Search~
+  - Smart case (ignorecase + smartcase)
+  - inccommand = split (live substitution preview)
+
+Diagnostics~
+  - Severity sorted, rounded float borders
+  - Virtual text enabled, virtual_lines disabled (toggle with |gk|)
+  - Float on cursorhold
+
+==============================================================================
+KEYMAPS                                                    *nvim-config-keymaps*
+
+Basics~
+  ;              Enter command mode (:)
+  <Esc>          Clear search highlights
+  <C-h/j/k/l>   Window navigation
+  <C-d/u>       Half-page down/up (centered)
+  gv             Reselect last visual selection
+  x then p       Paste without replacing selection
+  <leader>x      Write and quit (:wq)
+
+Lines & Text~
+  <A-j/k>        Move line(s) up/down (normal & visual)
+  < / >          Indent/dedent (reselects in visual)
+
+Diagnostics~
+  ]d             Next diagnostic (float)
+  [d             Previous diagnostic (float)
+  <leader>q      Toggle location list
+  gk             Toggle virtual_lines for diagnostics
+
+Windows~
+  <leader>wv     Split vertically
+  <leader>wh     Split horizontally
+  <leader>wx     Close window
+
+Terminal~
+  <leader>tt     Toggle floating terminal
+  <leader>tc     Close floating terminal
+  <Esc><Esc>     Exit terminal mode
+
+Utilities~
+  <leader>wc     Clean up ShaDa temp files
+
+==============================================================================
+TELESCOPE                                            *nvim-config-telescope*
+
+Search~
+  <leader>sf     Find files
+  <leader>sg     Live grep
+  <leader>sw     Grep word under cursor
+  <leader>sd     Diagnostics
+  <leader>sr     Resume last search
+  <leader>s.     Recent files
+  <leader>ss     Select Telescope builtin
+  <leader>sh     Help tags
+  <leader>sk     Keymaps
+  <leader>sn     Neovim config files
+
+Git~
+  <leader>gf     Git files
+  <leader>gc     Git commits
+  <leader>gC     Buffer git commits
+  <leader>gb     Git branches
+  <leader>gs     Git status
+
+Buffers~
+  <leader>bb     Buffer list
+  <leader>br     Recent files
+  <leader>bm     Marks
+  <leader>bd     Delete buffer
+
+Telescope Insert-mode mappings:~
+  <C-j/k>       Move selection down/up
+  <C-c>         Close
+  <C-x>         Open horizontal split
+  <C-v>         Open vertical split
+  <C-t>         Open in new tab
+  <C-q>         Send to quickfix list
+  <C-d>         Delete buffer (in buffer picker)
+
+==============================================================================
+FLASH                                                      *nvim-config-flash*
+
+  s (n,x,o)     Flash jump
+  S (n,x,o)     Flash Treesitter (select treesitter node)
+  r (o)          Remote Flash (operate on remote text)
+  R (o,x)        Treesitter Search
+  <C-s> (c)      Toggle Flash Search (in / or ?)
+
+==============================================================================
+GITSIGNS                                                *nvim-config-gitsigns*
+
+Navigation~
+  ]c             Next hunk
+  [c             Previous hunk
+
+Hunks~
+  <leader>hs     Stage hunk
+  <leader>hr     Reset hunk
+  <leader>hS     Stage buffer
+  <leader>hu     Undo stage hunk
+  <leader>hR     Reset buffer
+  <leader>hp     Preview hunk
+
+Blame & Diff~
+  <leader>hb     Blame line (full)
+  <leader>tb     Toggle inline blame
+  <leader>hd     Diff this
+  <leader>hD     Diff this (~)
+  ih (o,x)       Select hunk (text object)
+
+==============================================================================
+NEOTREE                                                  *nvim-config-neotree*
+
+  <leader>e      Toggle file explorer (right side, 25 width)
+
+==============================================================================
+OIL                                                          *nvim-config-oil*
+
+  -              Open parent directory as editable buffer
+
+==============================================================================
+LAZYGIT                                                  *nvim-config-lazygit*
+
+  <leader>gg     Open Lazygit
+
+==============================================================================
+LSP                                                          *nvim-config-lsp*
+
+  <leader>cd     Go to definitions (Telescope)
+  <leader>cD     Go to declaration
+  <leader>cr     References (Telescope)
+  <leader>ci     Implementations (Telescope)
+  <leader>ct     Type definitions (Telescope)
+  <leader>cn     Rename symbol
+  <leader>ca     Code action
+  <leader>co     Document symbols (Telescope)
+  <leader>cw     Workspace symbols (Telescope)
+  K              Hover documentation (built-in)
+  Format on save is enabled
+  Mason manages: lua_ls, stylua, ts_ls, vue_ls
+
+==============================================================================
+MINI.SURROUND                                      *nvim-config-mini-surround*
+
+  gsa            Add surrounding
+  gsd            Delete surrounding
+  gsr            Replace surrounding
+  gsf            Find surrounding (right)
+  gsF            Find surrounding (left)
+  gsh            Highlight surrounding
+  gsn            Update n_lines
+
+Other mini modules loaded:~
+  mini.comment       gc / gcc to comment
+  mini.pairs         Auto bracket pairs
+  mini.ai            Extended text objects (a/i)
+  mini.indentscope   Indent scope highlighting
+  mini.notify        Notification UI
+
+==============================================================================
+SESSIONS                                                *nvim-config-sessions*
+
+  <leader>ws     Save session
+  <leader>wl     Load session
+  <leader>wd     Delete session
+  :SessionSave   Save session
+  :SessionLoad   Load session
+  :SessionDelete Delete current session
+  :SessionDeletePattern <pat>  Bulk delete by pattern
+
+==============================================================================
+BUFFER TABS                                            *nvim-config-tabs*
+
+  <Tab>          Next buffer
+  <S-Tab>        Previous buffer
+  <leader>bd     Delete buffer
+  <leader>bn     New empty buffer
+  Tabline shows listed buffers with icons, modified flag, diagnostics.
+
+==============================================================================
+TODO-COMMENTS                                          *nvim-config-todo*
+
+  ]t             Next todo comment
+  [t             Previous todo comment
+  <leader>st     Search todos (Telescope)
+
+==============================================================================
+WHICH-KEY                                              *nvim-config-whichkey*
+
+Displays pending keybinds. Groups:
+  <leader>b      Buffer
+  <leader>c      Code (LSP)
+  <leader>s      Search
+  <leader>g      Git
+  <leader>w      Window/Session
+  <leader>t      Terminal
+  <leader>l      Lazy.nvim
+  <leader>h      Git Hunk
+  <leader>u      UI
+
+==============================================================================
+CONFIG STRUCTURE                                       *nvim-config-structure*
+
+>
+  init.lua              Entry point, boots lazy.nvim
+  lua/custom/
+    keymaps.lua         Custom keymaps & autocmds
+    options.lua         Vim options & autocmds
+    statusline.lua      Custom statusline
+    util/
+      floaterminal.lua  Floating terminal
+      session.lua       Session save/load/delete
+      tabs.lua          Buffer tabline
+    plugins/            Plugin specs (one file per plugin)
+    lsp/                LSP, autocomplete, formatter configs
+<
+
+==============================================================================
+INSTALLATION                                          *nvim-config-install*
+
+  Linux/macOS: >
+    git clone https://github.com/lubasinkal/nvim.git \
+      "${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
+<
+  Windows: >
+    git clone https://github.com/lubasinkal/nvim.git "$env:LOCALAPPDATA\nvim"
+<
+  Run `nvim` — plugins install automatically via lazy.nvim.
 
  vim:tw=78:ts=8:ft=help:norl:

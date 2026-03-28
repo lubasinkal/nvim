@@ -56,3 +56,4 @@ scoop install neovim git ripgrep fd unzip make zig nodejs win32yank lazygit zoxi
 
 - [Neovim Getting Started Video](https://youtu.be/m8C0Cq9Uv9o)
 - `:help lua-guide`
+- `:help nvim-config` (full keymap reference)
