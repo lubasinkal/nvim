@@ -1,12 +1,23 @@
 return {
-    {
-        "MeanderingProgrammer/render-markdown.nvim",
-        ft = { "markdown" },
+  'OXY2DEV/markview.nvim',
+  ft = { 'markdown' },
+  dependencies = { 'saghen/blink.cmp' },
 
-        -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
-        dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons" }, -- if you use standalone mini plugins
-        ---@module 'render-markdown'
-        ---@type render.md.UserConfig
-        opts = {},
-    },
+  config = function()
+    require('markview').setup {
+      -- You can add your custom options here
+    }
+
+    -- Optional: Ensure Treesitter parsers (recommended for best experience)
+    require('nvim-treesitter.configs').setup {
+      ensure_installed = {
+        'markdown',
+        'markdown_inline',
+        'html',
+        -- 'latex',  -- Requires treesitter cli installes
+        'typst',
+        'yaml',
+      },
+    }
+  end,
 }
