@@ -21,6 +21,14 @@ local function apply_highlights()
   vim.api.nvim_set_hl(0, 'StModeCommand', { fg = colors.black, bg = colors.mustard })
   vim.api.nvim_set_hl(0, 'StModeTerminal', { fg = colors.black, bg = colors.white })
 
+  -- Position highlight (matches mode colors)
+  vim.api.nvim_set_hl(0, 'StPos', { fg = colors.black, bg = colors.violet })
+  vim.api.nvim_set_hl(0, 'StPosInsert', { fg = colors.black, bg = colors.blue })
+  vim.api.nvim_set_hl(0, 'StPosVisual', { fg = colors.black, bg = colors.cyan })
+  vim.api.nvim_set_hl(0, 'StPosReplace', { fg = colors.black, bg = colors.red })
+  vim.api.nvim_set_hl(0, 'StPosCommand', { fg = colors.black, bg = colors.mustard })
+  vim.api.nvim_set_hl(0, 'StPosTerminal', { fg = colors.black, bg = colors.white })
+
   -- Diagnostic Highlights
   vim.api.nvim_set_hl(0, 'StErr', { fg = colors.red })
   vim.api.nvim_set_hl(0, 'StWarn', { fg = colors.mustard })
@@ -29,6 +37,8 @@ local function apply_highlights()
 
   -- Git Highlight
   vim.api.nvim_set_hl(0, 'StGit', { fg = colors.violet, bold = true })
+  vim.api.nvim_set_hl(0, 'StGitAdd', { fg = colors.cyan, bold = true })
+  vim.api.nvim_set_hl(0, 'StGitDel', { fg = colors.red, bold = true })
 end
 
 apply_highlights()
@@ -65,10 +75,28 @@ local function get_diagnostics()
   return table.concat(res, ' ')
 end
 
--- 3. Git Branch (cached & prefers gitsigns if available)
+-- 3. Git Branch and Changes (cached & prefers gitsigns if available)
 local function get_git_branch()
+  local git_info = {}
+
   if vim.b.gitsigns_head then
-    return '%#StGit#  ' .. vim.b.gitsigns_head .. ' '
+    table.insert(git_info, '%#StGit#  ' .. vim.b.gitsigns_head .. ' ')
+
+    local status = vim.b.gitsigns_status
+    if status then
+      local s = tostring(status)
+      local add_count = select(2, s:gsub('%+', ''))
+      local rem_count = tonumber(s:match('-(%d+)')) or 0
+
+      if add_count > 0 then
+        table.insert(git_info, '%#StGitAdd#+' .. add_count .. ' ')
+      end
+      if rem_count > 0 then
+        table.insert(git_info, '%#StGitDel#-' .. rem_count .. ' ')
+      end
+    end
+
+    return table.concat(git_info, '')
   end
 
   -- Fallback manual check (cached 5 seconds)
@@ -123,6 +151,13 @@ _G.statusline = function()
     or (mode == 't') and '%#StModeTerminal#'
     or '%#StMode#'
 
+  local pos_hl = (mode == 'i') and '%#StPosInsert#'
+    or (mode == 'v' or mode == 'V' or mode == 'Vq') and '%#StPosVisual#'
+    or (mode == 'R') and '%#StPosReplace#'
+    or (mode == 'c') and '%#StPosCommand#'
+    or mode == 't' and '%#StPosTerminal#'
+    or '%#StPos#'
+
   return table.concat {
     mode_hl,
     ' ',
@@ -132,16 +167,17 @@ _G.statusline = function()
     get_diagnostics(),
     ' ',
     '%#StMiddle#',
-    ' ',
+    '%=',
     vim.fn.expand '%:t',
-    ' ',
+    '%=',
     '%#StText#',
-    '%=', -- right align
     ' ',
     get_lsp_status(),
     '  ',
     vim.bo.filetype,
-    '  %p%%  %l:%c ',
+    '  %p%% ',
+    pos_hl,
+    ' %l:%c ',
   }
 end
 
