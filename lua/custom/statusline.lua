@@ -79,19 +79,20 @@ end
 local function get_git_branch()
   local git_info = {}
 
-  local signs = vim.b.gitsigns_status_dict or {head = '', added = 0, changed = 0, removed = 0}
-  local is_head_empty = signs.head and signs.head ~= ''
+  local branch = vim.b.gitsigns_head
+  if branch and branch ~= '' then
+    table.insert(git_info, '%#StGit#  ' .. branch .. ' ')
 
-  if is_head_empty then
-    table.insert(git_info, '%#StGit#  ' .. signs.head .. ' ')
-
-    if signs.added and signs.added > 0 then
-      table.insert(git_info, '%#StGitAdd#+' .. signs.added .. ' ')
-    end
-    if signs.removed and signs.removed > 0 then
-      table.insert(git_info, '%#StGitDel#-' .. signs.removed .. ' ')
-    elseif signs.changed and signs.changed > 0 then
-      table.insert(git_info, '%#StGitDel#~' .. signs.changed .. ' ')
+    local signs = vim.b.gitsigns_status_dict
+    if signs then
+      if signs.added and signs.added > 0 then
+        table.insert(git_info, '%#StGitAdd#+' .. signs.added .. ' ')
+      end
+      if signs.removed and signs.removed > 0 then
+        table.insert(git_info, '%#StGitDel#-' .. signs.removed .. ' ')
+      elseif signs.changed and signs.changed > 0 then
+        table.insert(git_info, '%#StGitDel#~' .. signs.changed .. ' ')
+      end
     end
   end
 
@@ -115,34 +116,34 @@ end
 
 -- 5. Statusline
 local modes = setmetatable({
-  ['n']  = {'Normal', 'N'};
-  ['no'] = {'N·Pending', 'N·P'} ;
-  ['v']  = {'Visual', 'V'};
-  ['V']  = {'V·Line', 'V·L'};
-  ['\022'] = {'V·Block', 'V·B'};
-  ['s']  = {'Select', 'S'};
-  ['S']  = {'S·Line', 'S·L'};
-  ['\019'] = {'S·Block', 'S·B'};
-  ['i']  = {'Insert', 'I'};
-  ['ic'] = {'Insert', 'I'};
-  ['R']  = {'Replace', 'R'};
-  ['Rv'] = {'V·Replace', 'V·R'};
-  ['c']  = {'Command', 'C'};
-  ['cv'] = {'Vim·Ex ', 'V·E'};
-  ['ce'] = {'Ex ', 'E'};
-  ['r']  = {'Prompt ', 'P'};
-  ['rm'] = {'More ', 'M'};
-  ['r?'] = {'Confirm ', 'C'};
-  ['!']  = {'Shell ', 'S'};
-  ['t']  = {'Terminal ', 'T'};
+  ['n'] = { 'Normal', 'N' },
+  ['no'] = { 'N·Pending', 'N·P' },
+  ['v'] = { 'Visual', 'V' },
+  ['V'] = { 'V·Line', 'V·L' },
+  ['\022'] = { 'V·Block', 'V·B' },
+  ['s'] = { 'Select', 'S' },
+  ['S'] = { 'S·Line', 'S·L' },
+  ['\019'] = { 'S·Block', 'S·B' },
+  ['i'] = { 'Insert', 'I' },
+  ['ic'] = { 'Insert', 'I' },
+  ['R'] = { 'Replace', 'R' },
+  ['Rv'] = { 'V·Replace', 'V·R' },
+  ['c'] = { 'Command', 'C' },
+  ['cv'] = { 'Vim·Ex ', 'V·E' },
+  ['ce'] = { 'Ex ', 'E' },
+  ['r'] = { 'Prompt ', 'P' },
+  ['rm'] = { 'More ', 'M' },
+  ['r?'] = { 'Confirm ', 'C' },
+  ['!'] = { 'Shell ', 'S' },
+  ['t'] = { 'Terminal ', 'T' },
 }, {
   __index = function()
-    return {'Unknown', 'U'}
-  end
+    return { 'Unknown', 'U' }
+  end,
 })
 
 local function get_mode_info(mode)
-  local m = modes[mode] or modes[mode:sub(1,2)]
+  local m = modes[mode] or modes[mode:sub(1, 2)]
   return m and m[1] or 'UNKNOWN', m and m[2] or 'U'
 end
 
@@ -184,7 +185,7 @@ _G.statusline = function()
     vim.bo.filetype,
     '  %p%% ',
     pos_hl,
-    ' %l:%c ',
+    ' Ln %l: Col %c ',
   }
 end
 
