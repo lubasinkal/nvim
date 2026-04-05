@@ -75,42 +75,27 @@ local function get_diagnostics()
   return table.concat(res, ' ')
 end
 
--- 3. Git Branch and Changes (cached & prefers gitsigns if available)
+-- 3. Git Branch and Changes
 local function get_git_branch()
   local git_info = {}
 
-  if vim.b.gitsigns_head then
-    table.insert(git_info, '%#StGit#  ' .. vim.b.gitsigns_head .. ' ')
+  local signs = vim.b.gitsigns_status_dict or {head = '', added = 0, changed = 0, removed = 0}
+  local is_head_empty = signs.head and signs.head ~= ''
 
-    local status = vim.b.gitsigns_status
-    if status then
-      local s = tostring(status)
-      local add_count = select(2, s:gsub('%+', ''))
-      local rem_count = tonumber(s:match('-(%d+)')) or 0
+  if is_head_empty then
+    table.insert(git_info, '%#StGit#  ' .. signs.head .. ' ')
 
-      if add_count > 0 then
-        table.insert(git_info, '%#StGitAdd#+' .. add_count .. ' ')
-      end
-      if rem_count > 0 then
-        table.insert(git_info, '%#StGitDel#-' .. rem_count .. ' ')
-      end
+    if signs.added and signs.added > 0 then
+      table.insert(git_info, '%#StGitAdd#+' .. signs.added .. ' ')
     end
-
-    return table.concat(git_info, '')
+    if signs.removed and signs.removed > 0 then
+      table.insert(git_info, '%#StGitDel#-' .. signs.removed .. ' ')
+    elseif signs.changed and signs.changed > 0 then
+      table.insert(git_info, '%#StGitDel#~' .. signs.changed .. ' ')
+    end
   end
 
-  -- Fallback manual check (cached 5 seconds)
-  if vim.b.last_git_check == nil or vim.uv.now() - vim.b.last_git_check > 5000 then
-    local branch = vim.fn.system('git branch --show-current 2>/dev/null'):gsub('\n$', '')
-    if vim.v.shell_error == 0 and branch ~= '' then
-      vim.b.git_branch = '%#StGit#  ' .. branch .. ' '
-    else
-      vim.b.git_branch = ''
-    end
-    vim.b.last_git_check = vim.uv.now()
-  end
-
-  return vim.b.git_branch or ''
+  return table.concat(git_info, '')
 end
 
 -- 4. Simple LSP status – only shows attached client names
@@ -129,33 +114,55 @@ local function get_lsp_status()
 end
 
 -- 5. Statusline
-local modes = {
-  n = 'NORMAL',
-  i = 'INSERT',
-  v = 'VISUAL',
-  V = 'V-LINE',
-  [''] = 'V-BLOCK',
-  c = 'COMMAND',
-  R = 'REPLACE',
-  t = 'TERMINAL',
-}
+local modes = setmetatable({
+  ['n']  = {'Normal', 'N'};
+  ['no'] = {'N·Pending', 'N·P'} ;
+  ['v']  = {'Visual', 'V'};
+  ['V']  = {'V·Line', 'V·L'};
+  ['\022'] = {'V·Block', 'V·B'};
+  ['s']  = {'Select', 'S'};
+  ['S']  = {'S·Line', 'S·L'};
+  ['\019'] = {'S·Block', 'S·B'};
+  ['i']  = {'Insert', 'I'};
+  ['ic'] = {'Insert', 'I'};
+  ['R']  = {'Replace', 'R'};
+  ['Rv'] = {'V·Replace', 'V·R'};
+  ['c']  = {'Command', 'C'};
+  ['cv'] = {'Vim·Ex ', 'V·E'};
+  ['ce'] = {'Ex ', 'E'};
+  ['r']  = {'Prompt ', 'P'};
+  ['rm'] = {'More ', 'M'};
+  ['r?'] = {'Confirm ', 'C'};
+  ['!']  = {'Shell ', 'S'};
+  ['t']  = {'Terminal ', 'T'};
+}, {
+  __index = function()
+    return {'Unknown', 'U'}
+  end
+})
+
+local function get_mode_info(mode)
+  local m = modes[mode] or modes[mode:sub(1,2)]
+  return m and m[1] or 'UNKNOWN', m and m[2] or 'U'
+end
 
 _G.statusline = function()
   local mode = vim.api.nvim_get_mode().mode
-  local mode_name = modes[mode] or mode:upper()
+  local mode_name, mode_short = get_mode_info(mode)
 
-  local mode_hl = (mode == 'i') and '%#StModeInsert#'
-    or (mode == 'v' or mode == 'V' or mode == '') and '%#StModeVisual#'
-    or (mode == 'R') and '%#StModeReplace#'
-    or (mode == 'c') and '%#StModeCommand#'
-    or (mode == 't') and '%#StModeTerminal#'
+  local mode_hl = (mode == 'i' or mode == 'ic') and '%#StModeInsert#'
+    or (mode == 'v' or mode == 'V' or mode == '\022') and '%#StModeVisual#'
+    or (mode == 'R' or mode == 'Rv') and '%#StModeReplace#'
+    or (mode == 'c' or mode == 'cv' or mode == 'ce') and '%#StModeCommand#'
+    or (mode == 't' or mode == '!') and '%#StModeTerminal#'
+    or (mode == 's' or mode == 'S' or mode == '\019') and '%#StModeVisual#'
     or '%#StMode#'
 
-  local pos_hl = (mode == 'i') and '%#StPosInsert#'
-    or (mode == 'v' or mode == 'V' or mode == 'Vq') and '%#StPosVisual#'
-    or (mode == 'R') and '%#StPosReplace#'
-    or (mode == 'c') and '%#StPosCommand#'
-    or mode == 't' and '%#StPosTerminal#'
+  local pos_hl = (mode == 'i' or mode == 'ic') and '%#StPosInsert#'
+    or (mode == 'v' or mode == 'V' or mode == '\022' or mode == 's' or mode == 'S' or mode == '\019') and '%#StPosVisual#'
+    or (mode == 'R' or mode == 'Rv') and '%#StPosReplace#'
+    or (mode == 'c' or mode == 'cv' or mode == 'ce') and '%#StPosCommand#'
+    or (mode == 't' or mode == '!') and '%#StPosTerminal#'
     or '%#StPos#'
 
   return table.concat {
