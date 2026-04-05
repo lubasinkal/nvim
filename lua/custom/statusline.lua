@@ -149,7 +149,7 @@ end
 
 _G.statusline = function()
   local mode = vim.api.nvim_get_mode().mode
-  local mode_name, mode_short = get_mode_info(mode)
+  local mode_name, _ = get_mode_info(mode)
 
   local mode_hl = (mode == 'i' or mode == 'ic') and '%#StModeInsert#'
     or (mode == 'v' or mode == 'V' or mode == '\022') and '%#StModeVisual#'
@@ -172,7 +172,6 @@ _G.statusline = function()
     mode_name,
     ' ',
     get_git_branch(),
-    get_diagnostics(),
     ' ',
     '%#StMiddle#',
     '%=',
@@ -181,16 +180,17 @@ _G.statusline = function()
     '%#StText#',
     ' ',
     get_lsp_status(),
-    '  ',
+    ' ',
+    get_diagnostics(),
+    ' ',
     vim.bo.filetype,
     '  %p%% ',
     pos_hl,
-    ' Ln %l: Col %c ',
+    ' %l: %c ',
   }
 end
 
 vim.o.statusline = '%!v:lua.statusline()'
-
 -- ============== Smart Redraws for Better Performance ==============
 local statusline_augroup = vim.api.nvim_create_augroup('StatuslineUpdate', { clear = true })
 
