@@ -36,9 +36,9 @@ local function apply_highlights()
   vim.api.nvim_set_hl(0, 'StInfo', { fg = colors.blue })
 
   -- Git Highlight
-  vim.api.nvim_set_hl(0, 'StGit', { fg = colors.violet, bold = true })
-  vim.api.nvim_set_hl(0, 'StGitAdd', { fg = colors.cyan, bold = true })
-  vim.api.nvim_set_hl(0, 'StGitDel', { fg = colors.red, bold = true })
+  vim.api.nvim_set_hl(0, 'StGit', { fg = colors.violet })
+  vim.api.nvim_set_hl(0, 'StGitAdd', { fg = colors.cyan })
+  vim.api.nvim_set_hl(0, 'StGitDel', { fg = colors.red })
 end
 
 apply_highlights()
