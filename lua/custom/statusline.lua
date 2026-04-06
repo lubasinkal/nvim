@@ -138,7 +138,7 @@ local modes = setmetatable({
   ['t'] = { 'Terminal ', 'T' },
 }, {
   __index = function()
-    return { 'Unknown', 'U' }
+    return { 'IDK', 'idk' }
   end,
 })
 
