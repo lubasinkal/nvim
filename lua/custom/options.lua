@@ -10,7 +10,7 @@ vim.opt.scrolloff = 10 -- Increased: keeps cursor more centered
 vim.opt.smoothscroll = true
 vim.opt.sidescrolloff = 8
 vim.opt.wrap = false
-vim.opt.mouse = 'a'
+-- mouse defaults to 'nvi' in Neovim 0.10+
 vim.opt.fillchars:append { eob = ' ', diff = '╱' }
 vim.opt.inccommand = 'split' -- Great for previewing substitutions
 vim.o.winborder = 'rounded'
@@ -39,7 +39,7 @@ vim.opt.smartcase = true
 vim.opt.shada = "!,'100,<50,s10,h" -- Limit search history/registers to keep startup fast
 
 -- Navigation & Splits
-vim.opt.splitright = true
+-- splitright = true -- default in 0.10+
 vim.opt.splitbelow = true
 vim.opt.whichwrap:append '<>[]hl'
 vim.opt.iskeyword:append '-' -- Treat dash-separated words as one unit (good for CSS/HTML)
@@ -78,10 +78,6 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 vim.api.nvim_create_autocmd({ 'VimResized' }, {
   callback = function()
     vim.cmd 'redraw!'
-  end,
-})
-vim.api.nvim_create_autocmd({ 'VimResized' }, {
-  callback = function()
     vim.cmd 'wincmd ='
   end,
 })

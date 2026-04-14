@@ -54,6 +54,7 @@ return {              -- Useful plugin to show you pending keybinds.
             { '<leader>t', group = 'Terminal' },
             { '<leader>l', group = 'Lazy.nvim' },
             { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+            { 'gs', group = 'Surround', mode = { 'n', 'x' } },
         },
         win = {
             wo = {
