@@ -3,40 +3,20 @@ return {
     build = ':TSUpdate',
     event = 'BufReadPost',
     cmd = { 'TSUpdate' },
-    branch = 'master',
+    branch = 'main',
     opts = {
-        -- Install languages that are not already installed above
-        auto_install = true,
-        indent = { enable = true },
         highlight = { enable = true },
-        context_commentstring = {
-            enable = true,
-            enable_autocmd = true,
-        },
+        indent = { enable = true },
     },
     config = function()
         vim.api.nvim_create_autocmd('FileType', {
             callback = function(args)
-                local buf, filetype = args.buf, args.match
-
-                local language = vim.treesitter.language.get_lang(filetype)
-                if not language then
+                local buf = args.buf
+                local lang = vim.treesitter.language.get_lang(args.match)
+                if not lang then
                     return
                 end
-
-                -- check if parser exists and load it
-                if not vim.treesitter.language.add(language) then
-                    return
-                end
-                -- enables syntax highlighting and other treesitter features
-                vim.treesitter.start(buf, language)
-
-                -- enables treesitter based folds
-                -- for more info on folds see `:help folds`
-                -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-                -- vim.wo.foldmethod = 'expr'
-
-                -- enables treesitter based indentation
+                vim.treesitter.start(buf, lang)
                 vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
             end,
         })
