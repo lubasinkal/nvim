@@ -1,27 +1,28 @@
 return {
-    'stevearc/conform.nvim',
-    event = 'BufWritePost',
-    cmd = { 'ConformInfo', 'ConformFormat' },
-    opts = {
-        format_on_save = {
-            -- These options will be passed to conform.format()
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-        },
-        format_after_save = {
-            lsp_format = 'fallback',
-        },
-        notify_on_error = true,
-        -- Conform will notify you when no formatters are available for the buffer
-        notify_no_formatters = true,
-        formatters_by_ft = {
-            lua = { 'stylua' },
-            javascript = { 'biome' },
-            typescript = { 'biome' },
-            vue = { 'biome' },
-            html = { 'biome' },
-            css = { 'biome' },
-            json = { 'biome' },
-        },
+  'stevearc/conform.nvim',
+  event = { 'BufWritePre' },
+  opts = {
+    formatters_by_ft = {
+      lua = { 'stylua' },
+      javascript = { 'biome' },
+      typescript = { 'biome' },
+      javascriptreact = { 'biome' },
+      typescriptreact = { 'biome' },
+      vue = { 'biome' },
+      html = { 'biome' },
+      css = { 'biome' },
+      json = { 'biome' },
+      yaml = { 'biome' },
+      markdown = { 'prettier' },
     },
+    format_on_save = {
+      timeout_ms = 500,
+      lsp_format = 'fallback',
+    },
+    default_format_opts = {
+      lsp_format = 'fallback',
+    },
+    notify_on_error = true,
+    notify_no_formatters = true,
+  },
 }
