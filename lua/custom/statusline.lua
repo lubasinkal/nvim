@@ -174,7 +174,6 @@ _G.statusline = function()
     get_git_branch(),
     ' ',
     '%#StMiddle#',
-    '%=',
     vim.fn.expand '%:t',
     '%=',
     '%#StText#',

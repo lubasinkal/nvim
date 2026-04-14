@@ -112,7 +112,7 @@ vim.api.nvim_create_autocmd('WinLeave', {
 vim.diagnostic.config {
   update_in_insert = false,
   severity_sort = true,
-  float = { border = 'rounded', source = 'if_many' },
+  float = { border = 'rounded', source = 'if_many', header = '' },
   underline = { severity = { min = vim.diagnostic.severity.WARN } },
 
   -- Can switch between these as you prefer
@@ -125,7 +125,7 @@ vim.diagnostic.config {
 vim.api.nvim_create_autocmd('CursorHold', {
   callback = function()
     if next(vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 })) then
-      vim.diagnostic.open_float(nil, { focusable = false, border = 'rounded' })
+      vim.diagnostic.open_float(nil, { focusable = false, border = 'rounded', scope = 'cursor' })
     end
   end,
 })
