@@ -1,9 +1,5 @@
 return {
-  'OXY2DEV/markview.nvim',
-  ft = { 'markdown' },
-  dependencies = { 'saghen/blink.cmp' },
-
-  config = function()
-    require('markview').setup {}
-  end,
+    'OXY2DEV/markview.nvim',
+    lazy = false,
+    dependencies = { 'saghen/blink.cmp' },
 }
