@@ -128,3 +128,17 @@ vim.api.nvim_create_autocmd('CursorHold', {
         end
     end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        local filetype = vim.bo.filetype
+
+        if filetype and filetype ~= "" then
+            pcall(vim.treesitter.start)
+            vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            vim.bo.indentexpr = "v:lua.vim.treesitter.indentexpr()"
+        end
+    end,
+
+})
