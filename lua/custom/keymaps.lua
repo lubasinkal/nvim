@@ -68,6 +68,12 @@ vim.keymap.set('x', 'p', '"_dP', { desc = 'Paste without replacing selected text
 -- Faster way to save and quit.
 vim.keymap.set('n', '<leader>x', '<cmd>wq<CR>', { desc = '[X] Write and Quit' })
 
+vim.keymap.set('n', '<leader>u', function()
+    vim.cmd.packadd('nvim.undotree')
+    require('undotree').open()
+end, { desc = 'Undotree' })
+
+
 -- [[ Basic Autocommands ]]
 -- See `:help lua-guide-autocommands`
 

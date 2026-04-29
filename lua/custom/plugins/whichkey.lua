@@ -1,6 +1,6 @@
-return {              -- Useful plugin to show you pending keybinds.
+return {                  -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
-    event = 'VeryLazy', -- Sets the loading event to 'VimEnter'
+    event = 'VeryLazy',   -- Sets the loading event to 'VimEnter'
     opts = {
         preset = 'helix', --classic,modern,helix
         -- delay between pressing a key and opening which-key (milliseconds)
@@ -49,12 +49,12 @@ return {              -- Useful plugin to show you pending keybinds.
             { '<leader>d', group = 'Datebase' },
             { '<leader>s', group = 'Search' },
             { '<leader>g', group = 'Git' },
-            { '<leader>u', group = 'UI' },
+            -- { '<leader>u', group = 'UI' },
             { '<leader>w', group = 'Window' },
             { '<leader>t', group = 'Terminal' },
             { '<leader>l', group = 'Lazy.nvim' },
             { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-            { 'gs', group = 'Surround', mode = { 'n', 'x' } },
+            { 'gs',        group = 'Surround',   mode = { 'n', 'x' } },
         },
         win = {
             wo = {
