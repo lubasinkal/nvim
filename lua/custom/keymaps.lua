@@ -1,16 +1,30 @@
--- NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = ' '      -- Sets the global leader key to space.
-vim.g.maplocalleader = ' ' -- Sets the local leader key to space.
+-- =============================================
+-- LEADER KEYS
+-- =============================================
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
--- [[ Basic Keymaps ]]
--- Remap ';' to act as ':' for easier command line access in normal mode.
-vim.keymap.set('n', ';', ':', { noremap = true, silent = false, desc = 'Enter command mode' })
+-- =============================================
+-- BASIC KEYMAPS
+-- =============================================
 
--- Clear highlights on search when pressing <Esc> in normal mode.
+-- Command mode shortcut
+vim.keymap.set('n', ';', ':', { noremap = true, desc = 'Enter command mode' })
+
+-- Clear search highlights
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlights' })
 
--- Diagnostic keymaps (requires Neovim's built-in LSP or a plugin)
-local toggle_loclist = function()
+-- Diagnostic navigation
+vim.keymap.set('n', '[d', function()
+    vim.diagnostic.jump { count = -1, float = true }
+end, { desc = 'Go to previous diagnostic message' })
+
+vim.keymap.set('n', ']d', function()
+    vim.diagnostic.jump { count = 1, float = true }
+end, { desc = 'Go to next diagnostic message' })
+
+-- Toggle diagnostics quickfix/loclist
+local function toggle_loclist()
     local loclist_winid = vim.fn.getloclist(0, { winid = 0 }).winid
     if loclist_winid ~= 0 then
         vim.cmd.lclose()
@@ -20,116 +34,118 @@ local toggle_loclist = function()
 end
 
 vim.keymap.set('n', '<leader>q', toggle_loclist, { desc = 'Toggle diagnostic [Q]uickfix list' })
-vim.keymap.set('n', '[d', function()
-    vim.diagnostic.jump { count = -1, float = true }
-end, { desc = 'Go to previous [d]iagnostic message' })
-vim.keymap.set('n', ']d', function()
-    vim.diagnostic.jump { count = 1, float = true }
-end, { desc = 'Go to next [d]iagnostic message' })
 
--- Exit terminal mode in the builtin terminal.
+-- Terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
--- TIP: Disable arrow keys in normal mode
--- Uncomment these lines if you want to enforce using hjkl for navigation.
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+-- =============================================
+-- WINDOW NAVIGATION
+-- =============================================
 
--- Keybinds to make split/window navigation easier.
--- Use CTRL+<hjkl> to switch between windows.
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to left window' })
+vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to lower window' })
+vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to upper window' })
+vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to right window' })
 
--- [[ Productivity Keymaps ]]
+-- Window management
+vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = 'Split window vertically' })
+vim.keymap.set('n', '<leader>wh', '<C-w>s', { desc = 'Split window horizontally' })
+vim.keymap.set('n', '<leader>wx', '<C-w>c', { desc = 'Close current window' })
 
--- Reselect last visual selection after exiting visual mode.
+-- =============================================
+-- PRODUCTIVITY KEYMAPS
+-- =============================================
+
+-- Reselect last visual selection
 vim.keymap.set('n', 'gv', '`[v`]', { desc = 'Reselect last visual selection' })
 
--- Moving lines in Normal and Visual modes.
--- Use Alt+j/k to move the current line up/down in normal mode.
-vim.keymap.set('n', '<A-j>', ':m .+1<CR>==', { desc = 'Move current line down' })
-vim.keymap.set('n', '<A-k>', ':m .-2<CR>==', { desc = 'Move current line up' })
+-- Move lines (Normal mode)
+vim.keymap.set('n', '<A-j>', ':m .+1<CR>==', { desc = 'Move line down' })
+vim.keymap.set('n', '<A-k>', ':m .-2<CR>==', { desc = 'Move line up' })
 
--- Use Alt+j/k to move selected lines up/down in visual mode.
-vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv", { desc = 'Move selected line(s) down' })
-vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv", { desc = 'Move selected line(s) up' })
+-- Move lines (Visual mode)
+vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
+vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
 
--- Indent/Dedent selected lines in Visual mode.
-vim.keymap.set('v', '<', '<gv', { desc = 'Dedent selected lines' })
-vim.keymap.set('v', '>', '>gv', { desc = 'Indent selected lines' })
+-- Better indenting in visual mode
+vim.keymap.set('v', '<', '<gv', { desc = 'Dedent selection' })
+vim.keymap.set('v', '>', '>gv', { desc = 'Indent selection' })
 
--- Paste without replacing selected text in Visual mode.
-vim.keymap.set('x', 'p', '"_dP', { desc = 'Paste without replacing selected text' })
+-- Paste over selection without yanking it
+vim.keymap.set('x', 'p', '"_dP', { desc = 'Paste without yanking replaced text' })
 
--- Faster way to save and quit.
-vim.keymap.set('n', '<leader>x', '<cmd>wq<CR>', { desc = '[X] Write and Quit' })
+-- Centered scrolling
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Half page down + center' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Half page up + center' })
 
-vim.keymap.set('n', '<leader>u', function()
+-- Fast save & quit
+vim.keymap.set('n', '<leader>x', '<cmd>wq<CR>', { desc = '[X] Write and quit' })
+
+-- =============================================
+-- LSP & DIAGNOSTICS
+-- =============================================
+
+-- Toggle inlay hints
+vim.keymap.set('n', '<leader>uh', function()
+    local enabled = vim.lsp.inlay_hint.is_enabled()
+    vim.lsp.inlay_hint.enable(not enabled)
+    vim.notify(enabled and "Inlay Hints Disabled" or "Inlay Hints Enabled")
+end, { desc = 'Toggle inlay [H]ints' })
+
+-- Toggle virtual lines diagnostics
+vim.keymap.set('n', 'gk', function()
+    local current = vim.diagnostic.config().virtual_lines or false
+    vim.diagnostic.config { virtual_lines = not current }
+end, { desc = 'Toggle diagnostic virtual lines' })
+
+-- =============================================
+-- UTILITIES
+-- =============================================
+
+-- Lazy load and open Undotree
+vim.keymap.set('n', '<leader>ut', function()
     vim.cmd.packadd('nvim.undotree')
     require('undotree').open()
-end, { desc = 'Undotree' })
+end, { desc = 'Open Undotree' })
 
-
--- [[ Basic Autocommands ]]
--- See `:help lua-guide-autocommands`
-
--- Highlight when yanking (copying) text.
--- Try it with `yap` in normal mode.
--- See `:help vim.hl.on_yank()`
-vim.api.nvim_create_autocmd('TextYankPost', {
-    desc = 'Highlight when yanking (copying) text',
-    group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-    callback = function()
-        vim.hl.on_yank()
-    end,
-})
-
--- Better window management
-vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = 'Split vertically' })
-vim.keymap.set('n', '<leader>wh', '<C-w>s', { desc = 'Split horizontally' })
-vim.keymap.set('n', '<leader>wx', '<C-w>c', { desc = 'Close window' })
-
--- Quick navigation
-vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Half page down (centered)' })
-vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Half page up (centered)' })
-vim.keymap.set('n', 'gk', function()
-    local new_config = not vim.diagnostic.config().virtual_lines
-    vim.diagnostic.config { virtual_lines = new_config }
-end, { desc = 'Toggle diagnostic virtual_lines' })
-
--- Function to clean up ShaDa temp files
+-- ShaDa temp files cleanup
 local function cleanup_shada()
-    local notify = vim.notify
-    local shada_dir = vim.fn.stdpath 'data' .. '/shada'
-
+    local shada_dir = vim.fn.stdpath('data') .. '/shada'
     if vim.fn.isdirectory(shada_dir) == 0 then
-        notify('ShaDa directory not found: ' .. shada_dir, vim.log.levels.WARN)
+        vim.notify('ShaDa directory not found: ' .. shada_dir, vim.log.levels.WARN)
         return
     end
 
-    local pattern = shada_dir .. '/main.shada.tmp.*'
-    local files = vim.fn.glob(pattern, false, true)
+    local files = vim.fn.glob(shada_dir .. '/main.shada.tmp.*', false, true)
 
     if #files == 0 then
-        notify('ShaDa cleanup: No temp files to remove.', vim.log.levels.INFO)
+        vim.notify('ShaDa cleanup: No temporary files found.', vim.log.levels.INFO)
         return
     end
 
-    notify('ShaDa cleanup: Found ' .. #files .. ' file(s) to remove.', vim.log.levels.INFO)
+    vim.notify('ShaDa cleanup: Removing ' .. #files .. ' temporary file(s)...', vim.log.levels.INFO)
 
     for _, file in ipairs(files) do
         local ok, err = os.remove(file)
         if ok then
-            notify('Deleted: ' .. file, vim.log.levels.DEBUG)
+            vim.notify('Deleted: ' .. file, vim.log.levels.DEBUG)
         else
-            notify('Failed to delete ' .. file .. ': ' .. err, vim.log.levels.ERROR)
+            vim.notify('Failed to delete ' .. file .. ': ' .. err, vim.log.levels.ERROR)
         end
     end
 end
 
--- Keymap: <leader>sc to clean up ShaDa files
 vim.keymap.set('n', '<leader>wc', cleanup_shada, { desc = 'Cleanup ShaDa temp files' })
+
+-- =============================================
+-- AUTOCOMMANDS
+-- =============================================
+
+-- Highlight on yank
+vim.api.nvim_create_autocmd('TextYankPost', {
+    desc = 'Highlight when yanking text',
+    group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
+    callback = function()
+        vim.hl.on_yank()
+    end,
+})

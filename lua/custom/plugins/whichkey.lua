@@ -49,7 +49,7 @@ return {                  -- Useful plugin to show you pending keybinds.
             { '<leader>d', group = 'Datebase' },
             { '<leader>s', group = 'Search' },
             { '<leader>g', group = 'Git' },
-            -- { '<leader>u', group = 'UI' },
+            { '<leader>u', group = 'UI' },
             { '<leader>w', group = 'Window' },
             { '<leader>t', group = 'Terminal' },
             { '<leader>l', group = 'Lazy.nvim' },
