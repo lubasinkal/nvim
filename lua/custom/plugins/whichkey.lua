@@ -45,15 +45,15 @@ return {                  -- Useful plugin to show you pending keybinds.
         -- Document existing key chains
         spec = {
             { '<leader>b', group = 'Buffer' },
-            { '<leader>d', group = 'Datebase' },
             { '<leader>s', group = 'Search' },
             { '<leader>g', group = 'Git' },
             { '<leader>u', group = 'UI' },
             { '<leader>w', group = 'Window' },
             { '<leader>t', group = 'Terminal' },
             { '<leader>l', group = 'Lazy.nvim' },
-            { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-            { 'gs',        group = 'Surround',   mode = { 'n', 'x' } },
+            { '<leader>h', group = 'Git [H]unk',  mode = { 'n', 'v' } },
+            { 'gs',        group = 'Surround',    mode = { 'n', 'x' } },
+            { 'gr',        group = 'LSP Actions', mode = { 'n' } },
         },
         win = {
             wo = {
