@@ -6,7 +6,7 @@ return {
         'MunifTanjim/nui.nvim',
     },
     cmd = 'Neotree',
-    keys = { { '<leader>e', '<Cmd>Neotree toggle<CR>', desc = 'Toggle File Explorer' } },
+    keys = { { '<leader>e', '<Cmd>Neotree toggle<CR>', desc = 'Toggle Explorer' } },
     ---@module 'neo-tree'
     ---@type neotree.Config
     opts = {

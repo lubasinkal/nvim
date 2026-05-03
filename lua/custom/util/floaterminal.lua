@@ -126,8 +126,8 @@ end
 vim.api.nvim_create_user_command('Floaterminal', toggle_terminal, {})
 vim.api.nvim_create_user_command('FloaterminalClose', close_terminal, {})
 
-vim.keymap.set('n', '<Leader>tt', toggle_terminal, { desc = 'Toggle Floating Terminal' })
-vim.keymap.set('n', '<Leader>tc', close_terminal, { desc = 'Close Floating Terminal' })
+vim.keymap.set('n', '<Leader>tt', toggle_terminal, { desc = '[T]oggle' })
+vim.keymap.set('n', '<Leader>tc', close_terminal, { desc = '[C]lose' })
 
 -- Optional: Resize on VimResized event
 local resize_autocmd_id = nil

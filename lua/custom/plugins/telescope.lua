@@ -19,33 +19,32 @@ return {
     },
     keys = {
         -- Search (prefixed with leader s)
-        { '<leader>sh', '<cmd>Telescope help_tags<CR>',   desc = '[S]earch [H]elp' },
-        { '<leader>sk', '<cmd>Telescope keymaps<CR>',     desc = '[S]earch [K]eymaps' },
-        { '<leader>sw', '<cmd>Telescope grep_string<CR>', desc = '[S]earch current [W]ord' },
-        { '<leader>sg', '<cmd>Telescope live_grep<CR>',   desc = '[S]earch by [G]rep' },
-        { '<leader>sd', '<cmd>Telescope diagnostics<CR>', desc = '[S]earch [D]iagnostics' },
-        { '<leader>sr', '<cmd>Telescope resume<CR>',      desc = '[S]earch [R]esume' },
-        { '<leader>s.', '<cmd>Telescope oldfiles<CR>',    desc = '[S]earch Recent Files' },
-        { '<leader>ss', '<cmd>Telescope builtin<CR>',     desc = '[S]earch [S]elect Telescope' },
-        { '<leader>sf', '<cmd>Telescope find_files<CR>',  desc = '[S]earch [F]iles' },
+        { '<leader>sh', '<cmd>Telescope help_tags<CR>',   desc = '[H]elp' },
+        { '<leader>sk', '<cmd>Telescope keymaps<CR>',     desc = '[K]eymaps' },
+        { '<leader>sw', '<cmd>Telescope grep_string<CR>', desc = 'Current [W]ord' },
+        { '<leader>sg', '<cmd>Telescope live_grep<CR>',   desc = 'By [G]rep' },
+        { '<leader>sd', '<cmd>Telescope diagnostics<CR>', desc = '[D]iagnostics' },
+        { '<leader>sr', '<cmd>Telescope resume<CR>',      desc = '[R]esume' },
+        { '<leader>s.', '<cmd>Telescope oldfiles<CR>',    desc = 'Recent [.] Files' },
+        { '<leader>ss', '<cmd>Telescope builtin<CR>',     desc = '[S]elect Telescope' },
+        { '<leader>sf', '<cmd>Telescope find_files<CR>',  desc = '[F]iles' },
         {
             '<leader>sn',
             function()
                 require('telescope.builtin').find_files { cwd = vim.fn.stdpath 'config' }
             end,
-            desc = '[S]earch [N]eovim files',
+            desc = '[N]eovim files',
         },
         -- Git
-        { '<leader>gf', '<cmd>Telescope git_files<CR>',    desc = '[G]it [F]iles' },
-        { '<leader>gc', '<cmd>Telescope git_commits<CR>',  desc = '[G]it [C]ommits' },
-        { '<leader>gC', '<cmd>Telescope git_bcommits<CR>', desc = '[G]it [B]uffer [C]ommits' },
-        { '<leader>gb', '<cmd>Telescope git_branches<CR>', desc = '[G]it [B]ranches' },
-        { '<leader>gs', '<cmd>Telescope git_status<CR>',   desc = '[G]it [S]tatus' },
+        { '<leader>gf', '<cmd>Telescope git_files<CR>',    desc = '[F]iles' },
+        { '<leader>gc', '<cmd>Telescope git_commits<CR>',  desc = '[C]ommits' },
+        { '<leader>gC', '<cmd>Telescope git_bcommits<CR>', desc = '[B]uffer [C]ommits' },
+        { '<leader>gb', '<cmd>Telescope git_branches<CR>', desc = '[B]ranches' },
+        { '<leader>gs', '<cmd>Telescope git_status<CR>',   desc = '[S]tatus' },
         -- Buffers (prefixed with leader b)
-        { '<leader>bb', '<cmd>Telescope buffers<CR>',      desc = '[B]uffer List' },
-        { '<leader>br', '<cmd>Telescope oldfiles<CR>',     desc = '[B]uffer [R]ecent' },
-        { '<leader>bm', '<cmd>Telescope marks<CR>',        desc = '[B]uffer [M]arks' },
-        { '<leader>bd', '<cmd>bdelete<CR>',                desc = '[B]uffer [D]elete current' },
+        { '<leader>bb', '<cmd>Telescope buffers<CR>',      desc = '[B]uffers' },
+        { '<leader>br', '<cmd>Telescope oldfiles<CR>',     desc = '[R]ecent' },
+        { '<leader>bm', '<cmd>Telescope marks<CR>',        desc = '[M]arks' },
     },
     config = function()
         local actions = require 'telescope.actions'

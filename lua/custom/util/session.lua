@@ -109,9 +109,9 @@ vim.api.nvim_create_user_command('SessionDeletePattern', function(opts)
 end, { nargs = 1, complete = 'file' })
 
 -- Recommended keymaps
-vim.keymap.set('n', '<leader>ws', M.save, { desc = 'Session: Save' })
-vim.keymap.set('n', '<leader>wl', M.load, { desc = 'Session: Load' })
-vim.keymap.set('n', '<leader>wd', M.delete_current, { desc = 'Session: Delete current' })
+vim.keymap.set('n', '<leader>ws', M.save, { desc = '[S]ave' })
+vim.keymap.set('n', '<leader>wl', M.load, { desc = '[L]oad' })
+vim.keymap.set('n', '<leader>wd', M.delete_current, { desc = '[D]elete' })
 -- vim.keymap.set("n", "<leader>wD", M.delete_picker, { desc = "Session: Pick & delete" })
 
 vim.opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'

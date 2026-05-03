@@ -44,16 +44,18 @@ return {                  -- Useful plugin to show you pending keybinds.
 
         -- Document existing key chains
         spec = {
-            { '<leader>b', group = 'Buffer' },
-            { '<leader>s', group = 'Search' },
-            { '<leader>g', group = 'Git' },
-            { '<leader>u', group = 'UI' },
-            { '<leader>w', group = 'Window' },
-            { '<leader>t', group = 'Terminal' },
-            { '<leader>l', group = 'Lazy.nvim' },
-            { '<leader>h', group = 'Git [H]unk',  mode = { 'n', 'v' } },
-            { 'gs',        group = 'Surround',    mode = { 'n', 'x' } },
-            { 'gr',        group = 'LSP Actions', mode = { 'n' } },
+            { '<leader>b', group = '[B]uffer' },
+            { '<leader>s', group = '[S]earch' },
+            { '<leader>g', group = '[G]it' },
+            { '<leader>u', group = '[U]I / Toggles' },
+            { '<leader>w', group = '[S]essions' },
+            { '<leader>t', group = '[T]erminal' },
+            { '<leader>l', group = '[L]azy' },
+            { '<leader>e', group = '[E]xplorer' },
+            { '<leader>q', group = '[Q]uickfix / Quit' },
+            { '<leader>h', group = 'Git [H]unk',      mode = { 'n', 'v' } },
+            { 'gs',        group = '[S]urround',      mode = { 'n', 'x' } },
+            { 'gr',        group = 'LSP Actions',     mode = { 'n' } },
         },
         win = {
             wo = {
