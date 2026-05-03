@@ -28,7 +28,7 @@ return {
                     { 'grn', vim.lsp.buf.rename, buffer = event.buf, desc = 'Rename' },
                     { 'gra', vim.lsp.buf.code_action, buffer = event.buf, desc = 'Code Action', mode = { 'n', 'x' } },
                     { 'gO', require('telescope.builtin').lsp_document_symbols, buffer = event.buf, desc = 'Document Symbols' },
-                    { '<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, buffer = event.buf, desc = '[W]orkspace [S]ymbols' },
+                    { '<leader>sS', require('telescope.builtin').lsp_dynamic_workspace_symbols, buffer = event.buf, desc = '[S]earch [S]ymbols (Workspace)' },
                 }
 
                 local function client_supports_method(client, method, bufnr)

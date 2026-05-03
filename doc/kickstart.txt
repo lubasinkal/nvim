@@ -181,7 +181,7 @@ LSP                                                          *nvim-config-lsp*
   grn            Rename symbol
   gra            Code action
   gO             Document symbols (Telescope)
-  <leader>ws     Workspace symbols (Telescope)
+  <leader>sS     Workspace symbols (Telescope)
   K              Hover documentation (built-in)
   Format on save is enabled
   Mason manages: lua_ls, stylua, ts_ls, vue_ls
