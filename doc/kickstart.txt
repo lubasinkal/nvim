@@ -71,17 +71,12 @@ Lines & Text~
 Diagnostics~
   ]d             Next diagnostic (float)
   [d             Previous diagnostic (float)
-  <leader>q      Toggle location list
+  <leader>q      Toggle Diagnostic Quickfix List
   gk             Toggle virtual_lines for diagnostics
 
-Windows~
-  <leader>wv     Split vertically
-  <leader>wh     Split horizontally
-  <leader>wx     Close window
-
 Terminal~
-  <leader>tt     Toggle floating terminal
-  <leader>tc     Close floating terminal
+  <leader>tt     Toggle
+  <leader>tc     Close
   <Esc><Esc>     Exit terminal mode
 
 Utilities~
@@ -91,29 +86,28 @@ Utilities~
 TELESCOPE                                            *nvim-config-telescope*
 
 Search~
-  <leader>sf     Find files
-  <leader>sg     Live grep
-  <leader>sw     Grep word under cursor
-  <leader>sd     Diagnostics
-  <leader>sr     Resume last search
-  <leader>s.     Recent files
-  <leader>ss     Select Telescope builtin
-  <leader>sh     Help tags
-  <leader>sk     Keymaps
-  <leader>sn     Neovim config files
+  <leader>sf     [F]iles
+  <leader>sg     By [G]rep
+  <leader>sw     Current [W]ord
+  <leader>sd     [D]iagnostics
+  <leader>sr     [R]esume
+  <leader>s.     Recent [.] Files
+  <leader>ss     [S]elect Telescope
+  <leader>sh     [H]elp
+  <leader>sk     [K]eymaps
+  <leader>sn     [N]eovim files
 
 Git~
-  <leader>gf     Git files
-  <leader>gc     Git commits
-  <leader>gC     Buffer git commits
-  <leader>gb     Git branches
-  <leader>gs     Git status
+  <leader>gf     [F]iles
+  <leader>gc     [C]ommits
+  <leader>gC     [B]uffer [C]ommits
+  <leader>gb     [B]ranches
+  <leader>gs     [S]tatus
 
 Buffers~
-  <leader>bb     Buffer list
-  <leader>br     Recent files
-  <leader>bm     Marks
-  <leader>bd     Delete buffer
+  <leader>bb     [B]uffers
+  <leader>br     [R]ecent
+  <leader>bm     [M]arks
 
 Telescope Insert-mode mappings:~
   <C-j/k>       Move selection down/up
@@ -141,24 +135,24 @@ Navigation~
   [c             Previous hunk
 
 Hunks~
-  <leader>hs     Stage hunk
-  <leader>hr     Reset hunk
-  <leader>hS     Stage buffer
-  <leader>hu     Undo stage hunk
-  <leader>hR     Reset buffer
-  <leader>hp     Preview hunk
+  <leader>hs     [S]tage Hunk
+  <leader>hr     [R]eset Hunk
+  <leader>hS     Stage [S]erial Buffer
+  <leader>hu     [U]ndo Stage
+  <leader>hR     [R]eset Buffer
+  <leader>hp     [P]review Hunk
 
 Blame & Diff~
-  <leader>hb     Blame line (full)
-  <leader>tb     Toggle inline blame
-  <leader>hd     Diff this
-  <leader>hD     Diff this (~)
+  <leader>hb     [B]lame Line
+  <leader>ub     [B]lame
+  <leader>hd     [D]iff This
+  <leader>hD     Diff This [~]
   ih (o,x)       Select hunk (text object)
 
 ==============================================================================
 NEOTREE                                                  *nvim-config-neotree*
 
-  <leader>e      Toggle file explorer (right side, 25 width)
+  <leader>e      Toggle Explorer (right side, 25 width)
 
 ==============================================================================
 OIL                                                          *nvim-config-oil*
@@ -207,9 +201,9 @@ Other mini modules loaded:~
 ==============================================================================
 SESSIONS                                                *nvim-config-sessions*
 
-  <leader>ws     Save session
-  <leader>wl     Load session
-  <leader>wd     Delete session
+  <leader>ws     [S]ave
+  <leader>wl     [L]oad
+  <leader>wd     [D]elete
   :SessionSave   Save session
   :SessionLoad   Load session
   :SessionDelete Delete current session
@@ -235,14 +229,18 @@ TODO-COMMENTS                                          *nvim-config-todo*
 WHICH-KEY                                              *nvim-config-whichkey*
 
 Displays pending keybinds. Groups:
-  <leader>b      Buffer
-  <leader>s      Search
-  <leader>g      Git
-  <leader>w      Window/Session
-  <leader>t      Terminal
-  <leader>l      Lazy.nvim
-  <leader>h      Git Hunk
-  <leader>u      UI
+  <leader>b      [B]uffer
+  <leader>s      [S]earch
+  <leader>g      [G]it
+  <leader>u      [U]I / Toggles
+  <leader>w      [S]essions
+  <leader>t      [T]erminal
+  <leader>l      [L]azy
+  <leader>e      [E]xplorer
+  <leader>q      [Q]uickfix / Quit
+  <leader>h      Git [H]unk
+  gs             [S]urround
+  gr             LSP Actions
 
 ==============================================================================
 CONFIG STRUCTURE                                       *nvim-config-structure*
