@@ -173,15 +173,15 @@ LAZYGIT                                                  *nvim-config-lazygit*
 ==============================================================================
 LSP                                                          *nvim-config-lsp*
 
-  <leader>cd     Go to definitions (Telescope)
-  <leader>cD     Go to declaration
-  <leader>cr     References (Telescope)
-  <leader>ci     Implementations (Telescope)
-  <leader>ct     Type definitions (Telescope)
-  <leader>cn     Rename symbol
-  <leader>ca     Code action
-  <leader>co     Document symbols (Telescope)
-  <leader>cw     Workspace symbols (Telescope)
+  gd             Go to definitions (Telescope)
+  gD             Go to declaration
+  grr            References (Telescope)
+  gri            Implementations (Telescope)
+  grt            Type definitions (Telescope)
+  grn            Rename symbol
+  gra            Code action
+  gO             Document symbols (Telescope)
+  <leader>ws     Workspace symbols (Telescope)
   K              Hover documentation (built-in)
   Format on save is enabled
   Mason manages: lua_ls, stylua, ts_ls, vue_ls
@@ -236,7 +236,6 @@ WHICH-KEY                                              *nvim-config-whichkey*
 
 Displays pending keybinds. Groups:
   <leader>b      Buffer
-  <leader>c      Code (LSP)
   <leader>s      Search
   <leader>g      Git
   <leader>w      Window/Session
