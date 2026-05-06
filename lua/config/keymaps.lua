@@ -72,16 +72,3 @@ vim.keymap.set('n', '<leader>ut', function()
     vim.cmd.packadd('nvim.undotree')
     require('undotree').open()
 end, { desc = 'Open Undotree' })
-
--- =============================================
--- AUTOCOMMANDS
--- =============================================
-
--- Highlight on yank
-vim.api.nvim_create_autocmd('TextYankPost', {
-    desc = 'Highlight when yanking text',
-    group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
-    callback = function()
-        vim.hl.on_yank()
-    end,
-})
