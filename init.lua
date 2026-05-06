@@ -18,37 +18,48 @@ for _, mod in ipairs(util_modules) do
     end, 0)
 end
 
--- Bootstrap lazy.nvim plugin manager if not installed
-local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-
-if not (vim.loop or vim.uv).fs_stat(lazypath) then
-    local lazy_repo = 'https://github.com/folke/lazy.nvim.git'
-    local clone_cmd = { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazy_repo, lazypath }
-    local output = vim.fn.system(clone_cmd)
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+    local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
     if vim.v.shell_error ~= 0 then
-        error('Failed to clone lazy.nvim:\n' .. output)
+        vim.api.nvim_echo({
+            { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+            { out,                            "WarningMsg" },
+            { "\nPress any key to exit..." },
+        }, true, {})
+        vim.fn.getchar()
+        os.exit(1)
     end
 end
-
--- Add lazy.nvim to runtime path
 vim.opt.rtp:prepend(lazypath)
 
 -- Plugin setup via lazy.nvim
 require('lazy').setup({
-    { import = 'custom.plugins' },
-    { import = 'custom.lsp' },
-}, {
+    spec = {
+        { import = 'custom.plugins' },
+        { import = 'custom.lsp' },
+    },
     defaults = {
         lazy = true, -- lazy load plugins by default
     },
     performance = {
+        cache = {
+            enabled = true,
+        },
+        reset_packpath = true,
         rtp = {
-            reset = false, -- reset runtime path
+            reset = true,
             disabled_plugins = {
-                'gzip',
-                'tarPlugin',
-                'zipPlugin',
-                'netrwPlugin',
+                "gzip",
+                -- "matchit",
+                -- "matchparen",
+                -- "netrwPlugin",
+                "tarPlugin",
+                "tohtml",
+                "tutor",
+                "zipPlugin",
             },
         },
     },
