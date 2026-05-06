@@ -10,6 +10,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 vim.api.nvim_create_autocmd({ 'BufEnter', 'UIEnter' }, {
     once = true,
     callback = function()
-        require 'config.statusline'
+        require 'config.util.statusline'
     end,
 })
