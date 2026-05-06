@@ -66,7 +66,7 @@ This config uses `<Space>` as the **Leader** key.
 
 ## 🛠️ Customization
 
-Most custom logic resides in `lua/custom/`:
+Most custom logic resides in `lua/config/`:
 - `options.lua`: Vim settings.
 - `keymaps.lua`: Global keybindings.
 - `plugins/`: Individual plugin configurations.

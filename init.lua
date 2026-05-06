@@ -1,12 +1,12 @@
 -- Load essential configs early (keymaps, options)
-require 'custom.keymaps'
-require 'custom.options'
+require 'config.keymaps'
+require 'config.options'
 
 -- Defer statusline until first buffer (saves ~5-10ms)
 vim.api.nvim_create_autocmd({ 'BufEnter', 'UIEnter' }, {
     once = true,
     callback = function()
-        require 'custom.statusline'
+        require 'config.statusline'
     end,
 })
 
@@ -14,7 +14,7 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'UIEnter' }, {
 local util_modules = { 'floaterminal', 'session', 'tabs' }
 for _, mod in ipairs(util_modules) do
     vim.defer_fn(function()
-        require('custom.util.' .. mod)
+        require('config.util.' .. mod)
     end, 0)
 end
 
@@ -38,8 +38,8 @@ vim.opt.rtp:prepend(lazypath)
 -- Plugin setup via lazy.nvim
 require('lazy').setup({
     spec = {
-        { import = 'custom.plugins' },
-        { import = 'custom.lsp' },
+        { import = 'config.plugins' },
+        { import = 'config.lsp' },
     },
     defaults = {
         lazy = true, -- lazy load plugins by default

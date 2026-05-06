@@ -247,7 +247,7 @@ CONFIG STRUCTURE                                       *nvim-config-structure*
 
 >
   init.lua              Entry point, boots lazy.nvim
-  lua/custom/
+  lua/config/
     keymaps.lua         Custom keymaps & autocmds
     options.lua         Vim options & autocmds
     statusline.lua      Custom statusline
