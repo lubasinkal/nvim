@@ -10,12 +10,13 @@ end
 
 local function get_session_filename()
     local cwd = vim.fn.getcwd()
-    local name = cwd:gsub('[\\/:]+', '%%')
+    local name = vim.fs.basename(cwd)
 
     if vim.uv.fs_stat('.git') then
         local branch = vim.fn.systemlist('git branch --show-current')[1]
-        if vim.v.shell_error == 0 and branch and branch ~= 'main' and branch ~= 'master' then
-            name = name .. '%%' .. branch:gsub('[\\/:]+', '%%')
+        local valid = branch and #branch < 50 and branch:match('^[%w%-%_]+$')
+        if vim.v.shell_error == 0 and valid and branch ~= 'main' and branch ~= 'master' then
+            name = name .. '%%' .. branch
         end
     end
 
