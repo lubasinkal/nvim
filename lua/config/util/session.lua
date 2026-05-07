@@ -41,39 +41,33 @@ function M.delete()
     end
 end
 
-local function get_session_name(path)
-    return vim.fn.fnamemodify(path, ':t:r')
-end
-
 function M.list()
     local files = vim.fn.glob(session_dir .. '*.vim', false, true)
     if #files == 0 then
         vim.notify('No saved sessions', vim.log.levels.WARN)
         return
     end
-    require('telescope.pickers').new({
-        prompt_title = 'Sessions',
-        finder = require('telescope.finders').new_table {
-            results = files,
-            entry_maker = function(entry)
-                return { value = entry, display = get_session_name(entry), ordinal = get_session_name(entry) }
-            end,
-        },
-        sorter = require('telescope.config').values.generic_sorter,
-        attach_mappings = function(prompt_bufnr, map)
-            require('telescope.actions.set').edit(prompt_bufnr, 'goto_selection')
-            map('i', '<c-d>', function()
-                local selection = require('telescope.actions.state').get_selected_entry()
-                if selection then
-                    vim.fn.delete(selection.value)
-                    require('telescope.actions').close(prompt_bufnr)
-                    vim.notify('Deleted: ' .. get_session_name(selection.value), vim.log.levels.INFO)
-                    vim.cmd('SessionList')
-                end
-            end)
-            return true
-        end,
-    }):find()
+    local items = {}
+    for _, f in ipairs(files) do
+        table.insert(items, { path = f, name = vim.fn.fnamemodify(f, ':t:r') })
+    end
+    vim.ui.select(items, {
+        prompt = 'Sessions (Enter=load, d=delete):',
+        format_item = function(item) return item.name end,
+    }, function(choice)
+        if not choice then return end
+        vim.ui.select({ 'load', 'delete' }, {
+            prompt = 'Action:',
+        }, function(action)
+            if action == 'load' then
+                vim.cmd('source ' .. vim.fn.fnameescape(choice.path))
+                vim.notify('Loaded: ' .. choice.name, vim.log.levels.INFO)
+            elseif action == 'delete' then
+                vim.fn.delete(choice.path)
+                vim.notify('Deleted: ' .. choice.name, vim.log.levels.INFO)
+            end
+        end)
+    end)
 end
 
 vim.api.nvim_create_user_command('SessionSave', M.save, {})
