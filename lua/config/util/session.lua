@@ -32,12 +32,22 @@ function M.save()
 end
 
 function M.load()
-    local path = get_session_filename()
-    if vim.fn.filereadable(path) == 1 then
-        vim.cmd('source ' .. vim.fn.fnameescape(path))
+    local branch = vim.b.gitsigns_head
+    local cwd = vim.fs.basename(vim.fn.getcwd())
+    local name_with_branch = cwd .. (branch and branch ~= 'main' and branch ~= 'master' and '%%' .. branch or '')
+    local name_no_branch = cwd
+
+    local path_branch = session_dir .. name_with_branch .. '.vim'
+    local path_base = session_dir .. name_no_branch .. '.vim'
+
+    if vim.fn.filereadable(path_branch) == 1 then
+        vim.cmd('source ' .. vim.fn.fnameescape(path_branch))
         vim.notify('Session loaded', vim.log.levels.INFO)
+    elseif vim.fn.filereadable(path_base) == 1 then
+        vim.cmd('source ' .. vim.fn.fnameescape(path_base))
+        vim.notify('Session loaded (no branch)', vim.log.levels.INFO)
     else
-        vim.notify('No session found for this project', vim.log.levels.WARN)
+        vim.notify('No session found', vim.log.levels.WARN)
     end
 end
 
