@@ -12,14 +12,9 @@ local function get_session_filename()
     local cwd = vim.fn.getcwd()
     local name = vim.fs.basename(cwd)
 
-    if vim.uv.fs_stat('.git') then
-        local branch = vim.b.gitsigns_head or (function()
-            local ret = vim.fn.systemlist('git branch --show-current')[1]
-            return vim.v.shell_error == 0 and ret or nil
-        end)()
-        if branch and #branch < 50 and branch:match('^[%w%-%_]+$') and branch ~= 'main' and branch ~= 'master' then
-            name = name .. '%%' .. branch
-        end
+    local branch = vim.b.gitsigns_head
+    if branch and branch ~= 'main' and branch ~= 'master' then
+        name = name .. '%%' .. branch
     end
 
     return session_dir .. name .. '.vim'
@@ -42,13 +37,7 @@ function M.load()
         vim.cmd('source ' .. vim.fn.fnameescape(path))
         vim.notify('Session loaded', vim.log.levels.INFO)
     else
-        local fallback = session_dir .. vim.fn.getcwd():gsub('[\\/:]+', '%%') .. '.vim'
-        if vim.fn.filereadable(fallback) == 1 then
-            vim.cmd('source ' .. vim.fn.fnameescape(fallback))
-            vim.notify('Session loaded (no branch)', vim.log.levels.INFO)
-        else
-            vim.notify('No session found for this project', vim.log.levels.WARN)
-        end
+        vim.notify('No session found for this project', vim.log.levels.WARN)
     end
 end
 
