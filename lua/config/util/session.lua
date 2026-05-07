@@ -13,9 +13,11 @@ local function get_session_filename()
     local name = vim.fs.basename(cwd)
 
     if vim.uv.fs_stat('.git') then
-        local branch = vim.fn.systemlist('git branch --show-current')[1]
-        local valid = branch and #branch < 50 and branch:match('^[%w%-%_]+$')
-        if vim.v.shell_error == 0 and valid and branch ~= 'main' and branch ~= 'master' then
+        local branch = vim.b.gitsigns_head or (function()
+            local ret = vim.fn.systemlist('git branch --show-current')[1]
+            return vim.v.shell_error == 0 and ret or nil
+        end)()
+        if branch and #branch < 50 and branch:match('^[%w%-%_]+$') and branch ~= 'main' and branch ~= 'master' then
             name = name .. '%%' .. branch
         end
     end
@@ -24,11 +26,7 @@ local function get_session_filename()
 end
 
 function M.branch()
-    if vim.uv.fs_stat('.git') then
-        local ret = vim.fn.systemlist('git branch --show-current')[1]
-        return vim.v.shell_error == 0 and ret or nil
-    end
-    return nil
+    return vim.b.gitsigns_head
 end
 
 function M.save()
