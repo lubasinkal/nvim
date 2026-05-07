@@ -9,9 +9,25 @@ local function ensure_session_dir()
 end
 
 local function get_session_filename()
-    local cwd = vim.uv.cwd()
-    local name = vim.fs.basename(cwd)
-    return vim.fs.joinpath(session_dir, name .. '.vim')
+    local cwd = vim.fn.getcwd()
+    local name = cwd:gsub('[\\/:]+', '%%')
+
+    if vim.uv.fs_stat('.git') then
+        local branch = vim.fn.systemlist('git branch --show-current')[1]
+        if vim.v.shell_error == 0 and branch and branch ~= 'main' and branch ~= 'master' then
+            name = name .. '%%' .. branch:gsub('[\\/:]+', '%%')
+        end
+    end
+
+    return session_dir .. name .. '.vim'
+end
+
+function M.branch()
+    if vim.uv.fs_stat('.git') then
+        local ret = vim.fn.systemlist('git branch --show-current')[1]
+        return vim.v.shell_error == 0 and ret or nil
+    end
+    return nil
 end
 
 function M.save()
@@ -27,7 +43,13 @@ function M.load()
         vim.cmd('source ' .. vim.fn.fnameescape(path))
         vim.notify('Session loaded', vim.log.levels.INFO)
     else
-        vim.notify('No session found for this project', vim.log.levels.WARN)
+        local fallback = session_dir .. vim.fn.getcwd():gsub('[\\/:]+', '%%') .. '.vim'
+        if vim.fn.filereadable(fallback) == 1 then
+            vim.cmd('source ' .. vim.fn.fnameescape(fallback))
+            vim.notify('Session loaded (no branch)', vim.log.levels.INFO)
+        else
+            vim.notify('No session found for this project', vim.log.levels.WARN)
+        end
     end
 end
 
@@ -78,9 +100,7 @@ vim.api.nvim_create_user_command('SessionList', M.list, {})
 vim.keymap.set('n', '<leader>ws', M.save, { desc = '[S]ave session' })
 vim.keymap.set('n', '<leader>wl', M.load, { desc = '[L]oad current' })
 vim.keymap.set('n', '<leader>wd', M.delete, { desc = '[D]elete current' })
-vim.keymap.set('n', '<leader>wL', M.list, { desc = '[L]ist (Telescope)' })
-
-vim.api.nvim_create_user_command('SessionList', M.list, {})
+vim.keymap.set('n', '<leader>wL', M.list, { desc = '[L]ist sessions' })
 
 vim.opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
