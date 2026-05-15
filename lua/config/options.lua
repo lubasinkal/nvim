@@ -108,7 +108,7 @@ vim.api.nvim_create_autocmd('WinLeave', {
     end,
 })
 
-vim.diagnostic.config {
+vim.diagnostic.config({
     update_in_insert = false,
     severity_sort = true,
     float = { border = 'rounded', source = 'if_many', header = '' },
@@ -116,11 +116,24 @@ vim.diagnostic.config {
 
     -- Can switch between these as you prefer
     virtual_text = true,   -- Text shows up at the end of the line
-    virtual_lines = false, -- Text shows up underneath the line, with virtual lines
+    virtual_lines = false, -- Text shows up underneath the line
 
-    -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
-    jump = { float = true },
-} -- Diagnonstic floating window on cursorhold
+    -- Auto-open float when jumping with [d and ]d
+    jump = {
+        on_jump = function(diagnostic, bufnr)
+            if not diagnostic then
+                return
+            end
+            vim.diagnostic.open_float({
+                bufnr = bufnr,
+                scope = "cursor", -- or "line"
+                focus = false,
+            })
+        end,
+    },
+})
+
+-- Diagnonstic floating window on cursorhold
 vim.api.nvim_create_autocmd('CursorHold', {
     callback = function()
         if next(vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 })) then
