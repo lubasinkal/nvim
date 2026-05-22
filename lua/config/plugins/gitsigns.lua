@@ -2,13 +2,6 @@ return { -- Adds git related signs to the gutter, as well as utilities for manag
     'lewis6991/gitsigns.nvim',
     event = { 'BufReadPost' },
     opts = {
-        signs = {
-            add = { text = '+' },
-            change = { text = '~' },
-            delete = { text = '_' },
-            topdelete = { text = '‾' },
-            changedelete = { text = '~' },
-        },
         -- Enable inline blame
         current_line_blame = true,
         current_line_blame_opts = {
@@ -47,6 +40,9 @@ return { -- Adds git related signs to the gutter, as well as utilities for manag
                 end)
                 return '<Ignore>'
             end, { expr = true, desc = 'Prev Hunk' })
+
+            map('n', ']H', gs.last_hunk, { desc = 'Last Hunk' })
+            map('n', '[H', gs.first_hunk, { desc = 'First Hunk' })
 
             -- Actions
             map({ 'n', 'v' }, '<leader>hs', ':Gitsigns stage_hunk<CR>', { desc = '[S]tage Hunk' })
