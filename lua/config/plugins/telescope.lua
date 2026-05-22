@@ -16,6 +16,7 @@ return {
             end,
         },
         'nvim-telescope/telescope-ui-select.nvim',
+        "nvim-telescope/telescope-frecency.nvim",
     },
     keys = {
         -- Search (prefixed with leader s)
@@ -98,5 +99,6 @@ return {
 
         pcall(require('telescope').load_extension, 'fzf')
         pcall(require('telescope').load_extension, 'ui-select')
+        pcall(require('telescope').load_extension, 'frecency')
     end,
 }
