@@ -94,6 +94,11 @@ return {
                     override_file_sorter = true,
                     case_mode = 'smart_case',
                 },
+                frecency = {
+                    auto_validate = false,
+                    matcher = "fuzzy",
+                    path_display = { "filename_first" },
+                },
             },
         }
 
