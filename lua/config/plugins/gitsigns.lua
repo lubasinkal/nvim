@@ -41,8 +41,8 @@ return { -- Adds git related signs to the gutter, as well as utilities for manag
                 return '<Ignore>'
             end, { expr = true, desc = 'Prev Hunk' })
 
-            map('n', ']H', gs.last_hunk, { desc = 'Last Hunk' })
-            map('n', '[H', gs.first_hunk, { desc = 'First Hunk' })
+            map('n', ']H', function() gs.nav_hunk("last") end, { desc = 'Last Hunk' })
+            map('n', '[H', function() gs.nav_hunk("first") end, { desc = 'First Hunk' })
 
             -- Actions
             map({ 'n', 'v' }, '<leader>hs', ':Gitsigns stage_hunk<CR>', { desc = '[S]tage Hunk' })
