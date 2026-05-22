@@ -17,6 +17,7 @@ return {
         },
         'nvim-telescope/telescope-ui-select.nvim',
         "nvim-telescope/telescope-frecency.nvim",
+        "olacin/telescope-cc.nvim",
     },
     keys = {
         -- Search (prefixed with leader s)
@@ -37,15 +38,16 @@ return {
             desc = '[N]eovim files',
         },
         -- Git
-        { '<leader>gf', '<cmd>Telescope git_files<CR>',    desc = '[F]iles' },
-        { '<leader>gc', '<cmd>Telescope git_commits<CR>',  desc = '[C]ommits' },
-        { '<leader>gC', '<cmd>Telescope git_bcommits<CR>', desc = '[B]uffer [C]ommits' },
-        { '<leader>gb', '<cmd>Telescope git_branches<CR>', desc = '[B]ranches' },
-        { '<leader>gs', '<cmd>Telescope git_status<CR>',   desc = '[S]tatus' },
+        { '<leader>gf', '<cmd>Telescope git_files<CR>',            desc = '[F]iles' },
+        { '<leader>gc', '<cmd>Telescope git_commits<CR>',          desc = '[C]ommits' },
+        { '<leader>gC', '<cmd>Telescope git_bcommits<CR>',         desc = '[B]uffer [C]ommits' },
+        { '<leader>gb', '<cmd>Telescope git_branches<CR>',         desc = '[B]ranches' },
+        { '<leader>gs', '<cmd>Telescope git_status<CR>',           desc = '[S]tatus' },
+        { '<leader>cc', '<cmd>Telescope conventional_commits<CR>', desc = '[C]onventional [C]ommit' },
         -- Buffers (prefixed with leader b)
-        { '<leader>bb', '<cmd>Telescope buffers<CR>',      desc = '[B]uffers' },
-        { '<leader>br', '<cmd>Telescope oldfiles<CR>',     desc = '[R]ecent' },
-        { '<leader>bm', '<cmd>Telescope marks<CR>',        desc = '[M]arks' },
+        { '<leader>bb', '<cmd>Telescope buffers<CR>',              desc = '[B]uffers' },
+        { '<leader>br', '<cmd>Telescope oldfiles<CR>',             desc = '[R]ecent' },
+        { '<leader>bm', '<cmd>Telescope marks<CR>',                desc = '[M]arks' },
     },
     config = function()
         local actions = require 'telescope.actions'
@@ -99,11 +101,15 @@ return {
                     matcher = "fuzzy",
                     path_display = { "filename_first" },
                 },
+                conventional_commits = {
+                    include_body_and_footer = true,
+                },
             },
         }
 
         pcall(require('telescope').load_extension, 'fzf')
         pcall(require('telescope').load_extension, 'ui-select')
         pcall(require('telescope').load_extension, 'frecency')
+        pcall(require('telescope').load_extension, 'conventional_commits')
     end,
 }
