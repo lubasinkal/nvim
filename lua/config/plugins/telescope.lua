@@ -17,7 +17,10 @@ return {
         },
         'nvim-telescope/telescope-ui-select.nvim',
         "nvim-telescope/telescope-frecency.nvim",
-        "olacin/telescope-cc.nvim",
+        {
+            "olacin/telescope-cc.nvim",
+            dependencies = { "tpope/vim-fugitive" },
+        },
     },
     keys = {
         -- Search (prefixed with leader s)
