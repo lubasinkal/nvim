@@ -71,10 +71,6 @@ local function create_floating_window(opts)
         vim.api.nvim_set_current_win(current_win)
     end
 
-    -- Set some window options for better experience
-    vim.api.nvim_win_set_option(win, 'winblend', 0)
-    vim.api.nvim_win_set_option(win, 'wrap', false)
-
     -- Auto-close terminal when job ends
     state.floating.autocmd_id = vim.api.nvim_create_autocmd('TermClose', {
         buffer = buf,
