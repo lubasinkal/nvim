@@ -9,14 +9,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(event)
         local wk = require('which-key')
         wk.add {
-            { 'gd', require('telescope.builtin').lsp_definitions, buffer = event.buf, desc = 'Goto Definition' },
-            { 'gD', vim.lsp.buf.declaration, buffer = event.buf, desc = 'Goto Declaration' },
-            { 'grr', require('telescope.builtin').lsp_references, buffer = event.buf, desc = 'Goto References' },
-            { 'gri', require('telescope.builtin').lsp_implementations, buffer = event.buf, desc = 'Goto Implementation' },
-            { 'grt', require('telescope.builtin').lsp_type_definitions, buffer = event.buf, desc = 'Type Definition' },
-            { 'grn', vim.lsp.buf.rename, buffer = event.buf, desc = 'Rename' },
-            { 'gra', vim.lsp.buf.code_action, buffer = event.buf, desc = 'Code Action', mode = { 'n', 'x' } },
-            { 'gO', require('telescope.builtin').lsp_document_symbols, buffer = event.buf, desc = 'Document Symbols' },
+            { 'gd',         require('telescope.builtin').lsp_definitions,               buffer = event.buf, desc = 'Goto Definition' },
+            { 'gD',         vim.lsp.buf.declaration,                                    buffer = event.buf, desc = 'Goto Declaration' },
+            { 'grr',        require('telescope.builtin').lsp_references,                buffer = event.buf, desc = 'Goto References' },
+            { 'gri',        require('telescope.builtin').lsp_implementations,           buffer = event.buf, desc = 'Goto Implementation' },
+            { 'grt',        require('telescope.builtin').lsp_type_definitions,          buffer = event.buf, desc = 'Type Definition' },
+            { 'grn',        vim.lsp.buf.rename,                                         buffer = event.buf, desc = 'Rename' },
+            { 'gra',        vim.lsp.buf.code_action,                                    buffer = event.buf, desc = 'Code Action',        mode = { 'n', 'x' } },
+            { 'gO',         require('telescope.builtin').lsp_document_symbols,          buffer = event.buf, desc = 'Document Symbols' },
             { '<leader>sS', require('telescope.builtin').lsp_dynamic_workspace_symbols, buffer = event.buf, desc = 'Workspace Symbols' },
         }
 

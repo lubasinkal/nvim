@@ -20,4 +20,3 @@ end, { desc = '[U]pdate plugins' })
 vim.keymap.set('n', '<leader>lU', function()
     vim.pack.update(nil, { force = true })
 end, { desc = '[U]pdate plugins (force, no confirm)' })
-
