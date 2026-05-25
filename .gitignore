@@ -5,6 +5,7 @@ nvim
 
 spell/
 lazy-lock.json
+nvim-pack-lock.json
 Session.vim
 
 *.swp
