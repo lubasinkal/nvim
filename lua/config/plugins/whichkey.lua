@@ -42,7 +42,7 @@ require('which-key').setup({
         { '<leader>u', group = 'UI / Toggles' },
         { '<leader>w', group = 'Sessions' },
         { '<leader>t', group = 'Terminal' },
-        { '<leader>l', group = 'Plugins' },
+        { '<leader>p', group = 'Pack' },
         { '<leader>e', group = 'Explorer' },
         { '<leader>q', group = 'Quickfix' },
         { '<leader>h', group = 'Git [H]unk',  mode = { 'n', 'v' } },
