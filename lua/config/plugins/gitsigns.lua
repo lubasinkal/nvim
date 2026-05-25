@@ -1,4 +1,5 @@
--- gitsigns.nvim
+vim.pack.add({ 'https://github.com/lewis6991/gitsigns.nvim' })
+
 require('gitsigns').setup({
     current_line_blame = true,
     current_line_blame_opts = {
@@ -16,7 +17,6 @@ require('gitsigns').setup({
             vim.keymap.set(mode, l, r, opts)
         end
 
-        -- Navigation
         map('n', ']c', function()
             if vim.wo.diff then return ']c' end
             vim.schedule(function() gs.next_hunk() end)
@@ -29,8 +29,6 @@ require('gitsigns').setup({
         end, { expr = true, desc = 'Prev Hunk' })
         map('n', ']H', function() gs.nav_hunk("last") end, { desc = 'Last Hunk' })
         map('n', '[H', function() gs.nav_hunk("first") end, { desc = 'First Hunk' })
-
-        -- Actions
         map({ 'n', 'v' }, '<leader>hs', ':Gitsigns stage_hunk<CR>', { desc = '[S]tage Hunk' })
         map({ 'n', 'v' }, '<leader>hr', ':Gitsigns reset_hunk<CR>', { desc = '[R]eset Hunk' })
         map('n', '<leader>hS', gs.stage_buffer, { desc = 'Stage [S]erial Buffer' })

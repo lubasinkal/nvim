@@ -1,7 +1,6 @@
--- typst-preview.nvim
-require('typst-preview').setup({
-    port = 6767,
-})
+vim.pack.add({ 'https://github.com/chomosuke/typst-preview.nvim' })
+
+require('typst-preview').setup({ port = 6767 })
 
 vim.keymap.set('n', '<leader>tp', function()
     vim.cmd('TypstPreviewToggle')

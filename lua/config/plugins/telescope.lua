@@ -1,14 +1,16 @@
--- telescope.nvim
+vim.pack.add({ 'https://github.com/nvim-telescope/telescope.nvim' })
+vim.pack.add({ 'https://github.com/nvim-telescope/telescope-fzf-native.nvim' })
+vim.pack.add({ 'https://github.com/nvim-telescope/telescope-ui-select.nvim' })
+vim.pack.add({ 'https://github.com/nvim-telescope/telescope-frecency.nvim' })
+vim.pack.add({ 'https://github.com/olacin/telescope-cc.nvim' })
+
 local actions = require('telescope.actions')
 
 require('telescope').setup({
     defaults = {
         layout_strategy = 'horizontal',
         layout_config = {
-            horizontal = {
-                prompt_position = 'top',
-                preview_width = 0.55,
-            },
+            horizontal = { prompt_position = 'top', preview_width = 0.55 },
         },
         path_display = { 'smart' },
         mappings = {
@@ -22,18 +24,11 @@ require('telescope').setup({
                 ['<C-q>'] = actions.smart_send_to_qflist + actions.open_qflist,
                 ['<C-d>'] = actions.delete_buffer,
             },
-            n = {
-                ['q'] = actions.close,
-                ['dd'] = actions.delete_buffer,
-            },
+            n = { ['q'] = actions.close, ['dd'] = actions.delete_buffer },
         },
     },
     pickers = {
-        buffers = {
-            sort_lastused = true,
-            theme = 'dropdown',
-            previewer = false,
-        },
+        buffers = { sort_lastused = true, theme = 'dropdown', previewer = false },
         current_buffer_fuzzy_find = { previewer = false, theme = 'dropdown' },
     },
     extensions = {
@@ -49,20 +44,16 @@ require('telescope').setup({
             matcher = "fuzzy",
             path_display = { "filename_first" },
         },
-        conventional_commits = {
-            include_body_and_footer = true,
-        },
+        conventional_commits = { include_body_and_footer = true },
     },
 })
 
--- Load extensions
 pcall(require('telescope').load_extension, 'fzf')
 pcall(require('telescope').load_extension, 'ui-select')
 pcall(require('telescope').load_extension, 'frecency')
 pcall(require('telescope').load_extension, 'conventional_commits')
 
--- ── Keymaps ──
--- Search (prefixed with leader s)
+-- Keymaps
 vim.keymap.set('n', '<leader>sh', '<cmd>Telescope help_tags<CR>',   { desc = '[H]elp' })
 vim.keymap.set('n', '<leader>sk', '<cmd>Telescope keymaps<CR>',     { desc = '[K]eymaps' })
 vim.keymap.set('n', '<leader>sw', '<cmd>Telescope grep_string<CR>', { desc = 'Current [W]ord' })
@@ -75,16 +66,12 @@ vim.keymap.set('n', '<leader>sf', '<cmd>Telescope find_files<CR>',  { desc = '[F
 vim.keymap.set('n', '<leader>sn', function()
     require('telescope.builtin').find_files { cwd = vim.fn.stdpath 'config' }
 end, { desc = '[N]eovim files' })
-
--- Git
 vim.keymap.set('n', '<leader>gf', '<cmd>Telescope git_files<CR>',    { desc = '[F]iles' })
 vim.keymap.set('n', '<leader>gc', '<cmd>Telescope git_commits<CR>',  { desc = '[C]ommits' })
 vim.keymap.set('n', '<leader>gC', '<cmd>Telescope git_bcommits<CR>', { desc = '[B]uffer [C]ommits' })
 vim.keymap.set('n', '<leader>gb', '<cmd>Telescope git_branches<CR>', { desc = '[B]ranches' })
 vim.keymap.set('n', '<leader>gs', '<cmd>Telescope git_status<CR>',   { desc = '[S]tatus' })
 vim.keymap.set('n', '<leader>cc', '<cmd>Telescope conventional_commits<CR>', { desc = '[C]onventional [C]ommit' })
-
--- Buffers
 vim.keymap.set('n', '<leader>bb', '<cmd>Telescope buffers<CR>',    { desc = '[B]uffers' })
 vim.keymap.set('n', '<leader>br', '<cmd>Telescope oldfiles<CR>',   { desc = '[R]ecent' })
 vim.keymap.set('n', '<leader>bm', '<cmd>Telescope marks<CR>',      { desc = '[M]arks' })

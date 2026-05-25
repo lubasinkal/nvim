@@ -1,8 +1,8 @@
--- lazygit.nvim
+vim.pack.add({ 'https://github.com/kdheepak/lazygit.nvim' })
+
 vim.api.nvim_create_user_command('LazyGit', function()
     require('lazygit').lazygit()
 end, {})
-vim.api.nvim_create_user_command('LazyGitConfig', function() end, {})
 vim.api.nvim_create_user_command('LazyGitCurrentFile', function()
     require('lazygit').lazygit { cwd = vim.fn.expand('%:p:h') }
 end, {})

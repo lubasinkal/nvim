@@ -1,4 +1,9 @@
--- nvim-lspconfig + mason.nvim
+vim.pack.add({ 'https://github.com/neovim/nvim-lspconfig' })
+vim.pack.add({ 'https://github.com/williamboman/mason.nvim' })
+vim.pack.add({ 'https://github.com/williamboman/mason-lspconfig.nvim' })
+vim.pack.add({ 'https://github.com/j-hui/fidget.nvim' })
+
+-- LspAttach autocmd
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
     callback = function(event)
@@ -12,35 +17,30 @@ vim.api.nvim_create_autocmd('LspAttach', {
             { 'grn', vim.lsp.buf.rename, buffer = event.buf, desc = 'Rename' },
             { 'gra', vim.lsp.buf.code_action, buffer = event.buf, desc = 'Code Action', mode = { 'n', 'x' } },
             { 'gO', require('telescope.builtin').lsp_document_symbols, buffer = event.buf, desc = 'Document Symbols' },
-            { '<leader>sS', require('telescope.builtin').lsp_dynamic_workspace_symbols, buffer = event.buf, desc = '[S]earch [S]ymbols (Workspace)' },
+            { '<leader>sS', require('telescope.builtin').lsp_dynamic_workspace_symbols, buffer = event.buf, desc = 'Workspace Symbols' },
         }
 
-        local function client_supports_method(client, method, bufnr)
+        local function supports_method(client, method, bufnr)
             if vim.fn.has 'nvim-0.11' == 1 then
                 return client:supports_method(method, bufnr)
-            else
-                return client:supports_method(method, { bufnr = bufnr })
             end
+            return client:supports_method(method, { bufnr = bufnr })
         end
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
-            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+        if client and supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
+            local group = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-                buffer = event.buf,
-                group = highlight_augroup,
-                callback = vim.lsp.buf.document_highlight,
+                buffer = event.buf, group = group, callback = vim.lsp.buf.document_highlight,
             })
             vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-                buffer = event.buf,
-                group = highlight_augroup,
-                callback = vim.lsp.buf.clear_references,
+                buffer = event.buf, group = group, callback = vim.lsp.buf.clear_references,
             })
             vim.api.nvim_create_autocmd('LspDetach', {
                 group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-                callback = function(event2)
+                callback = function(e)
                     vim.lsp.buf.clear_references()
-                    vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+                    vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = e.buf }
                 end,
             })
             vim.api.nvim_create_autocmd("BufWritePre", {
@@ -53,28 +53,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end,
 })
 
--- ── LSP server configs ──
-
 -- Lua
 vim.lsp.config('lua_ls', {
     settings = {
         Lua = {
-            runtime = {
-                version = 'LuaJIT',
-                path = {
-                    'lua/?.lua',
-                    'lua/?/init.lua',
-                },
-            },
-            diagnostics = {
-                globals = { 'vim' },
-            },
+            runtime = { version = 'LuaJIT', path = { 'lua/?.lua', 'lua/?/init.lua' } },
+            diagnostics = { globals = { 'vim' } },
             workspace = {
                 library = {
-                    vim.env.VIMRUNTIME,
-                    '${3rd}/luv/library',
-                    vim.fn.stdpath 'config',
-                    '${3rd}/busted/library',
+                    vim.env.VIMRUNTIME, '${3rd}/luv/library',
+                    vim.fn.stdpath 'config', '${3rd}/busted/library',
                 },
                 checkThirdParty = false,
             },
@@ -83,15 +71,15 @@ vim.lsp.config('lua_ls', {
     },
 })
 
--- TypeScript / JavaScript (with Vue support)
+-- TypeScript with Vue
 vim.lsp.config('ts_ls', {
     filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
     init_options = {
         plugins = {
             {
                 name = '@vue/typescript-plugin',
-                location = vim.fn.stdpath 'data' ..
-                    '/mason/packages/vue-language-server/node_modules/@vue/language-server',
+                location = vim.fn.stdpath 'data'
+                    .. '/mason/packages/vue-language-server/node_modules/@vue/language-server',
                 languages = { 'vue' },
                 configNamespace = 'typescript',
             },
@@ -101,16 +89,14 @@ vim.lsp.config('ts_ls', {
 
 vim.lsp.config('vue_ls', {})
 
--- ── Mason ──
+-- Mason
 require('mason').setup()
 require('mason-lspconfig').setup {
     ensure_installed = { 'stylua', 'lua_ls' },
     automatic_enable = true,
 }
 
--- ── Fidget (LSP progress UI) ──
+-- Fidget
 require('fidget').setup({
-    notification = {
-        window = { winblend = 0 },
-    },
+    notification = { window = { winblend = 0 } },
 })
