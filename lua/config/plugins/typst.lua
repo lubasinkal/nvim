@@ -1,16 +1,8 @@
-return {
-    'chomosuke/typst-preview.nvim',
-    cmd = { "TypstPreview", "TypstPreviewToggle", "TypstPreviewUpdate" },
-    keys = {
-        {
-            "<leader>tp",
-            ft = "typst",
-            "<cmd>TypstPreviewToggle<cr>",
-            desc = "Toggle Typst Preview",
-        },
-    },
-    opts = {
-        port = 6767,
+-- typst-preview.nvim
+require('typst-preview').setup({
+    port = 6767,
+})
 
-    }, -- lazy.nvim will implicitly calls `setup {}`
-}
+vim.keymap.set('n', '<leader>tp', function()
+    vim.cmd('TypstPreviewToggle')
+end, { desc = 'Toggle Typst Preview' })

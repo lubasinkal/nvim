@@ -1,54 +1,32 @@
--- Mini.nvim modular plugins loaded on VeryLazy event for smooth startup
-return {
-    'echasnovski/mini.nvim',
-    event = 'VeryLazy',
-    config = function()
-        require('mini.comment').setup()
-        require('mini.notify').setup {
-            lsp_progress = { enable = false },
-            -- Window options
-            window = {
-                winblend = 100,
-            },
-        }
-        require('mini.indentscope').setup()
-        require('mini.pairs').setup()
-        require('mini.ai').setup {
-            -- NOTE: Avoid conflicts with the built-in incremental selection mappings on Neovim>=0.12 (see `:help treesitter-incremental-selection`)
-            mappings = {
-                around_next = 'aa',
-                inside_next = 'ii',
-            },
-            n_lines = 500,
-        }
-        require('mini.surround').setup {
-            mappings = {
-                add = 'gsa', -- Add surrounding in Normal and Visual modes
-                --e.g. gsaiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-                --e.g. gsaa}) - [S]urround [A]dd [A]round [}]Braces [)]Paren
-                delete = 'gsd',         -- Delete surrounding
-                --e.g.    gsd"   - [S]urround [D]elete ["]quotes
-                replace = 'gsr',        -- Replace surrounding
-                --e.g.     gsr)'  - [S]urround [R]eplace [)]Paren by [']quote
-                find = 'gsf',           -- Find surrounding (to the right)
-                find_left = 'gsF',      -- Find surrounding (to the left)
-                highlight = 'gsh',      -- Highlight surrounding
-                update_n_lines = 'gsn', -- Update `n_lines`
-            },
-            n_lines = 500,
-        }
-
-        -- Simple and easy statusline.
-        --  You could remove this setup call if you don't like it,
-        --  and try some other statusline plugin
-        local statusline = require 'mini.statusline'
-        -- Set `use_icons` to true if you have a Nerd Font
-        statusline.setup { use_icons = vim.g.have_nerd_font }
-
-        -- You can configure sections in the statusline by overriding their
-        -- default behavior. For example, here we set the section for
-        -- cursor location to LINE:COLUMN
-        ---@diagnostic disable-next-line: duplicate-set-field
-        statusline.section_location = function() return '%2l:%-2v' end
-    end,
+-- mini.nvim — modular UI plugins
+require('mini.comment').setup()
+require('mini.notify').setup {
+    lsp_progress = { enable = false },
+    window = { winblend = 100 },
 }
+require('mini.indentscope').setup()
+require('mini.pairs').setup()
+require('mini.ai').setup {
+    mappings = {
+        around_next = 'aa',
+        inside_next = 'ii',
+    },
+    n_lines = 500,
+}
+require('mini.surround').setup {
+    mappings = {
+        add = 'gsa',
+        delete = 'gsd',
+        replace = 'gsr',
+        find = 'gsf',
+        find_left = 'gsF',
+        highlight = 'gsh',
+        update_n_lines = 'gsn',
+    },
+    n_lines = 500,
+}
+
+-- Statusline
+local statusline = require('mini.statusline')
+statusline.setup { use_icons = vim.g.have_nerd_font }
+statusline.section_location = function() return '%2l:%-2v' end
