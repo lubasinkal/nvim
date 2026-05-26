@@ -28,3 +28,4 @@ package-lock.json
 .scoped css
 .scoped.scss
 
+/nvim-pack-lock.json
