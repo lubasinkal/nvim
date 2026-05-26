@@ -24,28 +24,28 @@ vim.api.nvim_create_autocmd('PackChanged', {
 -- ── Eager: loaded before first draw ──
 
 function M.load_eager()
-    require('config.plugins.deps')        -- plenary, nui, fugitive, mini.icons
-    require('config.plugins.mini')        -- statusline, notify, editor utilities
     require('config.plugins.whichkey')    -- keybinding discoverability
     require('config.plugins.colorscheme') -- visual appearance
+    require('config.plugins.deps')        -- plenary, nui, fugitive, mini.icons
+    require('config.plugins.mini')        -- statusline, notify, editor utilities
 end
 
 -- ── Deferred: loaded after startup via vim.schedule() ──
 
 function M.load_deferred()
     vim.schedule(function()
+        require('config.plugins.oil')
+        require('config.plugins.telescope')
+        require('config.plugins.neotree')
         require('config.plugins.gitsigns')
         require('config.plugins.treesitter')
         require('config.plugins.flash')
-        require('config.plugins.neotree')
-        require('config.plugins.oil')
-        require('config.plugins.lazygit')
-        require('config.plugins.todo')
-        require('config.plugins.markdown')
-        require('config.plugins.telescope')
-        require('config.plugins.typst')
         require('config.lsp.autocomplete')
         require('config.lsp.lspconfig')
+        require('config.plugins.todo')
+        require('config.plugins.markdown')
+        require('config.plugins.typst')
+        require('config.plugins.lazygit')
     end)
 end
 
