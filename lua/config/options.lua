@@ -3,7 +3,6 @@ vim.g.have_nerd_font = true
 vim.opt.signcolumn = 'yes'
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.numberwidth = 4
 vim.opt.scrolloff = 10
 vim.opt.smoothscroll = true
 vim.opt.sidescrolloff = 8
@@ -12,11 +11,9 @@ vim.opt.inccommand = 'split'
 vim.o.winborder = 'rounded'
 
 vim.opt.swapfile = false
-vim.opt.backup = false
 vim.opt.undofile = true
 vim.opt.updatetime = 200
 vim.opt.timeoutlen = 300
-vim.opt.splitkeep = 'screen'
 vim.opt.virtualedit = 'block'
 
 vim.opt.tabstop = 4
@@ -28,11 +25,10 @@ vim.opt.formatoptions:remove { 'c', 'r', 'o' }
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.shada = "!,'100,<50,s10,h"
-
 vim.opt.whichwrap:append '<>[]hl'
 vim.opt.iskeyword:append '-'
 
+vim.opt.ttimeoutlen = 0
 vim.o.pumborder = 'rounded'
 vim.o.pummaxwidth = 40
 vim.o.completeopt = 'menu,menuone,noselect,nearest'
