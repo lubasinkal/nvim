@@ -32,7 +32,6 @@ vim.opt.confirm = true
 vim.opt.autoread = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.shortmess:append { I = true }
 vim.opt.synmaxcol = 200
 vim.opt.diffopt:append('inline:char')
 vim.opt.whichwrap:append '<>[]hl'
