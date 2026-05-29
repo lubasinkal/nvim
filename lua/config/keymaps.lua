@@ -4,11 +4,11 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- =============================================
--- BASIC KEYMAPS
--- =============================================
+vim.keymap.set("n", "<leader>re", function()
+    require('config.util.session').save()
+    vim.cmd([[restart lua require('config.util.session').load()]])
+end, { desc = 'Restart and restore session' })
 
--- Command mode shortcut
 vim.keymap.set('n', ';', ':', { noremap = true, desc = 'Enter command mode' })
 
 -- Clear search highlights
