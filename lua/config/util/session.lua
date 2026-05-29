@@ -7,7 +7,7 @@ local function ensure_session_dir()
     if not session_dir_ready then
         session_dir_ready = true
         if not vim.uv.fs_stat(session_dir) then
-            vim.uv.fs_mkdir(session_dir, 0o755)
+            vim.uv.fs_mkdir(session_dir, tonumber('755', 8))
         end
     end
 end
