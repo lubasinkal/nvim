@@ -13,7 +13,7 @@ local function ensure_session_dir()
 end
 
 local function escape_path(path)
-    return path:gsub('[][{}*?`''\\%% !]', '\\%0')
+    return path:gsub([[][{}*?`'\% !#]], [[\%0]])
 end
 
 local function get_session_filename()
@@ -33,7 +33,7 @@ function M.save()
     ensure_session_dir()
     local path = get_session_filename()
     vim.cmd('mksession! ' .. escape_path(path))
-    vim.notify('Session saved → ' .. path:sub(#session_dir + 1), vim.log.levels.INFO)
+    vim.notify('Session saved ' .. path:sub(#session_dir + 1), vim.log.levels.INFO)
 end
 
 function M.load()
