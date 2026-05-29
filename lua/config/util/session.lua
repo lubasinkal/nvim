@@ -1,22 +1,27 @@
 local M = {}
 
 local session_dir = vim.fn.stdpath 'data' .. '/sessions/'
+local session_dir_ready = false
 
 local function ensure_session_dir()
-    if vim.fn.isdirectory(session_dir) == 0 then
-        vim.fn.mkdir(session_dir, 'p')
+    if not session_dir_ready then
+        session_dir_ready = true
+        if not vim.uv.fs_stat(session_dir) then
+            vim.uv.fs_mkdir(session_dir, 0o755)
+        end
     end
 end
 
-local function get_session_filename()
-    local cwd = vim.fn.getcwd()
-    local name = vim.fs.basename(cwd)
+local function escape_path(path)
+    return path:gsub('[][{}*?`''\\%% !]', '\\%0')
+end
 
+local function get_session_filename()
+    local name = vim.fs.basename(vim.uv.cwd())
     local branch = vim.b.gitsigns_head
     if branch and branch ~= 'main' and branch ~= 'master' then
         name = name .. '%%' .. branch
     end
-
     return session_dir .. name .. '.vim'
 end
 
@@ -27,34 +32,39 @@ end
 function M.save()
     ensure_session_dir()
     local path = get_session_filename()
-    vim.cmd('mksession! ' .. vim.fn.fnameescape(path))
-    vim.notify('Session saved → ' .. vim.fn.fnamemodify(path, ':~'), vim.log.levels.INFO)
+    vim.cmd('mksession! ' .. escape_path(path))
+    vim.notify('Session saved → ' .. path:sub(#session_dir + 1), vim.log.levels.INFO)
 end
 
 function M.load()
+    local cwd_name = vim.fs.basename(vim.uv.cwd())
     local branch = vim.b.gitsigns_head
-    local cwd = vim.fs.basename(vim.fn.getcwd())
-    local name_with_branch = cwd .. (branch and branch ~= 'main' and branch ~= 'master' and '%%' .. branch or '')
-    local name_no_branch = cwd
+    local has_branch = branch and branch ~= 'main' and branch ~= 'master'
 
-    local path_branch = session_dir .. name_with_branch .. '.vim'
-    local path_base = session_dir .. name_no_branch .. '.vim'
+    local base_path = session_dir .. cwd_name .. '.vim'
 
-    if vim.fn.filereadable(path_branch) == 1 then
-        vim.cmd('source ' .. vim.fn.fnameescape(path_branch))
-        vim.notify('Session loaded', vim.log.levels.INFO)
-    elseif vim.fn.filereadable(path_base) == 1 then
-        vim.cmd('source ' .. vim.fn.fnameescape(path_base))
-        vim.notify('Session loaded (no branch)', vim.log.levels.INFO)
-    else
-        vim.notify('No session found', vim.log.levels.WARN)
+    if has_branch then
+        local branch_path = session_dir .. cwd_name .. '%%' .. branch .. '.vim'
+        if vim.uv.fs_stat(branch_path) then
+            vim.cmd('source ' .. escape_path(branch_path))
+            vim.notify('Session loaded', vim.log.levels.INFO)
+            return
+        end
     end
+
+    if vim.uv.fs_stat(base_path) then
+        vim.cmd('source ' .. escape_path(base_path))
+        vim.notify(has_branch and 'Session loaded (no branch)' or 'Session loaded', vim.log.levels.INFO)
+        return
+    end
+
+    vim.notify('No session found', vim.log.levels.WARN)
 end
 
 function M.delete()
     local path = get_session_filename()
-    if vim.fn.filereadable(path) == 1 then
-        vim.fn.delete(path)
+    if vim.uv.fs_stat(path) then
+        vim.uv.fs_unlink(path)
         vim.notify('Session deleted', vim.log.levels.INFO)
     else
         vim.notify('No session to delete', vim.log.levels.WARN)
@@ -62,16 +72,24 @@ function M.delete()
 end
 
 function M.list()
-    local files = vim.fn.glob(session_dir .. '*.vim', false, true)
+    local files = {}
+    for name, type in vim.fs.dir(session_dir) do
+        if type == 'file' and name:match('%.vim$') then
+            table.insert(files, {
+                path = session_dir .. name,
+                name = name:gsub('%.vim$', ''),
+            })
+        end
+    end
+
     if #files == 0 then
         vim.notify('No saved sessions', vim.log.levels.WARN)
         return
     end
-    local items = {}
-    for _, f in ipairs(files) do
-        table.insert(items, { path = f, name = vim.fn.fnamemodify(f, ':t:r') })
-    end
-    vim.ui.select(items, {
+
+    table.sort(files, function(a, b) return a.name < b.name end)
+
+    vim.ui.select(files, {
         prompt = 'Sessions (Enter=load, d=delete):',
         format_item = function(item) return item.name end,
     }, function(choice)
@@ -80,10 +98,10 @@ function M.list()
             prompt = 'Action:',
         }, function(action)
             if action == 'load' then
-                vim.cmd('source ' .. vim.fn.fnameescape(choice.path))
+                vim.cmd('source ' .. escape_path(choice.path))
                 vim.notify('Loaded: ' .. choice.name, vim.log.levels.INFO)
-            elseif action == 'delete' then
-                vim.fn.delete(choice.path)
+            else
+                vim.uv.fs_unlink(choice.path)
                 vim.notify('Deleted: ' .. choice.name, vim.log.levels.INFO)
             end
         end)
