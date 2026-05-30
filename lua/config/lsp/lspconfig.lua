@@ -61,15 +61,6 @@ return {
                             vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
                         end,
                     })
-                    -- NOTE: Format on save
-                    vim.api.nvim_create_autocmd("BufWritePre", {
-                        -- 3
-                        buffer = event.buf,
-                        callback = function()
-                            -- 4 + 5
-                            vim.lsp.buf.format { async = false, id = event.data.client_id }
-                        end,
-                    })
                 end
             end,
         })
