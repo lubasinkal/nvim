@@ -17,6 +17,6 @@ return {
             end,
             desc = 'Previous todo comment',
         },
-        { '<leader>st', '<cmd>TodoTelescope<cr>', desc = 'Todo (Telescope)' },
+        { '<leader>st', '<cmd>TodoFzfLua<cr>', desc = 'Todo Comments' },
     },
 }

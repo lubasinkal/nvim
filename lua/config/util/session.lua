@@ -113,10 +113,10 @@ vim.api.nvim_create_user_command('SessionLoad', M.load, {})
 vim.api.nvim_create_user_command('SessionDelete', M.delete, {})
 vim.api.nvim_create_user_command('SessionList', M.list, {})
 
-vim.keymap.set('n', '<leader>ws', M.save, { desc = '[S]ave session' })
-vim.keymap.set('n', '<leader>wl', M.load, { desc = '[L]oad current' })
-vim.keymap.set('n', '<leader>wd', M.delete, { desc = '[D]elete current' })
-vim.keymap.set('n', '<leader>wL', M.list, { desc = '[L]ist sessions' })
+vim.keymap.set('n', '<leader>ws', M.save, { desc = 'Save session' })
+vim.keymap.set('n', '<leader>wl', M.load, { desc = 'Load current' })
+vim.keymap.set('n', '<leader>wd', M.delete, { desc = 'Delete current' })
+vim.keymap.set('n', '<leader>wL', M.list, { desc = 'List sessions' })
 
 vim.opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
