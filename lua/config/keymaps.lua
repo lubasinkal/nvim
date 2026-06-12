@@ -2,8 +2,8 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 vim.keymap.set('n', '<leader>re', function()
-    require('config.util.session').save()
-    vim.cmd([[restart lua require('config.util.session').load()]])
+  require('config.util.session').save()
+  vim.cmd [[restart lua require('config.util.session').load()]]
 end, { desc = 'Restart and restore session' })
 
 vim.keymap.set('n', ';', ':', { noremap = true, desc = 'Enter command mode' })
@@ -31,17 +31,17 @@ vim.keymap.set('v', '>', '>gv', { desc = 'Indent selection' })
 vim.keymap.set('x', 'p', '"_dP', { desc = 'Paste without yanking replaced text' })
 
 vim.keymap.set('n', '<leader>uh', function()
-    local enabled = vim.lsp.inlay_hint.is_enabled()
-    vim.lsp.inlay_hint.enable(not enabled)
-    vim.notify(enabled and "Inlay Hints Disabled" or "Inlay Hints Enabled")
+  local enabled = vim.lsp.inlay_hint.is_enabled()
+  vim.lsp.inlay_hint.enable(not enabled)
+  vim.notify(enabled and 'Inlay Hints Disabled' or 'Inlay Hints Enabled')
 end, { desc = 'Toggle inlay [H]ints' })
 
 vim.keymap.set('n', 'gk', function()
-    local current = vim.diagnostic.config().virtual_lines or false
-    vim.diagnostic.config { virtual_lines = not current }
+  local current = vim.diagnostic.config().virtual_lines or false
+  vim.diagnostic.config { virtual_lines = not current }
 end, { desc = 'Toggle diagnostic virtual lines' })
 
 vim.keymap.set('n', '<leader>ut', function()
-    vim.cmd.packadd('nvim.undotree')
-    require('undotree').open()
+  vim.cmd.packadd 'nvim.undotree'
+  require('undotree').open()
 end, { desc = 'Open Undotree' })

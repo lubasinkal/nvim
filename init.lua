@@ -1,13 +1,13 @@
 require 'config.keymaps'
 require 'config.options'
-require('config.autocmd')
+require 'config.autocmd'
 
 -- Defer utility modules until first use
 local util_modules = { 'floaterminal', 'session', 'tabs' }
 for _, mod in ipairs(util_modules) do
-    vim.defer_fn(function()
-        require('config.util.' .. mod)
-    end, 0)
+  vim.defer_fn(function()
+    require('config.util.' .. mod)
+  end, 0)
 end
 
-require("config.lazy")
+require 'config.lazy'
