@@ -43,28 +43,3 @@ fzf.setup {
 }
 
 fzf.register_ui_select()
-
--- Search (prefixed with leader s)
-vim.keymap.set('n', '<leader>sh', '<cmd>FzfLua help_tags<CR>', { desc = 'Help' })
-vim.keymap.set('n', '<leader>sk', '<cmd>FzfLua keymaps<CR>', { desc = 'Keymaps' })
-vim.keymap.set('n', '<leader>sw', '<cmd>FzfLua grep_cword<CR>', { desc = 'Current Word' })
-vim.keymap.set('v', '<leader>sw', '<cmd>FzfLua grep_visual<CR>', { desc = 'Current Selection' })
-vim.keymap.set('n', '<leader>sg', '<cmd>FzfLua live_grep<CR>', { desc = 'Grep' })
-vim.keymap.set('n', '<leader>sd', '<cmd>FzfLua diagnostics_document<CR>', { desc = 'Diagnostics' })
-vim.keymap.set('n', '<leader>sr', '<cmd>FzfLua resume<CR>', { desc = 'Resume' })
-vim.keymap.set('n', '<leader>sf', '<cmd>FzfLua files<CR>', { desc = 'Files' })
-vim.keymap.set('n', '<leader>sn', function()
-  require('fzf-lua').files { cwd = vim.fn.stdpath 'config' }
-end, { desc = 'Neovim Files' })
-
--- Git
-vim.keymap.set('n', '<leader>gf', '<cmd>FzfLua git_files<CR>', { desc = 'Git Files' })
-vim.keymap.set('n', '<leader>gc', '<cmd>FzfLua git_commits<CR>', { desc = 'Git Commits' })
-vim.keymap.set('n', '<leader>gC', '<cmd>FzfLua git_bcommits<CR>', { desc = 'Buffer Commits' })
-vim.keymap.set('n', '<leader>gb', '<cmd>FzfLua git_branches<CR>', { desc = 'Git Branches' })
-vim.keymap.set('n', '<leader>gs', '<cmd>FzfLua git_status<CR>', { desc = 'Git Status' })
-
--- Buffers (prefixed with leader b)
-vim.keymap.set('n', '<leader>bb', '<cmd>FzfLua buffers<CR>', { desc = 'Buffers' })
-vim.keymap.set('n', '<leader>br', '<cmd>FzfLua oldfiles<CR>', { desc = 'Recent' })
-vim.keymap.set('n', '<leader>bl', '<cmd>FzfLua blines<CR>', { desc = 'Buffer Lines' })

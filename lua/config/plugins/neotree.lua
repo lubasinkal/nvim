@@ -5,4 +5,3 @@ require('neo-tree').setup {
     width = 25,
   },
 }
-vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>', { desc = 'Toggle Explorer' })

@@ -1,6 +1,8 @@
+local M = {}
+
 local state = { buf = -1, win = -1 }
 
-local function toggle()
+function M.toggle()
   if vim.api.nvim_win_is_valid(state.win) then
     vim.api.nvim_win_hide(state.win)
     return
@@ -48,4 +50,4 @@ vim.api.nvim_create_autocmd('TermClose', {
   end,
 })
 
-vim.keymap.set('n', '<Leader>tt', toggle, { desc = 'Toggle floating terminal' })
+return M

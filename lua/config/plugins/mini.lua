@@ -50,20 +50,3 @@ require('mini.sessions').setup {
   force = { read = true, write = true, delete = true },
   verbose = { write = true, delete = true },
 }
-
-local function session_name()
-  return vim.fs.basename(vim.uv.cwd()) .. '.vim'
-end
-
-vim.keymap.set('n', '<leader>ws', function()
-  require('mini.sessions').write(session_name())
-end, { desc = 'Save session' })
-vim.keymap.set('n', '<leader>wl', function()
-  require('mini.sessions').read(session_name())
-end, { desc = 'Load current' })
-vim.keymap.set('n', '<leader>wd', function()
-  require('mini.sessions').delete(session_name())
-end, { desc = 'Delete current' })
-vim.keymap.set('n', '<leader>wL', function()
-  require('mini.sessions').select 'read'
-end, { desc = 'List sessions' })
