@@ -56,7 +56,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-local ensure_installed = { 'stylua', 'lua_ls' }
 vim.lsp.config('lua_ls', {
   settings = {
     Lua = {
@@ -105,7 +104,10 @@ vim.lsp.config('ts_ls', {
   },
 })
 vim.lsp.config('vue_ls', {})
+require('mason').setup {
+  ensure_installed = { 'stylua' },
+}
 require('mason-lspconfig').setup {
-  ensure_installed = ensure_installed,
+  ensure_installed = { 'lua_ls' },
   automatic_enable = true,
 }
