@@ -93,7 +93,6 @@ end, { desc = 'Blame line' })
 
 -- <leader>e — explorer / files
 vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>', { desc = 'Explorer' })
-vim.keymap.set('n', '<leader>ef', '<Cmd>Neotree reveal<CR>', { desc = 'Reveal file in explorer' })
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Oil (parent dir)' })
 
 -- <leader>t — terminal
@@ -123,11 +122,8 @@ vim.keymap.set('n', '<leader>wL', function()
   require('mini.sessions').select 'read'
 end, { desc = 'List sessions' })
 
--- <leader>q — quickfix / location list
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Quickfix list' })
-vim.keymap.set('n', '<leader>qo', '<cmd>copen<CR>', { desc = 'Open quickfix' })
-vim.keymap.set('n', '<leader>qc', '<cmd>cclose<CR>', { desc = 'Close quickfix' })
-vim.keymap.set('n', '<leader>qt', function()
+-- <leader>q — quickfix toggle
+vim.keymap.set('n', '<leader>q', function()
   local qf_win = vim.fn.getqflist({ winid = 0 }).winid
   if qf_win and qf_win > 0 then
     vim.cmd 'cclose'
@@ -135,7 +131,6 @@ vim.keymap.set('n', '<leader>qt', function()
     vim.cmd 'copen'
   end
 end, { desc = 'Toggle quickfix' })
-
 -- <leader>r — restart / reload
 vim.keymap.set('n', '<leader>re', function()
   require('mini.sessions').write(vim.fs.basename(vim.uv.cwd()) .. '.vim')
