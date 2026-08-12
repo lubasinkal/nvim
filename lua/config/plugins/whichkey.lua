@@ -18,6 +18,7 @@ require('which-key').setup {
     { '<leader>t', group = 'Terminal', icon = { icon = ' ', color = 'red' } },
     { '<leader>e', group = 'Explorer', icon = { icon = '󰉋 ', color = 'blue' } },
     { '<leader>r', group = 'Restart', icon = { icon = '󰜉 ', color = 'purple' } },
+    { '<leader>q', group = 'Quickfix', icon = { icon = '󰅚 ', color = 'orange' } },
     { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' }, icon = { icon = '󰊢', color = 'orange' } },
     { '<leader>p', group = 'Pack', icon = { icon = '󰏗 ', color = 'blue' } },
     { 'gs', group = 'Surround', mode = { 'n', 'x' }, icon = { icon = '󰕘', color = 'yellow' } },

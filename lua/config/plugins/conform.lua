@@ -16,8 +16,13 @@ require('conform').setup {
     go = { 'gofumpt', 'gofmt' },
     rust = { 'rustfmt' },
   },
-  format_on_save = {
-    timeout_ms = 500,
-    lsp_fallback = true,
-  },
+  format_on_save = function(bufnr)
+    if vim.g.format_on_save == false then
+      return
+    end
+    return {
+      timeout_ms = 500,
+      lsp_fallback = true,
+    }
+  end,
 }
