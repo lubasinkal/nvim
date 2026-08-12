@@ -75,6 +75,7 @@ vim.keymap.set('n', '<leader>sd', '<cmd>FzfLua diagnostics_document<CR>', { desc
 vim.keymap.set('n', '<leader>sh', '<cmd>FzfLua help_tags<CR>', { desc = 'Help tags' })
 vim.keymap.set('n', '<leader>sk', '<cmd>FzfLua keymaps<CR>', { desc = 'Keymaps' })
 vim.keymap.set('n', '<leader>sr', '<cmd>FzfLua resume<CR>', { desc = 'Resume last' })
+vim.keymap.set('n', '<leader>s.', '<cmd>FzfLua oldfiles<CR>', { desc = 'Recent files' })
 vim.keymap.set('n', '<leader>sJ', '<cmd>FzfLua jumps<CR>', { desc = 'Jumps' })
 vim.keymap.set('n', '<leader>sm', '<cmd>FzfLua marks<CR>', { desc = 'Marks' })
 
