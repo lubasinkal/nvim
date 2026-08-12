@@ -2,8 +2,8 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 vim.keymap.set('n', '<leader>re', function()
-  require('config.util.session').save()
-  vim.cmd [[restart lua require('config.util.session').load()]]
+  require('mini.sessions').write()
+  vim.cmd [[restart lua pcall(require('mini.sessions').read)]]
 end, { desc = 'Restart and restore session' })
 
 vim.keymap.set('n', ';', ':', { noremap = true, desc = 'Enter command mode' })
@@ -29,6 +29,9 @@ vim.keymap.set('v', '<', '<gv', { desc = 'Dedent selection' })
 vim.keymap.set('v', '>', '>gv', { desc = 'Indent selection' })
 
 vim.keymap.set('x', 'p', '"_dP', { desc = 'Paste without yanking replaced text' })
+
+vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<CR>', { desc = 'Delete buffer' })
+vim.keymap.set('n', '<leader>bn', '<cmd>enew<CR>', { desc = 'New buffer' })
 
 vim.keymap.set('n', '<leader>uh', function()
   local enabled = vim.lsp.inlay_hint.is_enabled()

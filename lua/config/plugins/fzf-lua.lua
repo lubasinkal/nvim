@@ -3,8 +3,6 @@ local fzf = require 'fzf-lua'
 
 fzf.setup {
   winopts = {
-    height = 0.85,
-    width = 0.80,
     preview = {
       layout = 'horizontal',
       horizontal = 'right:50%',

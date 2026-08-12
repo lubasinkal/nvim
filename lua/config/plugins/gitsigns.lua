@@ -2,9 +2,6 @@ vim.pack.add { 'https://github.com/lewis6991/gitsigns.nvim' }
 require('gitsigns').setup {
   current_line_blame = true,
   current_line_blame_opts = {
-    virt_text = true,
-    virt_text_pos = 'eol',
-    delay = 500,
     ignore_whitespace = false,
   },
   current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
@@ -16,7 +13,6 @@ require('gitsigns').setup {
       vim.keymap.set(mode, l, r, opts)
     end
 
-    -- Navigation
     map('n', ']c', function()
       if vim.wo.diff then
         return ']c'
@@ -44,7 +40,6 @@ require('gitsigns').setup {
       gs.nav_hunk 'first'
     end, { desc = 'First Hunk' })
 
-    -- Actions
     map({ 'n', 'v' }, '<leader>hs', ':Gitsigns stage_hunk<CR>', { desc = 'Stage Hunk' })
     map({ 'n', 'v' }, '<leader>hr', ':Gitsigns reset_hunk<CR>', { desc = 'Reset Hunk' })
     map('n', '<leader>hS', gs.stage_buffer, { desc = 'Stage [S]erial Buffer' })

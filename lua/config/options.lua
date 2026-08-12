@@ -32,6 +32,7 @@ vim.opt.confirm = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.synmaxcol = 200
+vim.opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 vim.opt.whichwrap:append '<>[]hl'
 vim.opt.iskeyword:append '-'
 

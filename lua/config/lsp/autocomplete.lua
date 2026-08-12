@@ -9,13 +9,9 @@ require('blink.cmp').setup {
     preset = 'default',
     ['<C-k>'] = { 'select_next', 'fallback' },
     ['<C-j>'] = { 'select_prev', 'fallback' },
-    ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
-    ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
     -- prefer explicit accept key (C-y) to reduce accidental accepts with <CR>
     ['<C-y>'] = { 'accept', 'fallback' },
     ['<CR>'] = { 'accept', 'fallback' },
-    ['<C-e>'] = { 'cancel', 'fallback' },
-    ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
     -- Tab / S-Tab: sensible fallbacks, snippet support, complete when appropriate
     ['<Tab>'] = {
       function(cmp)

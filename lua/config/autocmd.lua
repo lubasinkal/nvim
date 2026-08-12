@@ -12,13 +12,6 @@ vim.api.nvim_create_autocmd('InsertEnter', {
     vim.cmd 'norm! zz'
   end,
 })
--- Automatic window resizing
-vim.api.nvim_create_autocmd({ 'VimResized' }, {
-  callback = function()
-    vim.cmd 'redraw!'
-    vim.cmd 'wincmd ='
-  end,
-})
 -- Vertical Help Page
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'help',
@@ -52,7 +45,6 @@ vim.api.nvim_create_autocmd('FileType', {
     local filetype = vim.bo.filetype
 
     if filetype and filetype ~= '' then
-      pcall(vim.treesitter.start)
       vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
       vim.bo.indentexpr = 'v:lua.vim.treesitter.indentexpr()'
     end
