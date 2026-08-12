@@ -1,7 +1,7 @@
 vim.pack.add {
   'https://github.com/rafamadriz/friendly-snippets',
   'https://github.com/roobert/tailwindcss-colorizer-cmp.nvim',
-  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.0' },
+  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.*' },
 }
 require('tailwindcss-colorizer-cmp').setup { color_square_width = 2 }
 require('blink.cmp').setup {
