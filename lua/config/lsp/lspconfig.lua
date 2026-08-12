@@ -51,51 +51,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
 vim.lsp.config('lua_ls', {
   settings = {
     Lua = {
-      runtime = {
-        -- Tell lua_ls you're using Neovim's LuaJIT
-        version = 'LuaJIT',
-        -- Optional: mimic Neovim's package.path for require("…")
-        -- Usually not strictly needed if you set workspace.library correctly
-        path = {
-          'lua/?.lua',
-          'lua/?/init.lua',
-        },
-      },
-      diagnostics = {
-        -- Stop "undefined global vim" warnings
-        globals = { 'vim' },
-      },
+      runtime = { version = 'LuaJIT', path = { 'lua/?.lua', 'lua/?/init.lua' } },
+      diagnostics = { globals = { 'vim' } },
       workspace = {
-        -- Very important: make lua_ls aware of Neovim's runtime files
-        library = {
-          -- Neovim runtime
-          vim.env.VIMRUNTIME,
-          '${3rd}/luv/library',
-          vim.fn.stdpath 'config',
-          '${3rd}/busted/library',
-        },
-        -- Recommended for performance & to avoid 3rd-party prompts
+        library = { vim.env.VIMRUNTIME, '${3rd}/luv/library', vim.fn.stdpath 'config', '${3rd}/busted/library' },
         checkThirdParty = false,
       },
-      -- Optional: disable telemetry
       telemetry = { enable = false },
     },
   },
 })
-vim.lsp.config('ts_ls', {
-  filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-  init_options = {
-    plugins = {
-      {
-        name = '@vue/typescript-plugin',
-        location = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server',
-        languages = { 'vue' },
-        configNamespace = 'typescript',
-      },
-    },
-  },
-})
-vim.lsp.config('vue_ls', {})
 require('mason').setup {
   ensure_installed = { 'stylua' },
 }

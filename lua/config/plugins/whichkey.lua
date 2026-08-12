@@ -19,9 +19,4 @@ require('which-key').setup {
     { 'gs', group = 'Surround', mode = { 'n', 'x' } },
     { 'gr', group = 'LSP Actions', mode = { 'n' } },
   },
-  win = {
-    wo = {
-      winblend = 100,
-    },
-  },
 }

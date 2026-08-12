@@ -42,18 +42,7 @@ require('gitsigns').setup {
 
     map({ 'n', 'v' }, '<leader>hs', ':Gitsigns stage_hunk<CR>', { desc = 'Stage Hunk' })
     map({ 'n', 'v' }, '<leader>hr', ':Gitsigns reset_hunk<CR>', { desc = 'Reset Hunk' })
-    map('n', '<leader>hS', gs.stage_buffer, { desc = 'Stage [S]erial Buffer' })
-    map('n', '<leader>hu', gs.undo_stage_hunk, { desc = 'Undo Stage' })
-    map('n', '<leader>hR', gs.reset_buffer, { desc = 'Reset Buffer' })
     map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview Hunk' })
-    map('n', '<leader>hb', function()
-      gs.blame_line { full = true }
-    end, { desc = 'Blame Line' })
     map('n', '<leader>ub', gs.toggle_current_line_blame, { desc = 'Blame' })
-    map('n', '<leader>hd', gs.diffthis, { desc = 'Diff This' })
-    map('n', '<leader>hD', function()
-      gs.diffthis '~'
-    end, { desc = 'Diff This [~]' })
-    map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'Select Hunk' })
   end,
 }

@@ -12,33 +12,6 @@ require('blink.cmp').setup {
     -- prefer explicit accept key (C-y) to reduce accidental accepts with <CR>
     ['<C-y>'] = { 'accept', 'fallback' },
     ['<CR>'] = { 'accept', 'fallback' },
-    -- Tab / S-Tab: sensible fallbacks, snippet support, complete when appropriate
-    ['<Tab>'] = {
-      function(cmp)
-        -- If popup visible, select next
-        if cmp.is_visible() then
-          return cmp.select_next()
-        end
-        -- If snippet engine has jump available, jump
-        if cmp.snippet_active() then
-          return cmp.snippet_forward()
-        end
-      end,
-      'fallback',
-    },
-
-    ['<S-Tab>'] = {
-      function(cmp)
-        if cmp.is_visible() then
-          return cmp.select_prev()
-        end
-        if cmp.snippet_active() then
-          return cmp.snippet_backward()
-        end
-        return cmp.fallback()
-      end,
-      'fallback',
-    },
   },
   appearance = {
     nerd_font_variant = 'mono',
