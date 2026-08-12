@@ -99,15 +99,7 @@ vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Oil (parent dir)' })
 -- <leader>t — terminal
 vim.keymap.set('n', '<Leader>tt', function()
   require('config.util.floaterminal').toggle()
-end, { desc = 'Floating terminal' })
-vim.keymap.set('n', '<leader>th', function()
-  vim.cmd 'split | terminal'
-  vim.cmd 'startinsert'
-end, { desc = 'Horizontal terminal' })
-vim.keymap.set('n', '<leader>tv', function()
-  vim.cmd 'vsplit | terminal'
-  vim.cmd 'startinsert'
-end, { desc = 'Vertical terminal' })
+end, { desc = 'Toggle floating terminal' })
 
 -- <leader>w — sessions
 vim.keymap.set('n', '<leader>ws', function()
