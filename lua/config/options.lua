@@ -29,11 +29,9 @@ vim.opt.formatoptions:remove { 'c', 'r', 'o' }
 vim.opt.list = true
 vim.opt.listchars = { trail = '·', tab = '  ' }
 vim.opt.confirm = true
-vim.opt.autoread = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.synmaxcol = 200
-vim.opt.diffopt:append 'inline:char'
 vim.opt.whichwrap:append '<>[]hl'
 vim.opt.iskeyword:append '-'
 
@@ -58,12 +56,9 @@ vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'NormalFloat', { bg = '#1e1e1e' })
 
 vim.diagnostic.config {
-  update_in_insert = false,
   severity_sort = true,
-  float = { border = 'rounded', source = 'if_many', header = '' },
-  underline = { severity = { min = vim.diagnostic.severity.WARN } },
   virtual_text = true,
-  virtual_lines = false,
+  underline = { severity = { min = vim.diagnostic.severity.WARN } },
   jump = {
     on_jump = function(diag, bufnr)
       if diag then
