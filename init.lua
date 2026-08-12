@@ -10,4 +10,4 @@ for _, mod in ipairs(util_modules) do
   end, 0)
 end
 
-require 'config.lazy'
+require 'config.pack'

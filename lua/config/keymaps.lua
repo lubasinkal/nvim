@@ -42,6 +42,5 @@ vim.keymap.set('n', 'gk', function()
 end, { desc = 'Toggle diagnostic virtual lines' })
 
 vim.keymap.set('n', '<leader>ut', function()
-  vim.cmd.packadd 'nvim.undotree'
   require('undotree').open()
 end, { desc = 'Open Undotree' })

@@ -1,9 +1,1 @@
-return {
-  'nvim-treesitter/nvim-treesitter',
-  build = ':TSUpdate',
-  branch = 'main',
-  event = 'VeryLazy',
-  config = function()
-    require('nvim-treesitter').setup {}
-  end,
-}
+vim.pack.add { { src = 'https://github.com/nvim-treesitter/nvim-treesitter', version = 'main' } }

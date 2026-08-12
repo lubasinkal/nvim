@@ -1,13 +1,13 @@
 # 🚀 Personal Neovim Configuration
 
-A modern, high-performance Neovim configuration bootstrapped from [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). Designed for speed, aesthetics, and a seamless developer experience with lazy-loaded plugins via `lazy.nvim`.
+A modern, high-performance Neovim configuration bootstrapped from [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). Designed for speed, aesthetics, and a seamless developer experience with plugins managed via Neovim 0.12's built-in `vim.pack`.
 
 ## ⚡ Features
 
-- **Blazing Fast:** Optimized startup with aggressive lazy-loading.
+- **Blazing Fast:** Optimized startup with eager/deferred plugin loading.
 - **Modern UI:** Clean statusline, tabline with icons, and floating windows.
-- **Git Integration:** Integrated `lazygit`, inline blame, and hunk management via `gitsigns`.
-- **Search & Navigation:** Powerful fuzzy finding with `telescope` and fast jumping with `flash.nvim`.
+- **Git Integration:** Inline blame and hunk management via `gitsigns`.
+- **Search & Navigation:** Powerful fuzzy finding with `fzf-lua` and fast jumping with `flash.nvim`.
 - **File Management:** `neo-tree` for sidebar exploration and `oil.nvim` for buffer-like FS editing.
 - **LSP & Autocomplete:** Full LSP support (Mason-managed) with `blink.cmp` for superior completion.
 - **Productivity:** `mini.nvim` modules for surround, pairs, commenting, and more.
@@ -21,7 +21,7 @@ A modern, high-performance Neovim configuration bootstrapped from [kickstart.nvi
 - **Nerd Font** (Optional, but highly recommended for icons)
 
 ### Optional Dependencies
-- **unzip**, **make**, **gcc/zig** (For compiling certain telescope extensions)
+- **unzip**, **make**, **gcc/zig** (For compiling certain fzf-lua extensions)
 - **xclip/xsel** (Linux) or **win32yank** (Windows) for system clipboard support.
 
 ## 📥 Installation
@@ -57,7 +57,6 @@ This config uses `<Space>` as the **Leader** key.
 | **Explorer** | `<leader>e` | Toggle Neo-tree |
 | **Search** | `<leader>sf` | [F]ind Files |
 | **Search** | `<leader>sg` | By [G]rep |
-| **Git** | `<leader>gg` | Open Lazygit |
 | **Sessions** | `<leader>ws` | [S]ave Session |
 | **Terminal** | `<leader>tt` | [T]oggle Floating Terminal |
 | **UI** | `<leader>ub` | Toggle Inline [B]lame |
@@ -76,7 +75,7 @@ Most custom logic resides in `lua/config/`:
 
 - `:help kickstart` - Documentation for the base config.
 - `:help lua-guide` - Neovim's official Lua guide.
-- [lazy.nvim](https://github.com/folke/lazy.nvim) - Plugin manager documentation.
+- [vim.pack](https://neovim.io/doc/user/usr_05.html#vim.pack) - Built-in plugin manager (Neovim 0.12+).
 
 ---
 *Maintained by [lubasinkal](https://github.com/lubasinkal)*
