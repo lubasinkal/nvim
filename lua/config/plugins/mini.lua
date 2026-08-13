@@ -9,6 +9,7 @@ require('mini.notify').setup {
 }
 require('mini.indentscope').setup()
 require('mini.pairs').setup()
+require('mini.snippets').setup()
 require('mini.ai').setup {
   mappings = {
     around_next = 'aa',
