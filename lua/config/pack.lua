@@ -25,9 +25,8 @@ require 'config.plugins.mini'
 require 'config.plugins.colorscheme'
 require 'config.plugins.whichkey'
 
--- nvim.undotree: loaded eagerly so the <leader>ut keymap's require('undotree') works
-vim.cmd.packadd 'undotree'
-vim.keymap.set('n', '<leader>ut', '<cmd>UndotreeToggle<CR>')
+-- nvim.undotree: built-in (0.12) visual undo-tree navigator, loaded eagerly so the <leader>ut keymap's require('undotree') works
+vim.cmd.packadd 'nvim.undotree'
 -- Deferred: run right after startup
 local deferred = {
   'oil',
