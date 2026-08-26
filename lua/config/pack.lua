@@ -22,6 +22,7 @@ vim.api.nvim_create_autocmd('PackChanged', {
 -- Eager: ready before first draw
 require 'config.deps'
 require 'config.plugins.mini'
+require 'config.plugins.colorscheme'
 require 'config.plugins.whichkey'
 require 'config.plugins.oil'
 require 'config.plugins.fzf-lua'
@@ -29,7 +30,6 @@ require 'config.plugins.fzf-lua'
 vim.cmd.packadd 'nvim.undotree'
 -- Deferred: run right after startup
 local deferred = {
-  'colorscheme',
   'neotree',
   'gitsigns',
   'treesitter',
