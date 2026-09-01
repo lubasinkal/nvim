@@ -1,5 +1,4 @@
 -- vim.pack: Neovim 0.12 built-in plugin manager.
--- Eager: deps + UI plugins before first draw. Deferred: everything else via vim.schedule.
 
 -- PackChanged hook must be registered before the first vim.pack.add() call.
 vim.api.nvim_create_autocmd('PackChanged', {
@@ -19,38 +18,25 @@ vim.api.nvim_create_autocmd('PackChanged', {
   end,
 })
 
--- Eager: ready before first draw
 require 'config.deps'
 require 'config.plugins.mini'
 require 'config.plugins.colorscheme'
 require 'config.plugins.whichkey'
 require 'config.plugins.oil'
 require 'config.plugins.fzf-lua'
+require 'config.plugins.neotree'
+require 'config.plugins.gitsigns'
+require 'config.plugins.treesitter'
+require 'config.plugins.flash'
+require 'config.plugins.markdown'
+require 'config.plugins.typst'
+require 'config.plugins.todo'
+require 'config.plugins.conform'
+require 'config.plugins.supermaven'
+require 'config.lsp.autocomplete'
+require 'config.lsp.lspconfig'
 -- nvim.undotree: built-in (0.12) visual undo-tree navigator, loaded eagerly so the <leader>ut keymap's require('undotree') works
 vim.cmd.packadd 'nvim.undotree'
--- Deferred: run right after startup
-local deferred = {
-  'neotree',
-  'gitsigns',
-  'treesitter',
-  'flash',
-  'markdown',
-  'typst',
-  'todo',
-  'conform',
-  'supermaven',
-}
-for _, name in ipairs(deferred) do
-  vim.schedule(function()
-    require('config.plugins.' .. name)
-  end)
-end
-vim.schedule(function()
-  require 'config.lsp.autocomplete'
-end)
-vim.schedule(function()
-  require 'config.lsp.lspconfig'
-end)
 
 -- Plugin management keymaps
 vim.keymap.set('n', '<leader>pu', function()
