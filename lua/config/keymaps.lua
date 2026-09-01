@@ -92,13 +92,12 @@ vim.keymap.set('n', '<leader>gB', function()
   require('gitsigns').blame_line { full = true }
 end, { desc = 'Blame line' })
 
--- <leader>e — explorer / files
+-- <leader>e — explorer / files (Oil '-' is set in plugins.lua)
 vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>', { desc = 'Explorer' })
-vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Oil (parent dir)' })
 
 -- <leader>t — terminal
 vim.keymap.set('n', '<Leader>tt', function()
-  require('config.util.floaterminal').toggle()
+  require('config.util').toggle()
 end, { desc = 'Toggle floating terminal' })
 
 -- <leader>w — sessions

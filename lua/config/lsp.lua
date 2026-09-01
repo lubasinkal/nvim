@@ -1,11 +1,36 @@
+-- Consolidated LSP + completion (was lsp/lspconfig.lua + lsp/autocomplete.lua)
+
 vim.pack.add {
   'https://github.com/neovim/nvim-lspconfig',
   'https://github.com/williamboman/mason.nvim',
   'https://github.com/williamboman/mason-lspconfig.nvim',
+  'https://github.com/j-hui/fidget.nvim',
+  'https://github.com/rafamadriz/friendly-snippets',
+  'https://github.com/roobert/tailwindcss-colorizer-cmp.nvim',
+  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.*' },
 }
-vim.pack.add { 'https://github.com/j-hui/fidget.nvim' }
-require('fidget').setup { notification = { window = { winblend = 0 } } }
 
+require('fidget').setup { notification = { window = { winblend = 0 } } }
+require('tailwindcss-colorizer-cmp').setup { color_square_width = 2 }
+require('blink.cmp').setup {
+  keymap = {
+    preset = 'default',
+    ['<Tab>'] = { 'snippet_forward', 'select_next', 'fallback' },
+    ['<S-Tab>'] = { 'snippet_backward', 'select_prev', 'fallback' },
+    ['<C-k>'] = { 'select_next', 'fallback' },
+    ['<C-j>'] = { 'select_prev', 'fallback' },
+    ['<C-y>'] = { 'accept', 'fallback' },
+    ['<CR>'] = { 'accept', 'fallback' },
+  },
+  appearance = { nerd_font_variant = 'mono' },
+  signature = { enabled = true },
+  completion = {
+    accept = { auto_brackets = { enabled = true } },
+    documentation = { auto_show = true, window = { border = 'rounded' } },
+  },
+}
+
+-- LspAttach: keymaps + highlight
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
   callback = function(event)
@@ -30,13 +55,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
         group = highlight_augroup,
         callback = vim.lsp.buf.document_highlight,
       })
-
       vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
         buffer = event.buf,
         group = highlight_augroup,
         callback = vim.lsp.buf.clear_references,
       })
-
       vim.api.nvim_create_autocmd('LspDetach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
         callback = function(event2)
@@ -74,10 +97,6 @@ vim.lsp.config('ts_ls', {
     },
   },
 })
-require('mason').setup {
-  ensure_installed = { 'stylua' },
-}
-require('mason-lspconfig').setup {
-  ensure_installed = { 'lua_ls' },
-  automatic_enable = true,
-}
+
+require('mason').setup { ensure_installed = { 'stylua' } }
+require('mason-lspconfig').setup { ensure_installed = { 'lua_ls' }, automatic_enable = true }

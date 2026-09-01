@@ -1,3 +1,4 @@
+-- Single-file util (was util/floaterminal.lua)
 local M = {}
 
 local state = { buf = -1, win = -1 }
@@ -7,18 +8,15 @@ function M.toggle()
     vim.api.nvim_win_hide(state.win)
     return
   end
-
   local width = math.floor(vim.o.columns * 0.8)
   local height = math.floor(vim.o.lines * 0.8)
   local col = math.floor((vim.o.columns - width) / 2)
   local row = math.floor((vim.o.lines - height) / 2)
-
   local buf = state.buf
   if not vim.api.nvim_buf_is_valid(buf) then
     buf = vim.api.nvim_create_buf(false, true)
     state.buf = buf
   end
-
   state.win = vim.api.nvim_open_win(buf, true, {
     relative = 'editor',
     width = width,
@@ -28,7 +26,6 @@ function M.toggle()
     style = 'minimal',
     border = 'rounded',
   })
-
   if vim.bo[buf].buftype ~= 'terminal' then
     vim.cmd 'terminal'
     vim.bo[buf].buflisted = false
@@ -37,7 +34,6 @@ function M.toggle()
   end
 end
 
--- Close the window and discard the buffer when the terminal job exits
 vim.api.nvim_create_autocmd('TermClose', {
   callback = function(ev)
     if ev.buf == state.buf then

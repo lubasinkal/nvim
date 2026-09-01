@@ -1,6 +1,7 @@
 vim.loader.enable()
-require 'config.keymaps'
 require 'config.options'
+require 'config.keymaps'
 require 'config.autocmd'
-require 'config.util.floaterminal'
-require 'config.pack'
+require 'config.util'
+require 'config.plugins'
+require 'config.lsp'
