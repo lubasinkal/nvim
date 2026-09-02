@@ -1,10 +1,3 @@
--- Consolidated LSP + completion — Nvim 0.12 vim.pack-native
--- READMEs: nvim-lspconfig (vim.lsp.config/enable), mason-org/mason.nvim, mason-lspconfig, blink.cmp, fidget, tailwindcss-colorizer
--- https://github.com/neovim/nvim-lspconfig — legacy require('lspconfig') deprecated, use vim.lsp.config()
--- https://github.com/mason-org/mason.nvim
--- https://github.com/mason-org/mason-lspconfig.nvim
--- https://cmp.saghen.dev/installation
-
 vim.pack.add {
   'https://github.com/neovim/nvim-lspconfig',
   'https://github.com/mason-org/mason.nvim',
@@ -12,7 +5,7 @@ vim.pack.add {
   'https://github.com/j-hui/fidget.nvim',
   'https://github.com/rafamadriz/friendly-snippets',
   'https://github.com/roobert/tailwindcss-colorizer-cmp.nvim',
-  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.*' },
+  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.*' }, -- v1 stable, auto-downloads fuzzy binary
 }
 
 require('fidget').setup { notification = { window = { winblend = 0 } } }
@@ -33,13 +26,9 @@ require('blink.cmp').setup {
     accept = { auto_brackets = { enabled = true } },
     documentation = { auto_show = true, window = { border = 'rounded' } },
   },
-  -- blink.cmp 1.* auto-downloads Rust fuzzy binary on tag; no build needed.
-  -- Optionally: fuzzy = { implementation = 'prefer_rust_with_warning' }
   sources = { default = { 'lsp', 'path', 'snippets', 'buffer' } },
 }
--- friendly-snippets: no setup(), auto-loaded via runtimepath; blink.cmp uses vim.snippet natively
 
--- LspAttach: keymaps + highlight (unchanged, uses mini.extra pickers)
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
   callback = function(event)
@@ -55,20 +44,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
       { 'gO', function() require('mini.extra').pickers.lsp { scope = 'document_symbol' } end, buffer = event.buf, desc = 'Document Symbols' },
       { '<leader>sS', function() require('mini.extra').pickers.lsp { scope = 'workspace_symbol' } end, buffer = event.buf, desc = 'Workspace Symbols' },
     }
-
     local client = vim.lsp.get_client_by_id(event.data.client_id)
     if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
-      local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
-      vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-        buffer = event.buf,
-        group = highlight_augroup,
-        callback = vim.lsp.buf.document_highlight,
-      })
-      vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-        buffer = event.buf,
-        group = highlight_augroup,
-        callback = vim.lsp.buf.clear_references,
-      })
+      local hg = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+      vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, { buffer = event.buf, group = hg, callback = vim.lsp.buf.document_highlight })
+      vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, { buffer = event.buf, group = hg, callback = vim.lsp.buf.clear_references })
       vim.api.nvim_create_autocmd('LspDetach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
         callback = function(event2)
@@ -80,12 +60,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
--- Nvim 0.11+ native LSP config (replaces legacy lspconfig[server].setup)
--- Capabilities injected automatically by blink.cmp on 0.11+ if needed; explicit merge for compat:
+-- capabilities for blink
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-pcall(function()
-  capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
-end)
+pcall(function() capabilities = require('blink.cmp').get_lsp_capabilities(capabilities) end)
 
 vim.lsp.config('lua_ls', {
   capabilities = capabilities,
@@ -116,8 +93,5 @@ vim.lsp.config('ts_ls', {
   },
 })
 
--- Mason: setup before mason-lspconfig. Requires git, curl/wget, unzip, tar/gzip (see README)
 require('mason').setup { ensure_installed = { 'stylua' } }
 require('mason-lspconfig').setup { ensure_installed = { 'lua_ls' }, automatic_enable = true }
--- automatic_enable = true calls vim.lsp.enable() for installed servers
--- To add more: ensure_installed = { 'lua_ls', 'ts_ls', 'tailwindcss', ... }
