@@ -108,7 +108,17 @@ vim.pack.add { 'https://github.com/stevearc/oil.nvim' }
 require('oil').setup { lsp_file_methods = { enabled = false } }
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open Oil (parent directory)' })
 
-vim.pack.add { { src = 'https://github.com/nvim-neo-tree/neo-tree.nvim', version = 'v3.x' } }
+vim.pack.add {
+  {
+    src = 'https://github.com/nvim-neo-tree/neo-tree.nvim',
+    version = vim.version.range '3',
+  },
+  -- dependencies
+  'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/MunifTanjim/nui.nvim',
+  -- optional, but recommended
+  'https://github.com/nvim-tree/nvim-web-devicons',
+}
 require('neo-tree').setup { window = { position = 'right', width = 25 } }
 
 -- ── Navigation / Search ─────────────────────────────────────────────────
