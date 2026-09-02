@@ -1,34 +1,51 @@
 -- Consolidated plugins: all vim.pack.add + setup in one place.
--- Sections are folded via -- stylua: ignore / region comments for navigation.
+-- Nvim 0.12 vim.pack-native. Reviewed against upstream READMEs 2026-09-02.
+-- See :h vim.pack, :h packages
+
+-- ── Pack hooks (MUST be before first vim.pack.add per :h vim.pack-events) ─
+vim.api.nvim_create_autocmd('PackChanged', {
+  group = vim.api.nvim_create_augroup('PackHooks', { clear = true }),
+  callback = function(ev)
+    local data = ev.data or {}
+    local name = data.spec and data.spec.name or ''
+    local src = data.spec and data.spec.src or ''
+    local kind = data.kind or ''
+    local is_install_or_update = kind == 'install' or kind == 'update'
+
+    -- nvim-treesitter (branch main, 0.12+): update parsers on install/update
+    -- README: :TSUpdate must run after upgrade; main branch requires 0.12+
+    -- https://github.com/nvim-treesitter/nvim-treesitter/blob/main/README.md
+    if is_install_or_update and (name:match('treesitter') or src:match('treesitter')) then
+      pcall(function()
+        if not data.active then vim.cmd.packadd('nvim-treesitter') end
+        vim.cmd.TSUpdate()
+      end)
+    end
+
+    -- fff.nvim: download/build Rust binary (auto-downloads prebuilt, falls back to cargo)
+    -- README https://github.com/dmtrKovalenko/fff
+    if name == 'fff' and is_install_or_update then
+      pcall(function()
+        if not data.active then vim.cmd.packadd('fff') end
+        require('fff.download').download_or_build_binary()
+      end)
+    end
+  end,
+})
 
 -- ── Dependencies ──────────────────────────────────────────────────────────
+-- plenary: deprecated, critical fixes until 2026-06-30, no new features
+-- nui: no setup() — OOP components only
 vim.pack.add {
   'https://github.com/nvim-lua/plenary.nvim',
   'https://github.com/MunifTanjim/nui.nvim',
   'https://github.com/nvim-mini/mini.icons',
 }
 require('mini.icons').setup()
-
--- Keep treesitter parsers fresh on install/update
-vim.api.nvim_create_autocmd('PackChanged', {
-  group = vim.api.nvim_create_augroup('PackHooks', { clear = true }),
-  callback = function(ev)
-    if ev.data.kind ~= 'update' and ev.data.kind ~= 'install' then
-      return
-    end
-    local spec = ev.data.spec or {}
-    local is_treesitter = (spec.name or ''):match 'treesitter' or (spec.src or ''):match 'treesitter'
-    if is_treesitter then
-      pcall(function()
-        vim.cmd.packadd 'nvim-treesitter'
-        vim.cmd.TSUpdate()
-      end)
-    end
-  end,
-})
+-- mocks nvim-web-devicons API; call before other plugins that use icons
 
 -- ── UI ──────────────────────────────────────────────────────────────────
--- colorscheme
+-- cyberdream: no deps, setup() optional, load early (priority 1000 in lazy.nvim)
 vim.pack.add { 'https://github.com/scottmckendry/cyberdream.nvim' }
 require('cyberdream').setup {
   transparent = true,
@@ -37,7 +54,9 @@ require('cyberdream').setup {
 }
 vim.cmd 'colorscheme cyberdream'
 
--- mini.nvim (comment, notify, indentscope, pairs, ai, surround, statusline, tabline, sessions)
+-- mini.nvim: explicit vim.pack support, pin stable for repro
+-- https://github.com/nvim-mini/mini.nvim — each module independent
+-- Use `version = 'stable'` or vim.version.range for pinned; here tracking main (default branch)
 vim.pack.add { 'https://github.com/echasnovski/mini.nvim' }
 require('mini.comment').setup()
 require('mini.notify').setup {
@@ -81,7 +100,8 @@ require('mini.pick').setup()
 require('mini.extra').setup()
 vim.ui.select = require('mini.pick').ui_select
 
--- which-key
+-- which-key v3: no deps, no vim.pack snippet in README, setup required
+-- https://github.com/folke/which-key.nvim (uses wk.add spec, not register)
 vim.pack.add { 'https://github.com/folke/which-key.nvim' }
 require('which-key').setup {
   preset = 'helix',
@@ -104,63 +124,73 @@ require('which-key').setup {
 }
 
 -- ── Files / Explorer ────────────────────────────────────────────────────
+-- oil.nvim: vim.pack ✅, README says lazy-loading NOT recommended (lazy=false)
+-- https://github.com/stevearc/oil.nvim
 vim.pack.add { 'https://github.com/stevearc/oil.nvim' }
 require('oil').setup { lsp_file_methods = { enabled = false } }
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open Oil (parent directory)' })
 
+-- neo-tree v3: vim.pack ✅ with version pin vim.version.range('3')
+-- Deps REQUIRED: plenary, nui. OPTIONAL: nvim-web-devicons
+-- https://github.com/nvim-neo-tree/neo-tree.nvim
 vim.pack.add {
   {
     src = 'https://github.com/nvim-neo-tree/neo-tree.nvim',
     version = vim.version.range '3',
   },
-  -- dependencies
+  -- deduped if already added above; vim.pack dedupes by name
   'https://github.com/nvim-lua/plenary.nvim',
   'https://github.com/MunifTanjim/nui.nvim',
-  -- optional, but recommended
   'https://github.com/nvim-tree/nvim-web-devicons',
 }
+-- nvim-web-devicons: call setup before neo-tree that caches icons
+pcall(function() require('nvim-web-devicons').setup { default = true } end)
 require('neo-tree').setup { window = { position = 'right', width = 25 } }
 
 -- ── Navigation / Search ─────────────────────────────────────────────────
+-- fff.nvim: Rust binary, PackChanged hook above handles download_or_build_binary
+-- https://github.com/dmtrKovalenko/fff (lazy = false, lazy_sync recommended)
 vim.pack.add { 'https://github.com/dmtrKovalenko/fff' }
-vim.api.nvim_create_autocmd('PackChanged', {
-  callback = function(ev)
-    local name, kind = ev.data.spec.name, ev.data.kind
-    if name == 'fff' and (kind == 'install' or kind == 'update') then
-      if not ev.data.active then
-        vim.cmd.packadd 'fff'
-      end
-      require('fff.download').download_or_build_binary()
-    end
-  end,
-})
-
 vim.g.fff = {
   lazy_sync = true,
   debug = { enabled = true, show_scores = true },
 }
 
+-- flash.nvim: no deps, keys use lua functions (not :lua rhs) for dot-repeat
+-- https://github.com/folke/flash.nvim
 vim.pack.add { 'https://github.com/folke/flash.nvim' }
 require('flash').setup()
-vim.keymap.set({ 'n', 'x', 'o' }, 's', function()
-  require('flash').jump()
-end, { desc = 'Flash' })
-vim.keymap.set({ 'n', 'x', 'o' }, 'S', function()
-  require('flash').treesitter()
-end, { desc = 'Flash Treesitter' })
-vim.keymap.set('o', 'r', function()
-  require('flash').remote()
-end, { desc = 'Remote Flash' })
-vim.keymap.set({ 'o', 'x' }, 'R', function()
-  require('flash').treesitter_search()
-end, { desc = 'Treesitter Search' })
-vim.keymap.set('c', '<c-s>', function()
-  require('flash').toggle()
-end, { desc = 'Toggle Flash Search' })
+vim.keymap.set({ 'n', 'x', 'o' }, 's', function() require('flash').jump() end, { desc = 'Flash' })
+vim.keymap.set({ 'n', 'x', 'o' }, 'S', function() require('flash').treesitter() end, { desc = 'Flash Treesitter' })
+vim.keymap.set('o', 'r', function() require('flash').remote() end, { desc = 'Remote Flash' })
+vim.keymap.set({ 'o', 'x' }, 'R', function() require('flash').treesitter_search() end, { desc = 'Treesitter Search' })
+vim.keymap.set('c', '<c-s>', function() require('flash').toggle() end, { desc = 'Toggle Flash Search' })
 
+-- nvim-treesitter: main branch is the 0.12 rewrite (master = legacy 0.11 locked)
+-- README https://github.com/nvim-treesitter/nvim-treesitter/blob/main/README.md
+-- Requires: tar, curl, C compiler, tree-sitter-cli 0.26.1+ (not npm), Nvim 0.12+
+-- Does NOT support lazy-loading. Setup is optional; parsers installed via :TSInstall or require('nvim-treesitter').install
 vim.pack.add { { src = 'https://github.com/nvim-treesitter/nvim-treesitter', version = 'main' } }
+-- New API (no nvim-treesitter.configs.setup). Keep minimal:
+pcall(function()
+  require('nvim-treesitter').setup {
+    install_dir = vim.fn.stdpath('data') .. '/site',
+  }
+end)
+-- Enable treesitter highlighting/folds per buffer (replaces old highlight.enable)
+-- Foldexpr/indentexpr already in autocmd.lua; highlight via vim.treesitter.start()
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('TreesitterEnable', { clear = true }),
+  callback = function(ev)
+    pcall(vim.treesitter.start, ev.buf)
+  end,
+})
+-- Parsers: install on demand via :TSInstall or uncomment below (requires tree-sitter-cli 0.26.1+ + C compiler)
+-- pcall(function() require('nvim-treesitter').install { 'lua','vim','markdown','markdown_inline' } end)
 
 -- ── Git ─────────────────────────────────────────────────────────────────
+-- gitsigns: no deps, auto-attaches, current_line_blame opt-in
+-- https://github.com/lewis6991/gitsigns.nvim
 vim.pack.add { 'https://github.com/lewis6991/gitsigns.nvim' }
 require('gitsigns').setup {
   current_line_blame = true,
@@ -174,29 +204,17 @@ require('gitsigns').setup {
       vim.keymap.set(mode, l, r, opts)
     end
     map('n', ']c', function()
-      if vim.wo.diff then
-        return ']c'
-      end
-      vim.schedule(function()
-        gs.next_hunk()
-      end)
+      if vim.wo.diff then return ']c' end
+      vim.schedule(function() gs.next_hunk() end)
       return '<Ignore>'
     end, { expr = true, desc = 'Next Hunk' })
     map('n', '[c', function()
-      if vim.wo.diff then
-        return '[c'
-      end
-      vim.schedule(function()
-        gs.prev_hunk()
-      end)
+      if vim.wo.diff then return '[c' end
+      vim.schedule(function() gs.prev_hunk() end)
       return '<Ignore>'
     end, { expr = true, desc = 'Prev Hunk' })
-    map('n', ']H', function()
-      gs.nav_hunk 'last'
-    end, { desc = 'Last Hunk' })
-    map('n', '[H', function()
-      gs.nav_hunk 'first'
-    end, { desc = 'First Hunk' })
+    map('n', ']H', function() gs.nav_hunk 'last' end, { desc = 'Last Hunk' })
+    map('n', '[H', function() gs.nav_hunk 'first' end, { desc = 'First Hunk' })
     map({ 'n', 'v' }, '<leader>hs', ':Gitsigns stage_hunk<CR>', { desc = 'Stage Hunk' })
     map({ 'n', 'v' }, '<leader>hr', ':Gitsigns reset_hunk<CR>', { desc = 'Reset Hunk' })
     map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview Hunk' })
@@ -205,6 +223,8 @@ require('gitsigns').setup {
 }
 
 -- ── Formatting ──────────────────────────────────────────────────────────
+-- conform.nvim: no deps, formatters (stylua etc) must be installed separately
+-- https://github.com/stevearc/conform.nvim
 vim.pack.add { 'https://github.com/stevearc/conform.nvim' }
 require('conform').setup {
   formatters_by_ft = {
@@ -224,17 +244,19 @@ require('conform').setup {
     rust = { 'rustfmt' },
   },
   format_on_save = function()
-    if vim.g.format_on_save == false then
-      return
-    end
+    if vim.g.format_on_save == false then return end
     return { timeout_ms = 500, lsp_fallback = true }
   end,
 }
 
 -- ── Notes / Markdown / Typst ────────────────────────────────────────────
+-- render-markdown.nvim: requires nvim-treesitter + markdown parsers + icon provider (mini.icons ✅)
+-- https://github.com/MeanderingProgrammer/render-markdown.nvim
 vim.pack.add { 'https://github.com/MeanderingProgrammer/render-markdown.nvim' }
 require('render-markdown').setup {}
 
+-- typst-preview.nvim: requires curl, downloads tinymist/websocat to data/typst-preview
+-- https://github.com/chomosuke/typst-preview.nvim — pin v1.* optionally
 vim.pack.add { 'https://github.com/chomosuke/typst-preview.nvim' }
 require('typst-preview').setup { port = 6767 }
 vim.api.nvim_create_autocmd('FileType', {
@@ -244,17 +266,17 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+-- todo-comments.nvim: optional deps plenary + rg; no setup required for defaults
+-- https://github.com/folke/todo-comments.nvim
 vim.pack.add { 'https://github.com/folke/todo-comments.nvim' }
 require('todo-comments').setup {}
-vim.keymap.set('n', ']t', function()
-  require('todo-comments').jump_next()
-end, { desc = 'Next todo comment' })
-vim.keymap.set('n', '[t', function()
-  require('todo-comments').jump_prev()
-end, { desc = 'Previous todo comment' })
+vim.keymap.set('n', ']t', function() require('todo-comments').jump_next() end, { desc = 'Next todo comment' })
+vim.keymap.set('n', '[t', function() require('todo-comments').jump_prev() end, { desc = 'Previous todo comment' })
 vim.keymap.set('n', '<leader>st', '<cmd>TodoQuickFix<cr>', { desc = 'Todo Comments' })
 
 -- ── AI ──────────────────────────────────────────────────────────────────
+-- supermaven-nvim: no setup deps, :SupermavenUseFree for free tier
+-- https://github.com/supermaven-inc/supermaven-nvim
 vim.pack.add { 'https://github.com/supermaven-inc/supermaven-nvim' }
 require('supermaven-nvim').setup {
   keymaps = { accept_suggestion = '<C-l>', clear_suggestion = '<C-]>' },
@@ -268,12 +290,8 @@ require('supermaven-nvim').setup {
 vim.cmd.packadd 'nvim.undotree'
 
 -- ── Pack management keymaps ─────────────────────────────────────────────
-vim.keymap.set('n', '<leader>pu', function()
-  vim.pack.update()
-end, { desc = 'Update plugins' })
-vim.keymap.set('n', '<leader>pU', function()
-  vim.pack.update(nil, { force = true })
-end, { desc = 'Update plugins (force)' })
+vim.keymap.set('n', '<leader>pu', function() vim.pack.update() end, { desc = 'Update plugins' })
+vim.keymap.set('n', '<leader>pU', function() vim.pack.update(nil, { force = true }) end, { desc = 'Update plugins (force)' })
 vim.keymap.set('n', '<leader>pl', function()
   local lines = {}
   for _, p in ipairs(vim.pack.get()) do
