@@ -7,7 +7,7 @@ A modern, high-performance Neovim configuration bootstrapped from [kickstart.nvi
 - **Blazing Fast:** Optimized startup with eager/deferred plugin loading.
 - **Modern UI:** Clean statusline, tabline with icons, and floating windows.
 - **Git Integration:** Inline blame and hunk management via `gitsigns`.
-- **Search & Navigation:** Blazing-fast file/grep via [`fff.nvim`](https://github.com/dmtrKovalenko/fff) (frecency, Rust index) + `mini.pick` + `flash.nvim`.
+- **Search & Navigation:** Powerful fuzzy finding with `fzf-lua` and fast jumping with `flash.nvim`.
 - **File Management:** `neo-tree` for sidebar exploration and `oil.nvim` for buffer-like FS editing.
 - **LSP & Autocomplete:** Full LSP support (Mason-managed) with `blink.cmp` for superior completion.
 - **Productivity:** `mini.nvim` modules for surround, pairs, commenting, and more.
@@ -21,8 +21,7 @@ A modern, high-performance Neovim configuration bootstrapped from [kickstart.nvi
 - **Nerd Font** (Optional, but highly recommended for icons)
 
 ### Optional Dependencies
-- **Rust toolchain / cargo** (to build `fff` — or auto-downloads prebuilt binary)
-- **unzip**, **make**, **gcc/zig** (For compiling treesitter/others)
+- **unzip**, **make**, **gcc/zig** (For compiling certain fzf-lua extensions)
 - **xclip/xsel** (Linux) or **win32yank** (Windows) for system clipboard support.
 
 ## 📥 Installation

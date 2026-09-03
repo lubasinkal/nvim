@@ -34,15 +34,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(event)
     local wk = require 'which-key'
     wk.add {
-      { 'gd', function() require('mini.extra').pickers.lsp { scope = 'definition' } end, buffer = event.buf, desc = 'Goto Definition' },
+      { 'gd', require('fzf-lua').lsp_definitions, buffer = event.buf, desc = 'Goto Definition' },
       { 'gD', vim.lsp.buf.declaration, buffer = event.buf, desc = 'Goto Declaration' },
-      { 'grr', function() require('mini.extra').pickers.lsp { scope = 'references' } end, buffer = event.buf, desc = 'Goto References' },
-      { 'gri', function() require('mini.extra').pickers.lsp { scope = 'implementation' } end, buffer = event.buf, desc = 'Goto Implementation' },
-      { 'grt', function() require('mini.extra').pickers.lsp { scope = 'type_definition' } end, buffer = event.buf, desc = 'Type Definition' },
+      { 'grr', require('fzf-lua').lsp_references, buffer = event.buf, desc = 'Goto References' },
+      { 'gri', require('fzf-lua').lsp_implementations, buffer = event.buf, desc = 'Goto Implementation' },
+      { 'grt', require('fzf-lua').lsp_type_definitions, buffer = event.buf, desc = 'Type Definition' },
       { 'grn', vim.lsp.buf.rename, buffer = event.buf, desc = 'Rename' },
       { 'gra', vim.lsp.buf.code_action, buffer = event.buf, desc = 'Code Action', mode = { 'n', 'x' } },
-      { 'gO', function() require('mini.extra').pickers.lsp { scope = 'document_symbol' } end, buffer = event.buf, desc = 'Document Symbols' },
-      { '<leader>sS', function() require('mini.extra').pickers.lsp { scope = 'workspace_symbol' } end, buffer = event.buf, desc = 'Workspace Symbols' },
+      { 'gO', require('fzf-lua').lsp_document_symbols, buffer = event.buf, desc = 'Document Symbols' },
+      { '<leader>sS', require('fzf-lua').lsp_workspace_symbols, buffer = event.buf, desc = 'Workspace Symbols' },
     }
     local client = vim.lsp.get_client_by_id(event.data.client_id)
     if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then

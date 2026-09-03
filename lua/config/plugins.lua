@@ -17,14 +17,6 @@ vim.api.nvim_create_autocmd('PackChanged', {
         vim.cmd.TSUpdate()
       end)
     end
-    if name == 'fff' and is_install then
-      pcall(function()
-        if not data.active then
-          vim.cmd.packadd 'fff'
-        end
-        require('fff.download').download_or_build_binary()
-      end)
-    end
   end,
 })
 
@@ -74,9 +66,6 @@ require('mini.sessions').setup {
   force = { read = true, write = true, delete = true },
   verbose = { write = true, delete = true },
 }
-require('mini.pick').setup()
-require('mini.extra').setup()
-vim.ui.select = require('mini.pick').ui_select
 
 vim.pack.add { 'https://github.com/folke/which-key.nvim' }
 require('which-key').setup {
@@ -116,8 +105,19 @@ end)
 require('neo-tree').setup { window = { position = 'right', width = 25 } }
 
 -- search
-vim.pack.add { 'https://github.com/dmtrKovalenko/fff' }
-vim.g.fff = { lazy_sync = true, debug = { enabled = true, show_scores = true } }
+vim.pack.add { 'https://github.com/ibhagwan/fzf-lua' }
+local fzf = require 'fzf-lua'
+fzf.setup {
+  winopts = { preview = { layout = 'horizontal', horizontal = 'right:50%', scrollbar = false } },
+  keymap = {
+    fzf = { ['ctrl-j'] = 'down', ['ctrl-k'] = 'up', ['ctrl-q'] = 'select-all+accept' },
+    builtin = { ['ctrl-c'] = 'close', ['ctrl-x'] = 'jump-accept', ['ctrl-v'] = 'jump', ['ctrl-t'] = 'jump-tab' },
+  },
+  buffers = { sort_lastused = true, previewer = false, winopts = { height = 0.4, width = 0.6, row = 0.4 } },
+  oldfiles = { include_current_session = true },
+  lsp = { async_or_timeout = 5000, symbols = { symbol_style = 1 } },
+}
+fzf.register_ui_select()
 
 vim.pack.add { 'https://github.com/folke/flash.nvim' }
 require('flash').setup()
@@ -240,7 +240,7 @@ end, { desc = 'Next todo comment' })
 vim.keymap.set('n', '[t', function()
   require('todo-comments').jump_prev()
 end, { desc = 'Previous todo comment' })
-vim.keymap.set('n', '<leader>st', '<cmd>TodoQuickFix<cr>', { desc = 'Todo Comments' })
+vim.keymap.set('n', '<leader>st', '<cmd>TodoFzfLua<cr>', { desc = 'Todo Comments' })
 
 -- ai
 -- vim.pack.add { 'https://github.com/supermaven-inc/supermaven-nvim' }
