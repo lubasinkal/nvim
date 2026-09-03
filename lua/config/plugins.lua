@@ -152,43 +152,29 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.pack.add { 'https://github.com/lewis6991/gitsigns.nvim' }
 require('gitsigns').setup {
   current_line_blame = true,
-  current_line_blame_opts = { ignore_whitespace = false },
-  current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
+  current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
   on_attach = function(bufnr)
-    local gs = package.loaded.gitsigns
+    local gs = require('gitsigns')
     local function map(mode, l, r, opts)
       opts = opts or {}
       opts.buffer = bufnr
       vim.keymap.set(mode, l, r, opts)
     end
     map('n', ']c', function()
-      if vim.wo.diff then
-        return ']c'
-      end
-      vim.schedule(function()
-        gs.next_hunk()
-      end)
-      return '<Ignore>'
-    end, { expr = true, desc = 'Next Hunk' })
+      if vim.wo.diff then vim.cmd.normal({ ']c', bang = true })
+      else gs.nav_hunk('next') end
+    end, { desc = 'Next Hunk' })
     map('n', '[c', function()
-      if vim.wo.diff then
-        return '[c'
-      end
-      vim.schedule(function()
-        gs.prev_hunk()
-      end)
-      return '<Ignore>'
-    end, { expr = true, desc = 'Prev Hunk' })
-    map('n', ']H', function()
-      gs.nav_hunk 'last'
-    end, { desc = 'Last Hunk' })
-    map('n', '[H', function()
-      gs.nav_hunk 'first'
-    end, { desc = 'First Hunk' })
-    map({ 'n', 'v' }, '<leader>hs', ':Gitsigns stage_hunk<CR>', { desc = 'Stage Hunk' })
-    map({ 'n', 'v' }, '<leader>hr', ':Gitsigns reset_hunk<CR>', { desc = 'Reset Hunk' })
+      if vim.wo.diff then vim.cmd.normal({ '[c', bang = true })
+      else gs.nav_hunk('prev') end
+    end, { desc = 'Prev Hunk' })
+    map('n', '<leader>hs', gs.stage_hunk, { desc = 'Stage Hunk' })
+    map('n', '<leader>hr', gs.reset_hunk, { desc = 'Reset Hunk' })
+    map('v', '<leader>hs', function() gs.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = 'Stage Hunk' })
+    map('v', '<leader>hr', function() gs.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = 'Reset Hunk' })
     map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview Hunk' })
-    map('n', '<leader>ub', gs.toggle_current_line_blame, { desc = 'Blame' })
+    map('n', '<leader>hb', function() gs.blame_line({ full = true }) end, { desc = 'Blame line' })
+    map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'Toggle blame' })
   end,
 }
 
