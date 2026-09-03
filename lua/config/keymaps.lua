@@ -73,7 +73,8 @@ vim.keymap.set('n', '<Leader>tt', function()
   require('config.util').toggle()
 end, { desc = 'Toggle floating terminal' })
 vim.keymap.set('n', '<leader>ws', function() require('mini.sessions').write(vim.fs.basename(vim.uv.cwd()) .. '.vim') end, { desc = 'Save session' })
-vim.keymap.set('n', '<leader>wl', function() require('mini.sessions').select 'read' end, { desc = 'Load session' })
+vim.keymap.set('n', '<leader>wl', function() require('mini.sessions').select 'read' end, { desc = 'Load session (fzf)' })
+vim.keymap.set('n', '<leader>wd', function() require('mini.sessions').select 'delete' end, { desc = 'Delete session (fzf)' })
 vim.keymap.set('n', '<leader>q', function()
   local qf_win = vim.fn.getqflist({ winid = 0 }).winid
   if qf_win and qf_win > 0 then
