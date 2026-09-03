@@ -13,11 +13,17 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Focus down' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Focus up' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Focus right' })
 
--- Move lines / selections
-vim.keymap.set('n', '<A-j>', ':m .+1<CR>==', { desc = 'Move line down' })
-vim.keymap.set('n', '<A-k>', ':m .-2<CR>==', { desc = 'Move line up' })
-vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
-vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
+-- Move lines / selections (Alt+j/k)
+-- <A-j> and <M-j> are synonyms in nvim, mapping both for terminal compat
+local function move_opts(desc) return { desc = desc, silent = true } end
+vim.keymap.set('n', '<A-j>', '<Cmd>silent! m .+1<CR>==', move_opts 'Move line down')
+vim.keymap.set('n', '<A-k>', '<Cmd>silent! m .-2<CR>==', move_opts 'Move line up')
+vim.keymap.set('n', '<M-j>', '<Cmd>silent! m .+1<CR>==', move_opts 'Move line down')
+vim.keymap.set('n', '<M-k>', '<Cmd>silent! m .-2<CR>==', move_opts 'Move line up')
+vim.keymap.set('v', '<A-j>', ":silent! m '>+1<CR>gv=gv", move_opts 'Move selection down')
+vim.keymap.set('v', '<A-k>', ":silent! m '<-2<CR>gv=gv", move_opts 'Move selection up')
+vim.keymap.set('v', '<M-j>', ":silent! m '>+1<CR>gv=gv", move_opts 'Move selection down')
+vim.keymap.set('v', '<M-k>', ":silent! m '<-2<CR>gv=gv", move_opts 'Move selection up')
 vim.keymap.set('v', '<', '<gv', { desc = 'Dedent' })
 vim.keymap.set('v', '>', '>gv', { desc = 'Indent' })
 vim.keymap.set('x', 'p', '"_dP', { desc = 'Paste without yank' })
