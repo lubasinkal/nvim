@@ -60,6 +60,22 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+-- format on save via native LSP (replaces conform)
+vim.g.format_on_save = vim.g.format_on_save == nil and true or vim.g.format_on_save
+vim.api.nvim_create_autocmd('BufWritePre', {
+  group = vim.api.nvim_create_augroup('lsp-format-on-save', { clear = true }),
+  callback = function()
+    if vim.g.format_on_save == false then return end
+    -- only format if an attached client supports it
+    local clients = vim.lsp.get_clients { bufnr = 0 }
+    local can_format = false
+    for _, c in ipairs(clients) do
+      if c:supports_method(vim.lsp.protocol.Methods.textDocument_formatting) then can_format = true; break end
+    end
+    if can_format then vim.lsp.buf.format { timeout_ms = 500 } end
+  end,
+})
+
 -- capabilities for blink
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 pcall(function() capabilities = require('blink.cmp').get_lsp_capabilities(capabilities) end)
