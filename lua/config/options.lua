@@ -60,11 +60,6 @@ vim.diagnostic.config {
   severity_sort = true,
   virtual_text = true,
   underline = { severity = { min = vim.diagnostic.severity.WARN } },
-  jump = {
-    on_jump = function(diag, bufnr)
-      if diag then
-        vim.diagnostic.open_float { bufnr = bufnr, scope = 'cursor', focus = false }
-      end
-    end,
-  },
+  float = { scope = 'cursor', focus = false },
+  jump = { float = true },
 }
