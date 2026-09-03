@@ -192,9 +192,8 @@ require('gitsigns').setup {
   end,
 }
 
--- format — native vim.lsp.buf.format (conform removed per user choice)
+-- format — native vim.lsp.buf.format
 -- Uses LSP formatting on save; ensure your LSPs support it (lua_ls, rust_analyzer, gopls, biome, etc.)
--- Toggle with <leader>uf (vim.g.format_on_save)
 
 -- notes
 vim.pack.add { 'https://github.com/MeanderingProgrammer/render-markdown.nvim' }

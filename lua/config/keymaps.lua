@@ -54,10 +54,6 @@ end, { desc = 'Spell check' })
 vim.keymap.set('n', '<leader>up', function()
   vim.opt.paste = not vim.opt.paste:get()
 end, { desc = 'Paste mode' })
-vim.keymap.set('n', '<leader>uf', function()
-  vim.g.format_on_save = not vim.g.format_on_save
-  vim.notify('Format on save: ' .. (vim.g.format_on_save and 'on' or 'off'))
-end, { desc = 'Format on save' })
 
 -- <leader>b — buffers
 vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<CR>', { desc = 'Delete buffer' })
