@@ -13,7 +13,9 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Focus up' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Focus right' })
 
 -- Move lines / selections (Alt+j/k)
-local function move_opts(desc) return { desc = desc, silent = true } end
+local function move_opts(desc)
+  return { desc = desc, silent = true }
+end
 vim.keymap.set('n', '<A-j>', '<Cmd>silent! m .+1<CR>==', move_opts 'Move line down')
 vim.keymap.set('n', '<A-k>', '<Cmd>silent! m .-2<CR>==', move_opts 'Move line up')
 vim.keymap.set('n', '<M-j>', '<Cmd>silent! m .+1<CR>==', move_opts 'Move line down')
@@ -32,7 +34,9 @@ vim.keymap.set('n', '<leader>uh', function()
   vim.lsp.inlay_hint.enable(not enabled)
   vim.notify(enabled and 'Inlay hints off' or 'Inlay hints on')
 end, { desc = 'Inlay hints' })
-vim.keymap.set('n', '<leader>ut', function() require('undotree').open() end, { desc = 'Undo tree' })
+vim.keymap.set('n', '<leader>ut', function()
+  require('undotree').open()
+end, { desc = 'Undo tree' })
 vim.keymap.set('n', '<leader>uv', function()
   local current = vim.diagnostic.config().virtual_lines or false
   vim.diagnostic.config { virtual_lines = not current }
@@ -57,10 +61,18 @@ vim.keymap.set('n', '<leader>sk', '<cmd>FzfLua keymaps<CR>', { desc = 'Keymaps' 
 vim.keymap.set('n', '<leader>gf', '<cmd>FzfLua git_files<CR>', { desc = 'Git files' })
 vim.keymap.set('n', '<leader>gs', '<cmd>FzfLua git_status<CR>', { desc = 'Status' })
 
--- explorer / terminal / quickfix
+-- explorer / terminal / sessions / quickfix
 vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>', { desc = 'Explorer' })
-vim.keymap.set('n', '<Leader>tt', function() require('config.util').toggle() end, { desc = 'Toggle floating terminal' })
+vim.keymap.set('n', '<Leader>tt', function()
+  require('config.util').toggle()
+end, { desc = 'Toggle floating terminal' })
+vim.keymap.set('n', '<leader>ws', function() require('mini.sessions').write(vim.fs.basename(vim.uv.cwd()) .. '.vim') end, { desc = 'Save session' })
+vim.keymap.set('n', '<leader>wl', function() require('mini.sessions').select 'read' end, { desc = 'Load session' })
 vim.keymap.set('n', '<leader>q', function()
   local qf_win = vim.fn.getqflist({ winid = 0 }).winid
-  if qf_win and qf_win > 0 then vim.cmd 'cclose' else vim.cmd 'copen' end
+  if qf_win and qf_win > 0 then
+    vim.cmd 'cclose'
+  else
+    vim.cmd 'copen'
+  end
 end, { desc = 'Toggle quickfix' })
