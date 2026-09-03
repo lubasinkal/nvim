@@ -154,26 +154,38 @@ require('gitsigns').setup {
   current_line_blame = true,
   current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
   on_attach = function(bufnr)
-    local gs = require('gitsigns')
+    local gs = require 'gitsigns'
     local function map(mode, l, r, opts)
       opts = opts or {}
       opts.buffer = bufnr
       vim.keymap.set(mode, l, r, opts)
     end
     map('n', ']c', function()
-      if vim.wo.diff then vim.cmd.normal({ ']c', bang = true })
-      else gs.nav_hunk('next') end
+      if vim.wo.diff then
+        vim.cmd.normal { ']c', bang = true }
+      else
+        gs.nav_hunk 'next'
+      end
     end, { desc = 'Next Hunk' })
     map('n', '[c', function()
-      if vim.wo.diff then vim.cmd.normal({ '[c', bang = true })
-      else gs.nav_hunk('prev') end
+      if vim.wo.diff then
+        vim.cmd.normal { '[c', bang = true }
+      else
+        gs.nav_hunk 'prev'
+      end
     end, { desc = 'Prev Hunk' })
     map('n', '<leader>hs', gs.stage_hunk, { desc = 'Stage Hunk' })
     map('n', '<leader>hr', gs.reset_hunk, { desc = 'Reset Hunk' })
-    map('v', '<leader>hs', function() gs.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = 'Stage Hunk' })
-    map('v', '<leader>hr', function() gs.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = 'Reset Hunk' })
+    map('v', '<leader>hs', function()
+      gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
+    end, { desc = 'Stage Hunk' })
+    map('v', '<leader>hr', function()
+      gs.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
+    end, { desc = 'Reset Hunk' })
     map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview Hunk' })
-    map('n', '<leader>hb', function() gs.blame_line({ full = true }) end, { desc = 'Blame line' })
+    map('n', '<leader>hb', function()
+      gs.blame_line { full = true }
+    end, { desc = 'Blame line' })
     map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'Toggle blame' })
   end,
 }
@@ -181,8 +193,6 @@ require('gitsigns').setup {
 -- notes
 vim.pack.add { 'https://github.com/MeanderingProgrammer/render-markdown.nvim' }
 require('render-markdown').setup {}
-
-
 
 vim.keymap.set('n', '<leader>st', function()
   require('fzf-lua').grep { search = 'TODO|FIXME|HACK|NOTE' }
