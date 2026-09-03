@@ -111,7 +111,7 @@ fzf.setup {
   winopts = {
     width = 0.90,
     height = 0.90,
-    preview = { layout = 'horizontal', horizontal = 'right:50%', scrollbar = false, border = 'border' },
+    preview = { layout = 'horizontal', horizontal = 'right:60%', scrollbar = false, border = 'border' },
   },
   keymap = {
     fzf = { ['ctrl-j'] = 'down', ['ctrl-k'] = 'up', ['ctrl-q'] = 'select-all+accept' },
