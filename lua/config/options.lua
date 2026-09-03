@@ -35,7 +35,6 @@ vim.opt.synmaxcol = 200
 vim.opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 vim.opt.whichwrap:append '<>[]hl'
 vim.opt.iskeyword:append '-'
-vim.opt.ttimeoutlen = 10 -- must be >0 for <A-j>/<M-j> (Alt sends ESC+j); 0 breaks it
 
 vim.o.pumborder = 'rounded'
 vim.o.pummaxwidth = 40
