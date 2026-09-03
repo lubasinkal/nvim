@@ -50,12 +50,14 @@ vim.keymap.set('n', '<leader>bl', '<cmd>FzfLua blines<CR>', { desc = 'Buffer lin
 
 -- <leader>s — search
 vim.keymap.set('n', '<leader>sf', '<cmd>FzfLua files<CR>', { desc = 'Files' })
+vim.keymap.set('n', '<leader>sn', function() require('fzf-lua').files { cwd = vim.fn.stdpath 'config' } end, { desc = 'Neovim files' })
 vim.keymap.set('n', '<leader>sg', '<cmd>FzfLua live_grep<CR>', { desc = 'Grep' })
 vim.keymap.set('n', '<leader>sw', '<cmd>FzfLua grep_cword<CR>', { desc = 'Word under cursor' })
 vim.keymap.set('v', '<leader>sw', '<cmd>FzfLua grep_visual<CR>', { desc = 'Visual selection' })
 vim.keymap.set('n', '<leader>sd', '<cmd>FzfLua diagnostics_document<CR>', { desc = 'Diagnostics' })
 vim.keymap.set('n', '<leader>sh', '<cmd>FzfLua help_tags<CR>', { desc = 'Help tags' })
 vim.keymap.set('n', '<leader>sk', '<cmd>FzfLua keymaps<CR>', { desc = 'Keymaps' })
+vim.keymap.set('n', '<leader>sr', '<cmd>FzfLua resume<CR>', { desc = 'Resume last' })
 
 -- <leader>g — git
 vim.keymap.set('n', '<leader>gf', '<cmd>FzfLua git_files<CR>', { desc = 'Git files' })
