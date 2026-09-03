@@ -9,15 +9,19 @@ vim.api.nvim_create_autocmd('PackChanged', {
     local src = data.spec and data.spec.src or ''
     local kind = data.kind or ''
     local is_install = kind == 'install' or kind == 'update'
-    if is_install and (name:match('treesitter') or src:match('treesitter')) then
+    if is_install and (name:match 'treesitter' or src:match 'treesitter') then
       pcall(function()
-        if not data.active then vim.cmd.packadd('nvim-treesitter') end
+        if not data.active then
+          vim.cmd.packadd 'nvim-treesitter'
+        end
         vim.cmd.TSUpdate()
       end)
     end
     if name == 'fff' and is_install then
       pcall(function()
-        if not data.active then vim.cmd.packadd('fff') end
+        if not data.active then
+          vim.cmd.packadd 'fff'
+        end
         require('fff.download').download_or_build_binary()
       end)
     end
@@ -58,7 +62,9 @@ require('mini.surround').setup {
 local statusline = require 'mini.statusline'
 statusline.setup { use_icons = vim.g.have_nerd_font }
 ---@diagnostic disable-next-line: duplicate-set-field
-statusline.section_location = function() return '%2l:%-2v' end
+statusline.section_location = function()
+  return '%2l:%-2v'
+end
 require('mini.tabline').setup()
 vim.keymap.set('n', '<Tab>', '<Cmd>bnext<CR>', { desc = 'Next buffer' })
 vim.keymap.set('n', '<S-Tab>', '<Cmd>bprevious<CR>', { desc = 'Previous buffer' })
@@ -104,7 +110,9 @@ vim.pack.add {
   'https://github.com/MunifTanjim/nui.nvim',
   'https://github.com/nvim-tree/nvim-web-devicons',
 }
-pcall(function() require('nvim-web-devicons').setup { default = true } end)
+pcall(function()
+  require('nvim-web-devicons').setup { default = true }
+end)
 require('neo-tree').setup { window = { position = 'right', width = 25 } }
 
 -- search
@@ -113,17 +121,31 @@ vim.g.fff = { lazy_sync = true, debug = { enabled = true, show_scores = true } }
 
 vim.pack.add { 'https://github.com/folke/flash.nvim' }
 require('flash').setup()
-vim.keymap.set({ 'n', 'x', 'o' }, 's', function() require('flash').jump() end, { desc = 'Flash' })
-vim.keymap.set({ 'n', 'x', 'o' }, 'S', function() require('flash').treesitter() end, { desc = 'Flash Treesitter' })
-vim.keymap.set('o', 'r', function() require('flash').remote() end, { desc = 'Remote Flash' })
-vim.keymap.set({ 'o', 'x' }, 'R', function() require('flash').treesitter_search() end, { desc = 'Treesitter Search' })
-vim.keymap.set('c', '<c-s>', function() require('flash').toggle() end, { desc = 'Toggle Flash Search' })
+vim.keymap.set({ 'n', 'x', 'o' }, 's', function()
+  require('flash').jump()
+end, { desc = 'Flash' })
+vim.keymap.set({ 'n', 'x', 'o' }, 'S', function()
+  require('flash').treesitter()
+end, { desc = 'Flash Treesitter' })
+vim.keymap.set('o', 'r', function()
+  require('flash').remote()
+end, { desc = 'Remote Flash' })
+vim.keymap.set({ 'o', 'x' }, 'R', function()
+  require('flash').treesitter_search()
+end, { desc = 'Treesitter Search' })
+vim.keymap.set('c', '<c-s>', function()
+  require('flash').toggle()
+end, { desc = 'Toggle Flash Search' })
 
 vim.pack.add { { src = 'https://github.com/nvim-treesitter/nvim-treesitter', version = 'main' } } -- main=0.12 rewrite, master=0.11 legacy
-pcall(function() require('nvim-treesitter').setup { install_dir = vim.fn.stdpath('data') .. '/site' } end)
+pcall(function()
+  require('nvim-treesitter').setup { install_dir = vim.fn.stdpath 'data' .. '/site' }
+end)
 vim.api.nvim_create_autocmd('FileType', {
   group = vim.api.nvim_create_augroup('TreesitterEnable', { clear = true }),
-  callback = function(ev) pcall(vim.treesitter.start, ev.buf) end,
+  callback = function(ev)
+    pcall(vim.treesitter.start, ev.buf)
+  end,
 })
 
 -- git
@@ -140,17 +162,29 @@ require('gitsigns').setup {
       vim.keymap.set(mode, l, r, opts)
     end
     map('n', ']c', function()
-      if vim.wo.diff then return ']c' end
-      vim.schedule(function() gs.next_hunk() end)
+      if vim.wo.diff then
+        return ']c'
+      end
+      vim.schedule(function()
+        gs.next_hunk()
+      end)
       return '<Ignore>'
     end, { expr = true, desc = 'Next Hunk' })
     map('n', '[c', function()
-      if vim.wo.diff then return '[c' end
-      vim.schedule(function() gs.prev_hunk() end)
+      if vim.wo.diff then
+        return '[c'
+      end
+      vim.schedule(function()
+        gs.prev_hunk()
+      end)
       return '<Ignore>'
     end, { expr = true, desc = 'Prev Hunk' })
-    map('n', ']H', function() gs.nav_hunk 'last' end, { desc = 'Last Hunk' })
-    map('n', '[H', function() gs.nav_hunk 'first' end, { desc = 'First Hunk' })
+    map('n', ']H', function()
+      gs.nav_hunk 'last'
+    end, { desc = 'Last Hunk' })
+    map('n', '[H', function()
+      gs.nav_hunk 'first'
+    end, { desc = 'First Hunk' })
     map({ 'n', 'v' }, '<leader>hs', ':Gitsigns stage_hunk<CR>', { desc = 'Stage Hunk' })
     map({ 'n', 'v' }, '<leader>hr', ':Gitsigns reset_hunk<CR>', { desc = 'Reset Hunk' })
     map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview Hunk' })
@@ -178,7 +212,9 @@ require('conform').setup {
     rust = { 'rustfmt' },
   },
   format_on_save = function()
-    if vim.g.format_on_save == false then return end
+    if vim.g.format_on_save == false then
+      return
+    end
     return { timeout_ms = 500, lsp_fallback = true }
   end,
 }
@@ -198,26 +234,34 @@ vim.api.nvim_create_autocmd('FileType', {
 
 vim.pack.add { 'https://github.com/folke/todo-comments.nvim' }
 require('todo-comments').setup {}
-vim.keymap.set('n', ']t', function() require('todo-comments').jump_next() end, { desc = 'Next todo comment' })
-vim.keymap.set('n', '[t', function() require('todo-comments').jump_prev() end, { desc = 'Previous todo comment' })
+vim.keymap.set('n', ']t', function()
+  require('todo-comments').jump_next()
+end, { desc = 'Next todo comment' })
+vim.keymap.set('n', '[t', function()
+  require('todo-comments').jump_prev()
+end, { desc = 'Previous todo comment' })
 vim.keymap.set('n', '<leader>st', '<cmd>TodoQuickFix<cr>', { desc = 'Todo Comments' })
 
 -- ai
-vim.pack.add { 'https://github.com/supermaven-inc/supermaven-nvim' }
-require('supermaven-nvim').setup {
-  keymaps = { accept_suggestion = '<C-l>', clear_suggestion = '<C-]>' },
-  ignore_filetypes = { bigfile = true },
-  color = { suggestion_color = '#6c7086', cterm = 244 },
-  log_level = 'off',
-  disable_inline_completion = false,
-}
+-- vim.pack.add { 'https://github.com/supermaven-inc/supermaven-nvim' }
+-- require('supermaven-nvim').setup {
+--   keymaps = { accept_suggestion = '<C-l>', clear_suggestion = '<C-]>' },
+--   ignore_filetypes = { bigfile = true },
+--   color = { suggestion_color = '#6c7086', cterm = 244 },
+--   log_level = 'off',
+--   disable_inline_completion = false,
+-- }
 
 -- built-in
 vim.cmd.packadd 'nvim.undotree'
 
 -- pack keymaps
-vim.keymap.set('n', '<leader>pu', function() vim.pack.update() end, { desc = 'Update plugins' })
-vim.keymap.set('n', '<leader>pU', function() vim.pack.update(nil, { force = true }) end, { desc = 'Update plugins (force)' })
+vim.keymap.set('n', '<leader>pu', function()
+  vim.pack.update()
+end, { desc = 'Update plugins' })
+vim.keymap.set('n', '<leader>pU', function()
+  vim.pack.update(nil, { force = true })
+end, { desc = 'Update plugins (force)' })
 vim.keymap.set('n', '<leader>pl', function()
   local lines = {}
   for _, p in ipairs(vim.pack.get()) do
