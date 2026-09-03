@@ -76,7 +76,9 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 
 -- capabilities for blink
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-pcall(function() capabilities = require('blink.cmp').get_lsp_capabilities(capabilities) end)
+pcall(function()
+  capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
+end)
 
 vim.lsp.config('lua_ls', {
   capabilities = capabilities,
