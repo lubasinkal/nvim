@@ -108,11 +108,7 @@ require('neo-tree').setup { window = { position = 'right', width = 25 } }
 vim.pack.add { 'https://github.com/ibhagwan/fzf-lua' }
 local fzf = require 'fzf-lua'
 fzf.setup {
-  winopts = {
-    width = 0.90,
-    height = 0.90,
-    preview = { layout = 'horizontal', horizontal = 'right:60%', scrollbar = false, border = 'border' },
-  },
+  -- winopts = docs defaults (0.80/0.85 flex right:60%)
   keymap = {
     fzf = { ['ctrl-j'] = 'down', ['ctrl-k'] = 'up', ['ctrl-q'] = 'select-all+accept' },
     builtin = { ['ctrl-c'] = 'close', ['ctrl-x'] = 'jump-accept', ['ctrl-v'] = 'jump', ['ctrl-t'] = 'jump-tab' },
