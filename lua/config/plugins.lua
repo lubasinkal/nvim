@@ -207,6 +207,8 @@ vim.api.nvim_create_autocmd('FileType', {
 
 
 
+vim.keymap.set('n', '<leader>st', '<cmd>FzfLua grep { search = "TODO|FIXME|HACK|NOTE" }<CR>', { desc = 'Todo grep' })
+
 -- ai
 -- vim.pack.add { 'https://github.com/supermaven-inc/supermaven-nvim' }
 -- require('supermaven-nvim').setup {
