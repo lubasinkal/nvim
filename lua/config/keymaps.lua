@@ -30,8 +30,12 @@ vim.keymap.set('x', 'p', '"_dP', { desc = 'Paste without yank' })
 
 -- <leader>u — UI
 vim.keymap.set('n', '<leader>uh', function()
-  local enabled = vim.lsp.inlay_hint.is_enabled()
-  vim.lsp.inlay_hint.enable(not enabled)
+  local ok, enabled = pcall(vim.lsp.inlay_hint.is_enabled, { bufnr = 0 })
+  if not ok then
+    vim.notify('Inlay hints not supported', vim.log.levels.WARN)
+    return
+  end
+  vim.lsp.inlay_hint.enable(not enabled, { bufnr = 0 })
   vim.notify(enabled and 'Inlay hints off' or 'Inlay hints on')
 end, { desc = 'Inlay hints' })
 vim.keymap.set('n', '<leader>ut', function()

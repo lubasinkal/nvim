@@ -37,7 +37,7 @@ vim.opt.iskeyword:append '-'
 
 vim.o.pumborder = 'rounded'
 vim.o.pummaxwidth = 40
-vim.o.completeopt = 'menu,menuone,noselect,nearest'
+vim.o.completeopt = 'menu,menuone,noselect'
 vim.opt.pumheight = 10
 vim.opt.wildmode = 'longest:full,full'
 vim.opt.wildoptions = 'pum'
@@ -51,6 +51,12 @@ end)
 vim.opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
 vim.opt.grepformat = '%f:%l:%c:%m'
 
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = vim.api.nvim_create_augroup('TransparentBackground', { clear = true }),
+  callback = function()
+    vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+  end,
+})
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'NormalFloat', { bg = '#1e1e1e' })
 

@@ -9,12 +9,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = '*',
-  callback = function()
-    local filetype = vim.bo.filetype
-
-    if filetype and filetype ~= '' then
+  callback = function(ev)
+    if vim.bo[ev.buf].filetype == '' then
+      return
+    end
+    if pcall(vim.treesitter.get_parser, ev.buf) then
       vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-      vim.bo.indentexpr = 'v:lua.vim.treesitter.indentexpr()'
+      vim.bo[ev.buf].indentexpr = 'v:lua.vim.treesitter.indentexpr()'
     end
   end,
 })

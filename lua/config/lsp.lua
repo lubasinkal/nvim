@@ -23,7 +23,7 @@ require('blink.cmp').setup {
   appearance = { nerd_font_variant = 'mono' },
   signature = { enabled = true },
   completion = {
-    accept = { auto_brackets = { enabled = true } },
+    accept = { auto_brackets = { enabled = false } },
     documentation = { auto_show = true, window = { border = 'rounded' } },
   },
   sources = { default = { 'lsp', 'path', 'snippets', 'buffer' } },
@@ -67,7 +67,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
     local clients = vim.lsp.get_clients { bufnr = 0 }
     for _, c in ipairs(clients) do
       if c:supports_method(vim.lsp.protocol.Methods.textDocument_formatting) then
-        vim.lsp.buf.format { timeout_ms = 500 }
+        vim.lsp.buf.format { id = c.id, timeout_ms = 500 }
         return
       end
     end
