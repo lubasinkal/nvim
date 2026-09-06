@@ -9,31 +9,23 @@ vim.opt.sidescrolloff = 8
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.fillchars:append { eob = ' ', diff = '╱' }
-vim.opt.inccommand = 'split'
 vim.o.winborder = 'rounded'
 
 vim.opt.swapfile = false
 vim.opt.undofile = true
-vim.opt.updatetime = 200
-vim.opt.timeoutlen = 300
-vim.opt.virtualedit = 'block'
 
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
 vim.opt.expandtab = true
 vim.opt.breakindent = true
-vim.opt.formatoptions:remove { 'c', 'r', 'o' }
 
 vim.opt.list = true
 vim.opt.listchars = { trail = '·', tab = '  ' }
 vim.opt.confirm = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.synmaxcol = 200
 vim.opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
-vim.opt.whichwrap:append '<>[]hl'
-vim.opt.iskeyword:append '-'
 
 vim.o.pumborder = 'rounded'
 vim.o.pummaxwidth = 40
@@ -46,24 +38,24 @@ vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
 
 vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
+    vim.o.clipboard = 'unnamedplus'
 end)
 vim.opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
 vim.opt.grepformat = '%f:%l:%c:%m'
 
 vim.api.nvim_create_autocmd('ColorScheme', {
-  group = vim.api.nvim_create_augroup('TransparentBackground', { clear = true }),
-  callback = function()
-    vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-  end,
+    group = vim.api.nvim_create_augroup('TransparentBackground', { clear = true }),
+    callback = function()
+        vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+    end,
 })
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'NormalFloat', { bg = '#1e1e1e' })
 
 vim.diagnostic.config {
-  severity_sort = true,
-  virtual_text = true,
-  underline = { severity = { min = vim.diagnostic.severity.WARN } },
-  float = { scope = 'cursor', focus = false },
-  jump = { float = true },
+    severity_sort = true,
+    virtual_text = true,
+    underline = { severity = { min = vim.diagnostic.severity.WARN } },
+    float = { scope = 'cursor', focus = false },
+    jump = { float = true },
 }
