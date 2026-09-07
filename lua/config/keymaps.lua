@@ -54,7 +54,8 @@ vim.keymap.set('n', '<leader>bl', '<cmd>FzfLua blines<CR>', { desc = 'Buffer lin
 
 -- <leader>s — search
 vim.keymap.set('n', '<leader>sf', '<cmd>FzfLua files<CR>', { desc = 'Files' })
-vim.keymap.set('n', '<leader>sn', function() require('fzf-lua').files { cwd = vim.fn.stdpath 'config' } end, { desc = 'Neovim files' })
+vim.keymap.set('n', '<leader>sn', function() require('fzf-lua').files { cwd = vim.fn.stdpath 'config' } end,
+  { desc = 'Neovim files' })
 vim.keymap.set('n', '<leader>sg', '<cmd>FzfLua live_grep<CR>', { desc = 'Grep' })
 vim.keymap.set('n', '<leader>sG', '<cmd>FzfLua grep_project<CR>', { desc = 'Grep (project)' })
 vim.keymap.set('n', '<leader>sw', '<cmd>FzfLua grep_cword<CR>', { desc = 'Word under cursor' })
@@ -66,6 +67,7 @@ vim.keymap.set('n', '<leader>sr', '<cmd>FzfLua resume<CR>', { desc = 'Resume las
 vim.keymap.set('n', '<leader>s.', '<cmd>FzfLua oldfiles<CR>', { desc = 'Recent files' })
 vim.keymap.set('n', '<leader>sJ', '<cmd>FzfLua jumps<CR>', { desc = 'Jumps' })
 vim.keymap.set('n', '<leader>sm', '<cmd>FzfLua marks<CR>', { desc = 'Marks' })
+vim.keymap.set('n', '<leader>sb', '<cmd>FzfLua<CR>', { desc = 'Builtins' })
 
 -- <leader>g — git
 vim.keymap.set('n', '<leader>gf', '<cmd>FzfLua git_files<CR>', { desc = 'Git files' })
@@ -76,9 +78,11 @@ vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>', { desc = 'Explorer' 
 vim.keymap.set('n', '<Leader>tt', function()
   require('config.util').toggle()
 end, { desc = 'Toggle floating terminal' })
-vim.keymap.set('n', '<leader>ws', function() require('mini.sessions').write(vim.fs.basename(vim.uv.cwd()) .. '.vim') end, { desc = 'Save session' })
+vim.keymap.set('n', '<leader>ws', function() require('mini.sessions').write(vim.fs.basename(vim.uv.cwd()) .. '.vim') end,
+  { desc = 'Save session' })
 vim.keymap.set('n', '<leader>wl', function() require('mini.sessions').select 'read' end, { desc = 'Load session (fzf)' })
-vim.keymap.set('n', '<leader>wd', function() require('mini.sessions').select 'delete' end, { desc = 'Delete session (fzf)' })
+vim.keymap.set('n', '<leader>wd', function() require('mini.sessions').select 'delete' end,
+  { desc = 'Delete session (fzf)' })
 vim.keymap.set('n', '<leader>q', function()
   local qf_win = vim.fn.getqflist({ winid = 0 }).winid
   if qf_win and qf_win > 0 then
