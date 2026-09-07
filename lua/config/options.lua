@@ -1,61 +1,52 @@
-vim.g.have_nerd_font = true
-
+-- UI & Layout
 vim.opt.signcolumn = 'yes'
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
 vim.opt.smoothscroll = true
 vim.opt.sidescrolloff = 8
-vim.opt.splitright = true
-vim.opt.splitbelow = true
-vim.opt.fillchars:append { eob = ' ', diff = '╱' }
+vim.opt.fillchars:append { eob = ' ' }
 vim.o.winborder = 'rounded'
 
+-- Files & Undo
 vim.opt.swapfile = false
 vim.opt.undofile = true
 
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.softtabstop = 4
+-- Indentation (shiftwidth = 0 inherits tabstop)
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 0
 vim.opt.expandtab = true
-vim.opt.breakindent = true
 
+-- Search & Display
 vim.opt.list = true
 vim.opt.listchars = { trail = '·', tab = '  ' }
-vim.opt.confirm = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
+-- Completion Popup Menu
 vim.o.pumborder = 'rounded'
 vim.o.pummaxwidth = 40
-vim.o.completeopt = 'menu,menuone,noselect'
 vim.opt.pumheight = 10
+vim.opt.completeopt = 'menu,menuone,noselect'
 vim.opt.wildmode = 'longest:full,full'
-vim.opt.wildoptions = 'pum'
-
-vim.opt.conceallevel = 2
-vim.opt.concealcursor = 'nc'
 
 vim.schedule(function()
-    vim.o.clipboard = 'unnamedplus'
+  vim.o.clipboard = 'unnamedplus'
 end)
-vim.opt.grepprg = 'rg --vimgrep --no-heading --smart-case'
-vim.opt.grepformat = '%f:%l:%c:%m'
 
 vim.api.nvim_create_autocmd('ColorScheme', {
-    group = vim.api.nvim_create_augroup('TransparentBackground', { clear = true }),
-    callback = function()
-        vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-    end,
+  group = vim.api.nvim_create_augroup('TransparentBackground', { clear = true }),
+  callback = function()
+    vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+  end,
 })
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-vim.api.nvim_set_hl(0, 'NormalFloat', { bg = '#1e1e1e' })
+vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 
 vim.diagnostic.config {
-    severity_sort = true,
-    virtual_text = true,
-    underline = { severity = { min = vim.diagnostic.severity.WARN } },
-    float = { scope = 'cursor', focus = false },
-    jump = { float = true },
+  severity_sort = true,
+  virtual_text = true,
+  underline = { severity = { min = vim.diagnostic.severity.WARN } },
+  float = { scope = 'cursor', focus = false },
+  jump = { float = true },
 }
