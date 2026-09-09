@@ -2,29 +2,29 @@
 
 -- hooks must be before first vim.pack.add (:h PackChanged)
 vim.api.nvim_create_autocmd('PackChanged', {
-    group = vim.api.nvim_create_augroup('PackHooks', { clear = true }),
-    callback = function(ev)
-        local data = ev.data or {}
-        local name = data.spec and data.spec.name or ''
-        local src = data.spec and data.spec.src or ''
-        local kind = data.kind or ''
-        local is_install = kind == 'install' or kind == 'update'
-        if is_install and (name:match 'treesitter' or src:match 'treesitter') then
-            pcall(function()
-                if not data.active then
-                    vim.cmd.packadd 'nvim-treesitter'
-                end
-                vim.cmd.TSUpdate()
-            end)
+  group = vim.api.nvim_create_augroup('PackHooks', { clear = true }),
+  callback = function(ev)
+    local data = ev.data or {}
+    local name = data.spec and data.spec.name or ''
+    local src = data.spec and data.spec.src or ''
+    local kind = data.kind or ''
+    local is_install = kind == 'install' or kind == 'update'
+    if is_install and (name:match 'treesitter' or src:match 'treesitter') then
+      pcall(function()
+        if not data.active then
+          vim.cmd.packadd 'nvim-treesitter'
         end
-    end,
+        vim.cmd.TSUpdate()
+      end)
+    end
+  end,
 })
 
 -- deps
 vim.pack.add {
-    'https://github.com/nvim-lua/plenary.nvim', -- deprecated, fixes until 2026-06-30
-    'https://github.com/MunifTanjim/nui.nvim',
-    'https://github.com/nvim-mini/mini.icons',
+  'https://github.com/nvim-lua/plenary.nvim', -- deprecated, fixes until 2026-06-30
+  'https://github.com/MunifTanjim/nui.nvim',
+  'https://github.com/nvim-mini/mini.icons',
 }
 require('mini.icons').setup()
 
@@ -38,54 +38,52 @@ require('mini.comment').setup()
 require('mini.notify').setup { lsp_progress = { enable = false } }
 require('mini.indentscope').setup()
 require('mini.pairs').setup()
-require('mini.ai').setup { mappings = { around_next = 'aa', inside_next = 'ii' }, n_lines = 500 }
+require('mini.ai').setup()
 require('mini.surround').setup {
-    mappings = {
-        add = 'gsa',
-        delete = 'gsd',
-        replace = 'gsr',
-        find = 'gsf',
-        find_left = 'gsF',
-        highlight = 'gsh',
-        update_n_lines = 'gsn',
-    },
-    n_lines = 500,
-}
+  mappings = {
+    add = "gsa",            -- Add surrounding in Normal and Visual modes
+    delete = "gsd",         -- Delete surrounding
+    find = "gsf",           -- Find surrounding (to the right)
+    find_left = "gsF",      -- Find surrounding (to the left)
+    highlight = "gsh",      -- Highlight surrounding
+    replace = "gsr",        -- Replace surrounding
+    update_n_lines = "gsn", -- Update `n_lines`
+  }, }
 local statusline = require 'mini.statusline'
 statusline.setup { use_icons = vim.g.have_nerd_font }
 ---@diagnostic disable-next-line: duplicate-set-field
 statusline.section_location = function()
-    return '%2l:%-2v'
+  return '%2l:%-2v'
 end
 require('mini.tabline').setup()
 vim.keymap.set('n', '<Tab>', '<Cmd>bnext<CR>', { desc = 'Next buffer' })
 vim.keymap.set('n', '<S-Tab>', '<Cmd>bprevious<CR>', { desc = 'Previous buffer' })
 require('mini.sessions').setup {
-    directory = vim.fn.stdpath 'data' .. '/sessions/',
-    file = '',
-    force = { read = true, write = true, delete = true },
-    verbose = { write = true, delete = true },
+  directory = vim.fn.stdpath 'data' .. '/sessions/',
+  file = '',
+  force = { read = true, write = true, delete = true },
+  verbose = { write = true, delete = true },
 }
 
 vim.pack.add { 'https://github.com/folke/which-key.nvim' }
 require('which-key').setup {
-    preset = 'helix',
-    icons = { mappings = vim.g.have_nerd_font, keys = {} },
-    spec = {
-        { '<leader>b', group = 'Buffer', icon = { icon = '󰈔 ', color = 'cyan' } },
-        { '<leader>s', group = 'Search', icon = { icon = ' ', color = 'green' } },
-        { '<leader>g', group = 'Git', icon = { icon = '󰊢', color = 'orange' } },
-        { '<leader>u', group = 'UI / Toggles', icon = { icon = '󰙵 ', color = 'cyan' } },
-        { '<leader>w', group = 'Sessions', icon = { icon = '󰉋 ', color = 'azure' } },
-        { '<leader>t', group = 'Terminal', icon = { icon = ' ', color = 'red' } },
-        { '<leader>e', group = 'Explorer', icon = { icon = '󰉋 ', color = 'blue' } },
-        { '<leader>r', group = 'Restart', icon = { icon = '󰜉 ', color = 'purple' } },
-        { '<leader>q', group = 'Quickfix', icon = { icon = '󰅚 ', color = 'orange' } },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' }, icon = { icon = '󰊢', color = 'orange' } },
-        { '<leader>p', group = 'Pack', icon = { icon = '󰏗 ', color = 'blue' } },
-        { 'gs', group = 'Surround', mode = { 'n', 'x' }, icon = { icon = '󰕘', color = 'yellow' } },
-        { 'gr', group = 'LSP Actions', mode = { 'n' }, icon = { icon = '󱧡 ', color = 'orange' } },
-    },
+  preset = 'helix',
+  icons = { mappings = vim.g.have_nerd_font, keys = {} },
+  spec = {
+    { '<leader>b', group = 'Buffer', icon = { icon = '󰈔 ', color = 'cyan' } },
+    { '<leader>s', group = 'Search', icon = { icon = ' ', color = 'green' } },
+    { '<leader>g', group = 'Git', icon = { icon = '󰊢', color = 'orange' } },
+    { '<leader>u', group = 'UI / Toggles', icon = { icon = '󰙵 ', color = 'cyan' } },
+    { '<leader>w', group = 'Sessions', icon = { icon = '󰉋 ', color = 'azure' } },
+    { '<leader>t', group = 'Terminal', icon = { icon = ' ', color = 'red' } },
+    { '<leader>e', group = 'Explorer', icon = { icon = '󰉋 ', color = 'blue' } },
+    { '<leader>r', group = 'Restart', icon = { icon = '󰜉 ', color = 'purple' } },
+    { '<leader>q', group = 'Quickfix', icon = { icon = '󰅚 ', color = 'orange' } },
+    { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' }, icon = { icon = '󰊢', color = 'orange' } },
+    { '<leader>p', group = 'Pack', icon = { icon = '󰏗 ', color = 'blue' } },
+    { 'gs', group = 'Surround', mode = { 'n', 'x' }, icon = { icon = '󰕘', color = 'yellow' } },
+    { 'gr', group = 'LSP Actions', mode = { 'n' }, icon = { icon = '󱧡 ', color = 'orange' } },
+  },
 }
 
 -- files
@@ -94,102 +92,98 @@ require('oil').setup { lsp_file_methods = { enabled = false } }
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open Oil (parent directory)' })
 
 vim.pack.add {
-    { src = 'https://github.com/nvim-neo-tree/neo-tree.nvim', version = vim.version.range '3' },
-    'https://github.com/nvim-lua/plenary.nvim',
-    'https://github.com/MunifTanjim/nui.nvim',
-    'https://github.com/nvim-tree/nvim-web-devicons',
+  { src = 'https://github.com/nvim-neo-tree/neo-tree.nvim', version = vim.version.range '3' },
+  'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/MunifTanjim/nui.nvim',
 }
-pcall(function()
-    require('nvim-web-devicons').setup { default = true }
-end)
 require('neo-tree').setup { window = { position = 'right', width = 25 } }
 
 -- search
 vim.pack.add { 'https://github.com/ibhagwan/fzf-lua' }
 local fzf = require 'fzf-lua'
 fzf.setup {
-    winopts = { preview = { layout = 'horizontal', horizontal = 'right:55%' } },
-    keymap = {
-        fzf = { ['ctrl-j'] = 'down', ['ctrl-k'] = 'up', ['ctrl-q'] = 'select-all+accept' },
-        builtin = { ['ctrl-c'] = 'close', ['ctrl-x'] = 'jump-accept', ['ctrl-v'] = 'jump', ['ctrl-t'] = 'jump-tab' },
-    },
-    buffers = { sort_lastused = true, previewer = false, winopts = { height = 0.4, width = 0.6, row = 0.4 } },
-    oldfiles = { include_current_session = true },
-    lsp = { async_or_timeout = 5000, symbols = { symbol_style = 1 } },
+  winopts = { preview = { layout = 'horizontal', horizontal = 'right:55%' } },
+  keymap = {
+    fzf = { ['ctrl-j'] = 'down', ['ctrl-k'] = 'up', ['ctrl-q'] = 'select-all+accept' },
+    builtin = { ['ctrl-c'] = 'close', ['ctrl-x'] = 'jump-accept', ['ctrl-v'] = 'jump', ['ctrl-t'] = 'jump-tab' },
+  },
+  buffers = { sort_lastused = true, previewer = false, winopts = { height = 0.4, width = 0.6, row = 0.4 } },
+  oldfiles = { include_current_session = true },
+  lsp = { async_or_timeout = 5000, symbols = { symbol_style = 1 } },
 }
 fzf.register_ui_select()
 
 vim.pack.add { 'https://github.com/folke/flash.nvim' }
 require('flash').setup()
 vim.keymap.set({ 'n', 'x', 'o' }, 's', function()
-    require('flash').jump()
+  require('flash').jump()
 end, { desc = 'Flash' })
 vim.keymap.set({ 'n', 'x', 'o' }, 'S', function()
-    require('flash').treesitter()
+  require('flash').treesitter()
 end, { desc = 'Flash Treesitter' })
 vim.keymap.set('o', 'r', function()
-    require('flash').remote()
+  require('flash').remote()
 end, { desc = 'Remote Flash' })
 vim.keymap.set({ 'o', 'x' }, 'R', function()
-    require('flash').treesitter_search()
+  require('flash').treesitter_search()
 end, { desc = 'Treesitter Search' })
 vim.keymap.set('c', '<c-s>', function()
-    require('flash').toggle()
+  require('flash').toggle()
 end, { desc = 'Toggle Flash Search' })
 
 vim.pack.add { { src = 'https://github.com/nvim-treesitter/nvim-treesitter', version = 'main' } } -- main=0.12 rewrite, master=0.11 legacy
 pcall(function()
-    require('nvim-treesitter').setup { install_dir = vim.fn.stdpath 'data' .. '/site' }
+  require('nvim-treesitter').setup { install_dir = vim.fn.stdpath 'data' .. '/site' }
 end)
 vim.api.nvim_create_autocmd('FileType', {
-    group = vim.api.nvim_create_augroup('TreesitterEnable', { clear = true }),
-    callback = function(ev)
-        pcall(vim.treesitter.start, ev.buf)
-        -- Enable treesitter-based indentation
-        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-    end,
+  group = vim.api.nvim_create_augroup('TreesitterEnable', { clear = true }),
+  callback = function(ev)
+    pcall(vim.treesitter.start, ev.buf)
+    -- Enable treesitter-based indentation
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
 })
 
 -- git
 vim.pack.add { 'https://github.com/lewis6991/gitsigns.nvim' }
 require('gitsigns').setup {
-    current_line_blame = true,
-    current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
-    on_attach = function(bufnr)
-        local gs = require 'gitsigns'
-        local function map(mode, l, r, opts)
-            opts = opts or {}
-            opts.buffer = bufnr
-            vim.keymap.set(mode, l, r, opts)
-        end
-        map('n', ']c', function()
-            if vim.wo.diff then
-                vim.cmd.normal { ']c', bang = true }
-            else
-                gs.nav_hunk 'next'
-            end
-        end, { desc = 'Next Hunk' })
-        map('n', '[c', function()
-            if vim.wo.diff then
-                vim.cmd.normal { '[c', bang = true }
-            else
-                gs.nav_hunk 'prev'
-            end
-        end, { desc = 'Prev Hunk' })
-        map('n', '<leader>hs', gs.stage_hunk, { desc = 'Stage Hunk' })
-        map('n', '<leader>hr', gs.reset_hunk, { desc = 'Reset Hunk' })
-        map('v', '<leader>hs', function()
-            gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
-        end, { desc = 'Stage Hunk' })
-        map('v', '<leader>hr', function()
-            gs.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
-        end, { desc = 'Reset Hunk' })
-        map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview Hunk' })
-        map('n', '<leader>hb', function()
-            gs.blame_line { full = true }
-        end, { desc = 'Blame line' })
-        map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'Toggle blame' })
-    end,
+  current_line_blame = true,
+  current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
+  on_attach = function(bufnr)
+    local gs = require 'gitsigns'
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+    map('n', ']c', function()
+      if vim.wo.diff then
+        vim.cmd.normal { ']c', bang = true }
+      else
+        gs.nav_hunk 'next'
+      end
+    end, { desc = 'Next Hunk' })
+    map('n', '[c', function()
+      if vim.wo.diff then
+        vim.cmd.normal { '[c', bang = true }
+      else
+        gs.nav_hunk 'prev'
+      end
+    end, { desc = 'Prev Hunk' })
+    map('n', '<leader>hs', gs.stage_hunk, { desc = 'Stage Hunk' })
+    map('n', '<leader>hr', gs.reset_hunk, { desc = 'Reset Hunk' })
+    map('v', '<leader>hs', function()
+      gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
+    end, { desc = 'Stage Hunk' })
+    map('v', '<leader>hr', function()
+      gs.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
+    end, { desc = 'Reset Hunk' })
+    map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview Hunk' })
+    map('n', '<leader>hb', function()
+      gs.blame_line { full = true }
+    end, { desc = 'Blame line' })
+    map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'Toggle blame' })
+  end,
 }
 
 -- notes
@@ -197,7 +191,7 @@ vim.pack.add { 'https://github.com/MeanderingProgrammer/render-markdown.nvim' }
 require('render-markdown').setup {}
 
 vim.keymap.set('n', '<leader>st', function()
-    require('fzf-lua').grep { search = 'TODO|FIXME|HACK|NOTE' }
+  require('fzf-lua').grep { search = 'TODO|FIXME|HACK|NOTE' }
 end, { desc = 'Todo grep' })
 
 -- ai
@@ -215,16 +209,16 @@ vim.cmd.packadd 'nvim.undotree'
 
 -- pack keymaps
 vim.keymap.set('n', '<leader>pu', function()
-    vim.pack.update()
+  vim.pack.update()
 end, { desc = 'Update plugins' })
 vim.keymap.set('n', '<leader>pU', function()
-    vim.pack.update(nil, { force = true })
+  vim.pack.update(nil, { force = true })
 end, { desc = 'Update plugins (force)' })
 vim.keymap.set('n', '<leader>pl', function()
-    local lines = {}
-    for _, p in ipairs(vim.pack.get()) do
-        lines[#lines + 1] = string.format('%s %s', p.active and '✓' or ' ', p.spec and p.spec.name or '?')
-    end
-    table.sort(lines)
-    vim.notify('Installed plugins:\n' .. table.concat(lines, '\n'))
+  local lines = {}
+  for _, p in ipairs(vim.pack.get()) do
+    lines[#lines + 1] = string.format('%s %s', p.active and '✓' or ' ', p.spec and p.spec.name or '?')
+  end
+  table.sort(lines)
+  vim.notify('Installed plugins:\n' .. table.concat(lines, '\n'))
 end, { desc = 'List plugins' })
