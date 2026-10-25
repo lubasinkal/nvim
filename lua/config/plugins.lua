@@ -20,15 +20,7 @@ vim.api.nvim_create_autocmd('PackChanged', {
   end,
 })
 
--- deps
-vim.pack.add {
-  'https://github.com/nvim-lua/plenary.nvim', -- deprecated, fixes until 2026-06-30
-  'https://github.com/MunifTanjim/nui.nvim',
-  'https://github.com/nvim-mini/mini.icons',
-}
-require('mini.icons').setup()
-
--- ui
+-- ui (plenary + nui get added next to neo-tree, their only consumer)
 vim.pack.add { 'https://github.com/scottmckendry/cyberdream.nvim' }
 require('cyberdream').setup { transparent = true, italic_comments = true, terminal_colors = true }
 vim.cmd 'colorscheme cyberdream'
@@ -132,15 +124,20 @@ vim.keymap.set('c', '<c-s>', function()
 end, { desc = 'Toggle Flash Search' })
 
 vim.pack.add { { src = 'https://github.com/nvim-treesitter/nvim-treesitter', version = 'main' } } -- main=0.12 rewrite, master=0.11 legacy
-pcall(function()
-  require('nvim-treesitter').setup { install_dir = vim.fn.stdpath 'data' .. '/site' }
-end)
+-- treesitter — main rewrite: enable per filetype, fetch parser on demand
+-- (no parser registered → none runs, and the filetype is downloaded async)
 vim.api.nvim_create_autocmd('FileType', {
   group = vim.api.nvim_create_augroup('TreesitterEnable', { clear = true }),
   callback = function(ev)
-    pcall(vim.treesitter.start, ev.buf)
-    -- Enable treesitter-based indentation
-    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    local ok, lang = pcall(vim.treesitter.language.get_lang, ev.match)
+    if ok and lang then
+      if pcall(vim.treesitter.language.add, lang) then
+        pcall(vim.treesitter.start, ev.buf)
+        vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      else
+        pcall(require('nvim-treesitter').install, { lang })
+      end
+    end
   end,
 })
 

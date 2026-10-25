@@ -4,19 +4,17 @@ vim.pack.add {
     'https://github.com/mason-org/mason-lspconfig.nvim',
     'https://github.com/j-hui/fidget.nvim',
     'https://github.com/rafamadriz/friendly-snippets',
-    'https://github.com/roobert/tailwindcss-colorizer-cmp.nvim',
     { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.*' }, -- v1 stable, auto-downloads fuzzy binary
 }
 
 require('fidget').setup { notification = { window = { winblend = 0 } } }
-require('tailwindcss-colorizer-cmp').setup { color_square_width = 2 }
 require('blink.cmp').setup {
     keymap = {
         preset = 'default',
         ['<Tab>'] = { 'snippet_forward', 'select_next', 'fallback' },
         ['<S-Tab>'] = { 'snippet_backward', 'select_prev', 'fallback' },
-        ['<C-k>'] = { 'select_next', 'fallback' },
-        ['<C-j>'] = { 'select_prev', 'fallback' },
+        ['<C-j>'] = { 'select_next', 'fallback' }, -- down, matches window-nav idiom
+        ['<C-k>'] = { 'select_prev', 'fallback' }, -- up
         ['<C-y>'] = { 'accept', 'fallback' },
         ['<CR>'] = { 'accept', 'fallback' },
     },
@@ -96,21 +94,24 @@ vim.lsp.config('lua_ls', {
         },
     },
 })
+-- ts_ls + the Vue ts plugin (only register the plugin when vue-language-server is installed)
+local vue_ls_dir = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+local ts_plugins = {}
+if vim.uv.fs_stat(vue_ls_dir) then
+    ts_plugins = {
+        {
+            name = '@vue/typescript-plugin',
+            location = vue_ls_dir,
+            languages = { 'vue' },
+            configNamespace = 'typescript',
+        },
+    }
+end
 vim.lsp.config('ts_ls', {
     capabilities = capabilities,
     filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-    init_options = {
-        plugins = {
-            {
-                name = '@vue/typescript-plugin',
-                location = vim.fn.stdpath 'data' ..
-                    '/mason/packages/vue-language-server/node_modules/@vue/language-server',
-                languages = { 'vue' },
-                configNamespace = 'typescript',
-            },
-        },
-    },
+    init_options = { plugins = ts_plugins },
 })
 
 require('mason').setup()
-require('mason-lspconfig').setup { ensure_installed = { 'lua_ls', 'stylua' }, automatic_enable = true }
+require('mason-lspconfig').setup { ensure_installed = { 'lua_ls' }, automatic_enable = true } -- stylua is a formatter, install it manually via :Mason
