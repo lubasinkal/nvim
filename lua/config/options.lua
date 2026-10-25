@@ -3,9 +3,9 @@ vim.g.have_nerd_font = true
 vim.opt.signcolumn = 'yes'
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.scrolloff = 3
+vim.opt.scrolloff = 2
 vim.opt.smoothscroll = true
-vim.opt.sidescrolloff = 3
+vim.opt.sidescrolloff = 2
 vim.opt.fillchars:append { eob = ' ' }
 vim.o.winborder = 'rounded'
 
