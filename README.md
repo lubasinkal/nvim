@@ -4,7 +4,7 @@ A modern, high performance Neovim configuration bootstrapped from [kickstart.nvi
 
 ## Features
 
-- **Fast startup:** lean plugin set with lazy loading where it counts.
+- **Fast startup:** lean eagerly-loaded plugin set (vim.pack, lockfile) — sub-150 ms cold start.
 - **Modern UI:** cyberdream colourscheme with transparency, clean statusline, tabline with icons and floating windows.
 - **Git integration:** inline blame and hunk actions via `gitsigns`.
 - **Search and navigation:** fuzzy finding with `fzf-lua`, fast jumps with `flash.nvim`.
@@ -19,7 +19,10 @@ A modern, high performance Neovim configuration bootstrapped from [kickstart.nvi
 - **Git**
 - **Ripgrep** for fast searching
 - **FD** for fast file finding
-- **A Nerd Font** (optional, recommended for icons)
+- **fzf** (hard dependency of fzf-lua)
+- **Node.js + npm** for Mason-managed servers
+- **tar + curl** and **tree-sitter-cli ≥ 0.26.1** (package manager, *not* npm) plus a **C compiler** (base-devel), for building treesitter parsers
+- **A Nerd Font** (optional, icons are enabled when `vim.g.have_nerd_font` is set)
 
 Optional extras:
 
@@ -79,7 +82,7 @@ Most custom logic lives in `lua/config/`:
 - `lsp.lua`: language servers and completion
 - `plugins.lua`: plugin list and setup
 - `autocmd.lua`: autocommands
-- `util.lua`: helpers (floating terminal, sessions, tabs)
+- `util.lua`: helpers (floating terminal) · sessions live in the `mini.sessions` setup in `plugins.lua`
 
 ## Resources
 

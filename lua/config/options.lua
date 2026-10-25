@@ -1,4 +1,5 @@
 -- UI & Layout
+vim.g.have_nerd_font = true
 vim.opt.signcolumn = 'yes'
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -34,14 +35,14 @@ vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
 
+-- Transparent background — survives any colorscheme switch.
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = vim.api.nvim_create_augroup('TransparentBackground', { clear = true }),
   callback = function()
     vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+    vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
   end,
 })
-vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 
 vim.diagnostic.config {
   severity_sort = true,
