@@ -187,10 +187,6 @@ require('gitsigns').setup {
 vim.pack.add { 'https://github.com/MeanderingProgrammer/render-markdown.nvim' }
 require('render-markdown').setup {}
 
-vim.keymap.set('n', '<leader>st', function()
-  require('fzf-lua').grep { search = 'TODO|FIXME|HACK|NOTE' }
-end, { desc = 'Todo grep' })
-
 -- ai
 -- vim.pack.add { 'https://github.com/supermaven-inc/supermaven-nvim' }
 -- require('supermaven-nvim').setup {
