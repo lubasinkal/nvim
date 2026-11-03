@@ -80,7 +80,7 @@ require('which-key').setup {
 
 -- files
 vim.pack.add { 'https://github.com/stevearc/oil.nvim' } -- no lazy-load per README
-require('oil').setup { lsp_file_methods = { enabled = false } }
+require('oil').setup { lsp_file_methods = { enabled = false }, view_options = { show_hidden = true } }
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open Oil (parent directory)' })
 
 vim.pack.add {
