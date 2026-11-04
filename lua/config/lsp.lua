@@ -1,117 +1,138 @@
 vim.pack.add {
-    'https://github.com/neovim/nvim-lspconfig',
-    'https://github.com/mason-org/mason.nvim',
-    'https://github.com/mason-org/mason-lspconfig.nvim',
-    'https://github.com/j-hui/fidget.nvim',
-    'https://github.com/rafamadriz/friendly-snippets',
-    { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.*' }, -- v1 stable, auto-downloads fuzzy binary
+  'https://github.com/neovim/nvim-lspconfig',
+  'https://github.com/mason-org/mason.nvim',
+  'https://github.com/mason-org/mason-lspconfig.nvim',
+  'https://github.com/j-hui/fidget.nvim',
+  'https://github.com/rafamadriz/friendly-snippets',
+  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.*' }, -- v1 stable, auto-downloads fuzzy binary
 }
 
 require('fidget').setup { notification = { window = { winblend = 0 } } }
 require('blink.cmp').setup {
-    keymap = {
-        preset = 'default',
-        ['<Tab>'] = { 'snippet_forward', 'select_next', 'fallback' },
-        ['<S-Tab>'] = { 'snippet_backward', 'select_prev', 'fallback' },
-        ['<C-j>'] = { 'select_next', 'fallback' }, -- down, matches window-nav idiom
-        ['<C-k>'] = { 'select_prev', 'fallback' }, -- up
-        ['<C-y>'] = { 'accept', 'fallback' },
-        ['<CR>'] = { 'accept', 'fallback' },
-    },
-    appearance = { nerd_font_variant = 'mono' },
-    signature = { enabled = true },
-    completion = {
-        accept = { auto_brackets = { enabled = false } },
-        documentation = { auto_show = true, window = { border = 'rounded' } },
-    },
-    sources = { default = { 'lsp', 'path', 'snippets', 'buffer' } },
+  keymap = {
+    preset = 'default',
+    ['<Tab>'] = { 'snippet_forward', 'select_next', 'fallback' },
+    ['<S-Tab>'] = { 'snippet_backward', 'select_prev', 'fallback' },
+    ['<C-j>'] = { 'select_next', 'fallback' }, -- down, matches window-nav idiom
+    ['<C-k>'] = { 'select_prev', 'fallback' }, -- up
+    ['<C-y>'] = { 'accept', 'fallback' },
+    ['<CR>'] = { 'accept', 'fallback' },
+  },
+  appearance = { nerd_font_variant = 'mono' },
+  signature = { enabled = true },
+  completion = {
+    accept = { auto_brackets = { enabled = false } },
+    documentation = { auto_show = true, window = { border = 'rounded' } },
+  },
+  sources = { default = { 'lsp', 'path', 'snippets', 'buffer' } },
 }
 
 vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
-    callback = function(event)
-        local wk = require 'which-key'
-        wk.add {
-            { 'gd',         require('fzf-lua').lsp_definitions,       buffer = event.buf, desc = 'Goto Definition' },
-            { 'gD',         vim.lsp.buf.declaration,                  buffer = event.buf, desc = 'Goto Declaration' },
-            { 'grr',        require('fzf-lua').lsp_references,        buffer = event.buf, desc = 'Goto References' },
-            { 'gri',        require('fzf-lua').lsp_implementations,   buffer = event.buf, desc = 'Goto Implementation' },
-            { 'grt',        require('fzf-lua').lsp_type_definitions,  buffer = event.buf, desc = 'Type Definition' },
-            { 'grn',        vim.lsp.buf.rename,                       buffer = event.buf, desc = 'Rename' },
-            { 'gra',        vim.lsp.buf.code_action,                  buffer = event.buf, desc = 'Code Action',        mode = { 'n', 'x' } },
-            { 'gO',         require('fzf-lua').lsp_document_symbols,  buffer = event.buf, desc = 'Document Symbols' },
-            { '<leader>sS', require('fzf-lua').lsp_workspace_symbols, buffer = event.buf, desc = 'Workspace Symbols' },
-        }
-        local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
-            local hg = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
-            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' },
-                { buffer = event.buf, group = hg, callback = vim.lsp.buf.document_highlight })
-            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' },
-                { buffer = event.buf, group = hg, callback = vim.lsp.buf.clear_references })
-            vim.api.nvim_create_autocmd('LspDetach', {
-                group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-                callback = function(event2)
-                    vim.lsp.buf.clear_references()
-                    vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
-                end,
-            })
-        end
-    end,
+  group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+  callback = function(event)
+    local wk = require 'which-key'
+    wk.add {
+      { 'gd', require('fzf-lua').lsp_definitions, buffer = event.buf, desc = 'Goto Definition' },
+      { 'gD', vim.lsp.buf.declaration, buffer = event.buf, desc = 'Goto Declaration' },
+      { 'grr', require('fzf-lua').lsp_references, buffer = event.buf, desc = 'Goto References' },
+      { 'gri', require('fzf-lua').lsp_implementations, buffer = event.buf, desc = 'Goto Implementation' },
+      { 'grt', require('fzf-lua').lsp_type_definitions, buffer = event.buf, desc = 'Type Definition' },
+      { 'grn', vim.lsp.buf.rename, buffer = event.buf, desc = 'Rename' },
+      { 'gra', vim.lsp.buf.code_action, buffer = event.buf, desc = 'Code Action', mode = { 'n', 'x' } },
+      { 'gO', require('fzf-lua').lsp_document_symbols, buffer = event.buf, desc = 'Document Symbols' },
+      { '<leader>sS', require('fzf-lua').lsp_workspace_symbols, buffer = event.buf, desc = 'Workspace Symbols' },
+    }
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
+      local hg = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+      vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, { buffer = event.buf, group = hg, callback = vim.lsp.buf.document_highlight })
+      vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, { buffer = event.buf, group = hg, callback = vim.lsp.buf.clear_references })
+      vim.api.nvim_create_autocmd('LspDetach', {
+        group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+        callback = function(event2)
+          vim.lsp.buf.clear_references()
+          vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+        end,
+      })
+    end
+  end,
 })
 
 -- format on save via native LSP
 vim.api.nvim_create_autocmd('BufWritePre', {
-    group = vim.api.nvim_create_augroup('lsp-format-on-save', { clear = true }),
-    callback = function()
-        local clients = vim.lsp.get_clients { bufnr = 0 }
-        for _, c in ipairs(clients) do
-            if c:supports_method(vim.lsp.protocol.Methods.textDocument_formatting) then
-                vim.lsp.buf.format { id = c.id, timeout_ms = 500 }
-                return
-            end
-        end
-    end,
+  group = vim.api.nvim_create_augroup('lsp-format-on-save', { clear = true }),
+  callback = function()
+    local clients = vim.lsp.get_clients { bufnr = 0 }
+    for _, c in ipairs(clients) do
+      if c:supports_method(vim.lsp.protocol.Methods.textDocument_formatting) then
+        vim.lsp.buf.format { id = c.id, timeout_ms = 500 }
+        return
+      end
+    end
+  end,
+})
+
+-- lua has no LSP formatter: pipe through styLua (mason puts it on PATH)
+vim.api.nvim_create_autocmd('BufWritePre', {
+  group = vim.api.nvim_create_augroup('stylua-format', { clear = true }),
+  pattern = '*.lua',
+  callback = function()
+    if vim.fn.executable 'stylua' ~= 1 then
+      return
+    end
+    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local out = vim.fn.system({ 'stylua', '-s', '--stdin-filepath', vim.api.nvim_buf_get_name(0), '-' }, table.concat(lines, '\n') .. '\n')
+    if vim.v.shell_error ~= 0 or out == '' then
+      return
+    end
+    local new = vim.split(out, '\n', { plain = true })
+    if new[#new] == '' then
+      table.remove(new)
+    end
+    if not vim.deep_equal(new, lines) then
+      vim.api.nvim_buf_set_lines(0, 0, -1, false, new)
+    end
+  end,
 })
 
 -- capabilities for blink
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 pcall(function()
-    capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
+  capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
 end)
 
 vim.lsp.config('lua_ls', {
-    capabilities = capabilities,
-    settings = {
-        Lua = {
-            runtime = { version = 'LuaJIT', path = { 'lua/?.lua', 'lua/?/init.lua' } },
-            diagnostics = { globals = { 'vim' } },
-            workspace = {
-                library = { vim.env.VIMRUNTIME, '${3rd}/luv/library', vim.fn.stdpath 'config', '${3rd}/busted/library' },
-                checkThirdParty = false,
-            },
-            telemetry = { enable = false },
-        },
+  capabilities = capabilities,
+  settings = {
+    Lua = {
+      runtime = { version = 'LuaJIT', path = { 'lua/?.lua', 'lua/?/init.lua' } },
+      diagnostics = { globals = { 'vim' } },
+      workspace = {
+        library = { vim.env.VIMRUNTIME, '${3rd}/luv/library', vim.fn.stdpath 'config', '${3rd}/busted/library' },
+        checkThirdParty = false,
+      },
+      telemetry = { enable = false },
     },
+  },
 })
 -- ts_ls + the Vue ts plugin (only register the plugin when vue-language-server is installed)
 local vue_ls_dir = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
 local ts_plugins = {}
 if vim.uv.fs_stat(vue_ls_dir) then
-    ts_plugins = {
-        {
-            name = '@vue/typescript-plugin',
-            location = vue_ls_dir,
-            languages = { 'vue' },
-            configNamespace = 'typescript',
-        },
-    }
+  ts_plugins = {
+    {
+      name = '@vue/typescript-plugin',
+      location = vue_ls_dir,
+      languages = { 'vue' },
+      configNamespace = 'typescript',
+    },
+  }
 end
 vim.lsp.config('ts_ls', {
-    capabilities = capabilities,
-    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-    init_options = { plugins = ts_plugins },
+  capabilities = capabilities,
+  filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+  init_options = { plugins = ts_plugins },
 })
 
 require('mason').setup()
-require('mason-lspconfig').setup { ensure_installed = { 'lua_ls' }, automatic_enable = true } -- stylua is a formatter, install it manually via :Mason
+require('mason-lspconfig').setup { ensure_installed = { 'lua_ls', 'ts_ls' }, automatic_enable = true }
