@@ -27,6 +27,7 @@ vim.cmd 'colorscheme cyberdream'
 
 vim.pack.add { 'https://github.com/echasnovski/mini.nvim' }
 require('mini.comment').setup()
+require('mini.icons').setup()
 require('mini.notify').setup { lsp_progress = { enable = false } }
 require('mini.indentscope').setup()
 require('mini.pairs').setup()
